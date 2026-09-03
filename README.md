@@ -242,13 +242,25 @@ Three things this depends on:
   give up space when their box has a height to divide.
 - `main > section` is two type selectors, specificity 0-0-2, which any class
   rule beats. The chapter rule is written `main > .hero, main > .why, ...`.
-- The main scene is capped with `max-height` in `svh` rather than grown. A
-  growing box eats leftover space and pushes the scene to the bottom; capping
-  keeps it centered, and it is what keeps the PIDE MCP chapter inside its
-  screen. Re-check it if the scene or the copy grows.
+- `.scene-wrap` is `flex: none` and the scene sizes from its width, so the
+  PIDE MCP chapter is the one that outgrows its screen. That is why `.line` is
+  `height: auto; min-height: 100svh` while the others are a definite `100svh`,
+  and why it carries its own larger `padding-top`: the others center their
+  content and get slack above the heading for free, this one does not.
 
 Below 620px tall or 700px wide this reverts to an ordinary scrolling page and
-the rail and cues are hidden.
+the cues are hidden.
+
+### The rail is a bar on narrow screens
+
+At or below 1340px wide the rail moves from right-edge dots to a bar fixed
+across the top, and `--bar-h` (46px) is its height. Three things read it, and
+they must stay together: `main`'s `padding-top` moves the page clear of it once,
+`scroll-padding-top` keeps every *scroll position* clear of it, and the inline
+script reads the computed `scroll-padding-top` because with script the page
+scrolls by hand and would otherwise land each chapter under the bar. The
+script's chapter offsets are scroll positions, already less the bar, so its
+comparisons against `scrollY` stay consistent.
 
 The reveal is `animation-timeline: view()` on each chapter's children, declared
 with no duration, so a browser without scroll timelines runs it in 0s and shows

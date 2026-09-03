@@ -894,7 +894,15 @@ html.js, html.js body { scroll-snap-type: none; }
   padding: clamp(30px, 5vh, 64px) 0;
   display: flex;
   flex-direction: column;
+  /* `safe` is what keeps the heading reachable. A centred flex box overflows
+     at both ends, and the overflow past the top cannot be scrolled to -- so on
+     a screen short enough that a chapter no longer fits (browser chrome eats
+     the height long before the 620px fallback), the title sat above the snap
+     position and came out clipped. `safe` centres only while the content fits
+     and aligns to the start once it does not. The plain value stays as the
+     fallback for engines without the keyword. */
   justify-content: center;
+  justify-content: safe center;
 }
 /* Only the artwork gives up height when a chapter is tight. Everything else
    keeps its own: .props clips its text when squeezed, because it hides overflow
@@ -911,7 +919,17 @@ html.js, html.js body { scroll-snap-type: none; }
 /* The chapter runs a little past its screen: the scene stays full size, the
    feature strip stays with it, and the arrow follows the strip in the flow
    rather than pinned to a foot the reader would never reach. */
-.line { height: auto; min-height: 100svh; padding-bottom: clamp(34px, 5vh, 60px); }
+/* The one chapter that outgrows its screen, so justify-content stops centring
+   it and the heading sits at whatever padding-top gives. Every other chapter
+   centres and has slack above its title; this one had 30px on a short viewport,
+   which is what put "Meet PIDE MCP" under the browser's top bar. Its own top
+   gap, larger than the shared one, is what keeps the heading clear. */
+.line {
+  height: auto;
+  min-height: 100svh;
+  padding-top: clamp(52px, 8vh, 84px);
+  padding-bottom: clamp(34px, 5vh, 60px);
+}
 .props { margin: clamp(34px, 5vh, 56px) 0 0; }
 /* the small arrow into the subsections is a step, not a chapter break: it lost
    its own margins when the other .cue-sub went and fell back to .cue-flow's,
@@ -927,10 +945,12 @@ html.js, html.js body { scroll-snap-type: none; }
   scroll-snap-align: start;
   min-height: calc(100svh - var(--footer-h, 3.3rem));
   /* centred in the screen it fills: the block is content-sized, so without
-     this the ending sat against the top edge */
+     this the ending sat against the top edge. `safe` for the same reason as
+     the chapters above: never push the top of the content out of reach. */
   display: flex;
   flex-direction: column;
   justify-content: center;
+  justify-content: safe center;
 }
 /* Get started stops at its content: "Want to know more?" belongs directly
    under the two downloads, not a screen below them. .finale is the snap
@@ -2102,7 +2122,15 @@ html:not(.js) body:has(#get-started:target) .rail a[href="#get-started"] i {
   }
   .rail i { order: 0; width: 7px; height: 7px; }
   .rail span { order: 1; opacity: 1; transform: none; }
-  main { padding-top: 46px; }
+  /* The rail is a fixed bar here, so it sits over the top of whatever is
+     scrolled to. main's padding moves the page down once; scroll-padding is
+     what keeps every *scroll position* clear of it, so a chapter snapped to
+     `start` lands below the bar instead of under it. The inline script reads
+     this same value, because with script the page scrolls by hand and
+     scroll-padding alone would not apply. */
+  :root { --bar-h: 46px; }
+  main { padding-top: var(--bar-h); }
+  html { scroll-padding-top: var(--bar-h); }
 }
 @media (max-width: 430px) {
   .rail { gap: 8px; }

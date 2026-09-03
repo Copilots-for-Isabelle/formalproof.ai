@@ -1151,6 +1151,15 @@
                         .filter(Boolean);
   var gliding = false, lockUntil = 0;
 
+  // On narrow screens the rail is a fixed bar across the top and the CSS sets
+  // scroll-padding-top to match. Snapping honours that on its own, but with
+  // script the page scrolls by hand, so it has to read the value and apply it
+  // -- otherwise a chapter lands with its heading under the bar.
+  function barGap() {
+    var v = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+    return v > 0 ? v : 0;                  // 'auto' parses as NaN
+  }
+
   function glideTo(top) {
     var from = window.scrollY, dist = top - from;
     if (Math.abs(dist) < 2) return;
@@ -1181,10 +1190,13 @@
     if (ev.deltaMode === 0 && Math.abs(ev.deltaY) < 20) return;   // fine trackpad scrolling
 
     var here = window.scrollY, ih = innerHeight, dir = ev.deltaY > 0 ? 1 : -1;
+    var gap = barGap();
     var at = -1, tops = [];
     for (var i = 0; i < stopsEl.length; i++) {
       var r = stopsEl[i].getBoundingClientRect();
-      tops.push(r.top + here);
+      // the scroll position that puts this chapter below the bar, not the
+      // chapter's own offset: everything downstream compares against scrollY
+      tops.push(r.top + here - gap);
       if (r.top <= ih / 2 && r.bottom >= ih / 2) at = i;   // resting on this chapter
     }
     var target = null;
