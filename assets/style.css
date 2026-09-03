@@ -1,0 +1,2119 @@
+/* formalproof.ai - PIDE MCP
+   Palette and artwork follow the ai4math_convening slides. */
+
+:root {
+  --bg:         #ffffff;
+  --panel:      #f7f7f8;
+  --panel-2:    #fbfbfc;
+  --line:       #e3e3e6;
+  --fg:         #2b2b2e;
+  --fg-mid:     #555555;
+  --fg-dim:     #8a8a90;
+  --red:        #901A1E;
+  --twine:      #9C7A44;
+  --twine-dark: #7a5f33;
+  --pulse:      #e8b34a;
+  --ok:         #3f8f5e;
+  --warn:       #b8860b;
+  --run:        #8a5fb0;
+  --unproc:     rgba(176, 132, 214, .32);   /* Isabelle's "not checked yet" */
+  --err-soft:   rgba(144, 26, 30, .13);
+  --found:      rgba(232, 179, 74, .28);
+
+  --prose: 820px;   /* every block of running prose uses this one column */
+
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:         #17171a;
+    --panel:      #1f1f23;
+    --panel-2:    #1b1b1f;
+    --line:       #313136;
+    --fg:         #ececee;
+    --fg-mid:     #b0b0b6;
+    --fg-dim:     #7d7d85;
+    --red:        #e2757a;
+    --twine:      #d8b87e;
+    --twine-dark: #c2a065;
+    --pulse:      #ffd98a;
+    --ok:         #6fca90;
+    --warn:       #d9ad4b;
+    --run:        #c39bf0;
+    --unproc:     rgba(176, 132, 214, .30);
+    --err-soft:   rgba(226, 117, 122, .18);
+    --found:      rgba(255, 217, 138, .22);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+
+main {
+  flex: 1;
+  width: 100%; max-width: 1080px; margin: 0 auto;
+  padding: 0 clamp(18px, 4vw, 40px);
+  text-align: center;
+}
+
+
+/* The handover between chapters: content lifts into place as its screen
+   arrives. Without a scroll timeline the duration is 0s, so the end state
+   shows immediately and nothing is hidden. */
+@keyframes chapter-in {
+  from { opacity: 0; transform: translateY(64px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero > *, .why > *, .line > *, .start > * {
+  animation: chapter-in linear both;
+  animation-timeline: view();
+  animation-range: entry 12% entry 88%;
+}
+/* and staggered, so the chapter assembles rather than arriving in one block */
+.hero > *:nth-child(2), .why > *:nth-child(2), .line > *:nth-child(2), .start > *:nth-child(2) { animation-range: entry 20% entry 92%; }
+.hero > *:nth-child(3), .why > *:nth-child(3), .line > *:nth-child(3), .start > *:nth-child(3) { animation-range: entry 28% entry 96%; }
+.hero > *:nth-child(4), .why > *:nth-child(4), .line > *:nth-child(4), .start > *:nth-child(4) { animation-range: entry 36% entry 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .hero > *, .why > *, .line > *, .start > * { animation: none; }
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(31px, 5.2vw, 52px);
+  line-height: 1.07;
+  letter-spacing: -.03em;
+  font-weight: 600;
+}
+h1 em { font-style: normal; color: var(--red); }
+
+.sub {
+  margin: 17px auto 0;
+  max-width: var(--prose);
+  /* Ragged-left costs the reader a hunt for the start of every line, so the
+     prose is left aligned inside its centred column -- the same shape the
+     Isabelle and sledgehammer paragraphs already had. The hero keeps its
+     centred block, and so do the one-line notes under a heading. */
+  text-align: left;
+  font-size: clamp(18.5px, 2.1vw, 23px);
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+.sub b { color: var(--fg); font-weight: 600; }
+.sub a { color: inherit; text-decoration: underline;
+         text-underline-offset: 3px; text-decoration-color: var(--fg-dim); }
+.sub a:hover { text-decoration-color: var(--red); }
+
+/* ============================== the scene ============================== *
+ * One 18s cycle. Two proofs and one lookup, in parallel:
+ *    2-16 %   two edits and a find_entities go out
+ *   18-29 %   a get_state chases each edit
+ *   26-29 %   both proofs come back wrong
+ *   30-44 %   two errors and the search hits travel home
+ *   38 %      the robot has heard enough                      🙁
+ *   48-59 %   both proofs are edited again, using what the search found
+ *   62-73 %   get_state again; this time they check clean
+ *   85 %      the good news has landed                        🙂
+ * Change one lane and you must change the others. --------------------- */
+
+.scene-head {
+  margin: clamp(22px, 3.2vw, 36px) 0 0;
+  font-size: clamp(21px, 2.9vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  font-weight: 600;
+}
+.scene-head em { font-style: normal; color: var(--red); }
+
+.pm-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: clamp(8px, 1.6vw, 16px);
+  overflow: visible;
+}
+
+/* the label: one chip, a stem across the fan, a bullet on every wire */
+.tag-stem {
+  stroke: var(--twine-dark);
+  stroke-width: .05px;
+  stroke-dasharray: .17px .15px;
+  fill: none;
+}
+.tag-bullet { fill: var(--twine-dark); }
+.tag-chip { fill: var(--bg); stroke: var(--twine-dark); stroke-width: .055px; }
+.tag-text {
+  font-family: var(--sans);
+  font-size: .42px;
+  font-weight: 700;
+  fill: var(--fg);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* the wire lights up as each message runs down it */
+.pulse { opacity: 0; animation: var(--beat) linear infinite; }
+.pulse.k-out  { stroke: var(--pulse); }
+.pulse.k-err  { stroke: var(--red); }
+.pulse.k-ok   { stroke: var(--ok); }
+.pulse.k-info { stroke: var(--warn); }
+
+/* the messages */
+.pkt { opacity: 0; animation: var(--beat) linear infinite; }
+.pkt rect { fill: var(--bg); stroke-width: .032px; }
+.pkt.k-out  rect { stroke: var(--twine); }
+.pkt.k-err  rect { stroke: var(--red); }
+.pkt.k-ok   rect { stroke: var(--ok); }
+.pkt.k-info rect { stroke: var(--warn); }
+.pkt text {
+  font-family: var(--mono);
+  font-size: .3px;
+  fill: var(--fg);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.pkt.k-err  text { fill: var(--red); }
+.pkt.k-ok   text { fill: var(--ok); }
+.pkt.k-info text { fill: var(--warn); }
+
+/* the face. Only the story robot cross-fades; the fixed-mood copies in <defs>
+   keep whatever single mouth they were drawn with. */
+.m-flat, .m-sad, .m-happy { opacity: 0; animation: var(--beat) steps(1) infinite; }
+.m-flat  { animation-name: face-flat; }
+.m-sad   { animation-name: face-sad; }
+.m-happy { animation-name: face-happy; }
+
+/* the saw and the drill only run when it has something to celebrate --
+   see saw-spin / flute-run in the generated keyframes */
+.blip { animation: blip 2.4s ease-in-out infinite; }
+@keyframes blip { 0%, 62%, 100% { opacity: 1; } 72%, 86% { opacity: .18; } }
+.eyes { animation: blink 6.5s steps(1) infinite; transform-origin: center; }
+@keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 96.5%, 98.5% { transform: scaleY(.12); } }
+
+/* one session panel */
+.panel .pane { fill: var(--panel-2); stroke: var(--line); stroke-width: .035px; }
+.panel .pane-head { fill: var(--panel); }
+.isa-badge { pointer-events: none; }
+.badge-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .badge-light { display: none; }
+  .badge-dark { display: block; }
+}
+.panel .pane-sep { stroke: var(--line); stroke-width: .035px; fill: none; }
+/* WebKit does not inherit dominant-baseline into <tspan>, which splits a line
+   like `by (induct n)` across two baselines -- so set it on both. */
+.panel text, .panel tspan { dominant-baseline: central; }
+.pane-logic { font-family: var(--sans); font-size: .3px; font-weight: 600; fill: var(--fg); }
+.pane-file { font-family: var(--mono); font-size: .27px; fill: var(--fg-dim); }
+.pane-code {
+  font-family: var(--mono);
+  font-size: .3px;
+  fill: var(--fg);
+  white-space: pre;
+  dominant-baseline: central;
+}
+.pane-code tspan { dominant-baseline: central; }
+.pane-code .kw { fill: var(--red); }
+.pane-code .str { fill: var(--ok); }
+.pane-code .warn { fill: var(--warn); }
+.pane-code .dim { fill: var(--fg-dim); }
+
+/* the three attempts at a proof, and the washes behind them */
+.pv, .q-empty, .q-code, .q-snip { opacity: 0; animation: var(--beat) steps(1) infinite; }
+.wash { opacity: 0; animation: var(--beat) steps(1) infinite; }
+.w-run { fill: var(--unproc); }
+.w-err { fill: var(--err-soft); }
+.w-found { fill: var(--found); }
+
+.pst { opacity: 0; animation: var(--beat) steps(1) infinite; }
+.pane-status { font-family: var(--mono); font-size: .27px; fill: var(--fg-mid); }
+.tone-warn .pane-dot { fill: var(--warn); }
+.tone-run  .pane-dot { fill: var(--run); }
+.tone-err  .pane-dot { fill: var(--red); }
+.tone-ok   .pane-dot { fill: var(--ok); }
+.tone-dim  .pane-dot { fill: var(--fg-dim); }
+.tone-err  .pane-status { fill: var(--red); }
+
+
+/* ============================ what it does ============================= */
+.props {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* The dividers are borders on the cells, not a --line background showing
+     through 1px gaps: with three cells in a two-column grid, that trick
+     paints the empty fourth slot grey. */
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: left;
+}
+.props li {
+  background: var(--bg);
+  padding: 16px 18px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+.props li + li { border-left: 1px solid var(--line); }
+.props b { display: block; color: var(--fg); font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+
+/* ========================= section headings ============================ */
+.why h2, .line h2, .start h2,
+.mcp h3, .beside h3, .uses h3 {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.14;
+  letter-spacing: -.025em;
+  font-weight: 600;
+}
+.why h2 em, .line h2 em, .start h2 em,
+.mcp h3 em, .beside h3 em, .uses h3 em {
+  font-style: normal;
+  color: var(--red);
+}
+.line .sub { margin-top: 14px; }
+.hero-cta, .start .sub { text-align: center; }
+
+/* ============================ why it matters =========================== */
+.why h2 {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.14;
+  letter-spacing: -.025em;
+  font-weight: 600;
+}
+.why h2 em { font-style: normal; color: var(--red); }
+/* this paragraph sits inside .isa-intro, which sets the column width */
+.isa-intro .sub { margin: 0; max-width: none; flex: 1; }
+.isa-intro {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  margin: 16px auto 0;
+  max-width: var(--prose);   /* identical column to .hammer below */
+  text-align: left;
+}
+.isa-mark { width: 74px; height: auto; flex: none; }   /* the icon slot */
+.isa-link { flex: none; display: block; line-height: 0; border-radius: 8px; transition: opacity .18s ease; }
+.isa-link:hover { opacity: .78; }
+.isa-mark-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .isa-mark-light { display: none; }
+  .isa-mark-dark { display: block; }
+}
+@media (max-width: 620px) {
+  .isa-intro { flex-direction: column; text-align: center; gap: 12px; }
+}
+
+.proofs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: clamp(20px, 3vw, 30px);
+  text-align: left;
+}
+.proof-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  text-decoration: none;
+  transition: transform .12s ease, border-color .15s ease;
+}
+.proof-card:hover { transform: translateY(-2px); border-color: var(--fg-dim); }
+.proof-card b {
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--fg);
+}
+.proof-card span {
+  margin-top: 6px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+.proof-card em {
+  margin-top: 14px;
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--red);
+}
+.why-note {
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: var(--fg-dim);
+}
+.why-note a { color: var(--fg-mid); }
+@media (max-width: 1080px) { .proofs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .proofs { grid-template-columns: 1fr; } }
+@media (hover: none) { .proof-card:hover { transform: none; } }
+
+/* the other half of the story: Isabelle finds proofs, not just checks them */
+.hammer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  margin: clamp(16px, 2.4vw, 24px) auto 0;
+  max-width: var(--prose);
+  font-size: clamp(18.5px, 2.1vw, 23px);
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+/* drawn smaller than the logo, but padded to the same 74px slot so both
+   text columns start at the same x */
+.hammer-icon { width: 56px; height: 56px; flex: none; margin-left: 18px; }
+.hammer span { text-align: left; flex: 1; }
+.hammer b { color: var(--fg); font-weight: 600; }
+.hammer a { color: inherit; text-decoration: underline; text-underline-offset: 3px;
+            text-decoration-color: var(--fg-dim); }
+.hammer a:hover { text-decoration-color: var(--red); }
+@media (max-width: 560px) {
+  .hammer { flex-direction: column; gap: 8px; }
+  .hammer span { text-align: center; }
+}
+
+/* ========================= what it is pointed at ======================= */
+.uses h3 {
+  margin: 0 0 clamp(16px, 2.4vw, 26px);
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  font-weight: 600;
+}
+.uses h2 em { font-style: normal; color: var(--red); }
+.use-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  text-align: left;
+}
+.use-grid li {
+  padding: 19px 19px 21px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+.use-grid b {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--fg);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+@media (max-width: 980px) { .use-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .use-grid { grid-template-columns: 1fr; } }
+
+/* =========================== speaks MCP ================================ */
+.mcp h3 {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  font-weight: 600;
+}
+
+/* A subsection heading has to read as one: everything between "Meet PIDE MCP"
+   and "Get started today" is an h3 under it. */
+.mcp h3, .beside h3, .uses h3 {
+  font-size: clamp(19px, 2.6vw, 27px);
+  letter-spacing: -.02em;
+}
+.mcp h2 em { font-style: normal; color: var(--red); }
+.mcp .sub { margin-top: 12px; }
+.mcp-wrap { margin-top: clamp(12px, 2vw, 22px); }
+.mcp-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.mcp-svg .plate {
+  fill: var(--panel-2);
+  stroke: var(--line);
+  stroke-width: .05px;
+}
+.mcp-svg .plate-text {
+  font-family: var(--sans);
+  font-size: .38px;
+  font-weight: 600;
+  fill: var(--fg);
+  dominant-baseline: central;
+}
+.mcp-note-p { margin: 10px 0 0; font-size: 13.5px; color: var(--fg-dim); }
+.mcp-svg .plate.mini { fill: none; stroke: var(--fg-dim); stroke-dasharray: .2px .16px; }
+.mcp-svg .plate-text.mini { font-size: .34px; }
+.mcp-svg .ghost { opacity: .42; }
+
+/* the editor in the middle of the band -- .panel styles do not reach here */
+.mcp-svg text, .mcp-svg tspan { dominant-baseline: central; }
+.mcp-svg .pane { fill: var(--panel-2); stroke: var(--line); stroke-width: .035px; }
+.mcp-svg .pane-head { fill: var(--panel); }
+.mcp-svg .pane-sep { stroke: var(--line); stroke-width: .035px; fill: none; }
+.mcp-svg .pane-code { font-size: .285px; }
+
+/* Each cell owns its own wire, so only the pointed-at agent lights up. The crowd
+   uses its own <defs> robots: CSS cannot reach into a <use> shadow tree with a
+   descendant selector, so a per-instance mood has to be its own definition. */
+.mcp-svg .conn { opacity: 0; transition: opacity .12s ease; }
+.mcp-svg .agent:hover .conn,
+.mcp-svg .agent:focus-visible .conn,
+.mcp-svg .agent:active .conn { opacity: 1; }
+.mcp-svg .wire-c { fill: none; stroke: var(--twine); stroke-width: .07px; stroke-dasharray: .22px .18px; }
+.mcp-svg .wire-bullet { fill: var(--twine); }
+.mcp-svg .pk { opacity: 0; }
+.mcp-svg .pk-box { fill: var(--bg); stroke-width: .032px; }
+.mcp-svg .pk-box.k-out { stroke: var(--twine); }
+.mcp-svg .pk-box.k-ok { stroke: var(--ok); }
+.mcp-svg .pk-text {
+  font-family: var(--mono); font-size: .21px; text-anchor: middle;
+  dominant-baseline: central; fill: var(--twine);
+}
+.mcp-svg .pk-text.k-ok { fill: var(--ok); }
+/* Which cell holds the line: the one being pointed at, or failing that the one
+   with focus, or failing that Claude Code. Focus is what makes it stick after
+   the pointer leaves -- CSS has no memory of "the last one hovered". */
+/* Which cell holds the line is a class the script sets, not a cascade of
+   :not(:has()). Those tiers were right on paper but Firefox did not always
+   re-evaluate them when hover changed, so the default cell stayed lit
+   alongside the pointed-at one and two wires showed at once. One class is
+   also simply easier to reason about. */
+.mcp-svg .agent.live .pk-out { animation: mcp-fly 1.35s ease .2s both; }
+.mcp-svg .agent.live .pk-in  { animation: mcp-fly 1.35s ease 1.8s both; }
+@keyframes mcp-fly {
+  0%   { opacity: 0; transform: translate(0, 0); }
+  14%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+}
+
+.mcp-svg .conn { opacity: 0; transition: opacity .12s ease; }
+.mcp-svg .agent.live .conn { opacity: 1; }
+
+/* Switch, do not cross-fade. The two moods are the same robot with a
+   different mouth stacked on top of each other, so any overlap shows both at
+   once and reads as a flicker. The other scenes swap theirs with steps(1),
+   which is what this matches -- the wait before it is all in the delay. */
+.mcp-svg .r-calm, .mcp-svg .r-glad { transition: opacity 0s; }
+.mcp-svg .r-glad { opacity: 0; }
+.mcp-svg .agent.live .r-calm { opacity: 0; transition-delay: 3.15s; }
+.mcp-svg .agent.live .r-glad { opacity: 1; transition-delay: 3.15s; }
+.mcp-svg .agent:hover .plate,
+.mcp-svg .agent:focus-visible .plate { stroke: var(--fg-dim); }
+.mcp-svg .agent:focus { outline: none; }
+
+/* without script nothing would ever light, so the default cell holds the line */
+html:not(.js) .mcp-svg .a-cc .conn { opacity: 1; }
+html:not(.js) .mcp-svg .a-cc .r-calm { opacity: 0; }
+html:not(.js) .mcp-svg .a-cc .r-glad { opacity: 1; }
+html:not(.js) .mcp-svg .st-cc { opacity: 1; }
+
+/* The tools spin only while a robot is actually engaged, so the resting
+   default does not whirr forever. A descendant selector cannot reach into a
+   <use> shadow tree, but an inherited custom property can. */
+.mcp-svg .agent { --tool-spin: none; --tool-flute: none; }
+.mcp-svg .agent.live { --tool-spin: hello-spin; --tool-flute: hello-flute; }
+.saw.saw-live {
+  animation-name: var(--tool-spin, hello-spin);
+  animation-duration: 2.2s; animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.flutes.flutes-live {
+  animation-name: var(--tool-flute, hello-flute);
+  animation-duration: .5s; animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes hello-spin { to { transform: rotate(360deg); } }
+@keyframes hello-flute { to { transform: translateY(-.22px); } }
+
+/* the editor names whoever holds the line, once the handshake has finished */
+.mcp-svg .st { opacity: 0; transition: opacity .14s ease; }
+.mcp-svg.on-cc    .st-cc,
+.mcp-svg.on-codex .st-codex,
+.mcp-svg.on-oc    .st-oc,
+.mcp-svg.on-more  .st-more { opacity: 1; }
+
+/* While a new agent is connecting the editor says so: the client that just
+   let go is gone at once, and the new name only arrives with its response.
+   This has to come after the rules above -- same specificity, so order is
+   what decides, and the other way round both lines drew at once. */
+.mcp-svg .st-none { opacity: 0; transition: opacity .14s ease; }
+.mcp-svg.connecting .st-none { opacity: 1; }
+.mcp-svg.connecting .st { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html, body { scroll-behavior: auto; }
+  .mcp-svg .pk { display: none; }
+  .saw.saw-live, .flutes.flutes-live { animation-name: none; }
+  .mcp-svg .r-calm, .mcp-svg .r-glad, .mcp-svg .st { transition-delay: 0s !important; }
+}
+
+.mcp-svg .hit { fill: transparent; pointer-events: all; }
+.mcp-svg text { user-select: none; -webkit-user-select: none; }
+
+.mcp-svg .ghost .plate {
+  fill: none;
+  stroke: var(--fg-dim);
+  stroke-dasharray: .2px .16px;
+}
+.mcp-svg .ghost .plate-text { font-weight: 400; fill: var(--fg-mid); }
+
+@media (max-width: 700px) {
+  .mcp-wrap { overflow-x: auto; overflow-y: hidden; padding-bottom: 8px; scrollbar-width: thin; }
+  .mcp-svg { min-width: 680px; }
+}
+
+/* ====================== autonomous, or side by side ==================== */
+.windows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 14px;
+  margin-top: clamp(18px, 2.6vw, 28px);
+  text-align: left;
+}
+.win {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.win-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 11px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.win-icon { width: 16px; height: 16px; flex: none; color: var(--fg-mid); }
+.win-logo { object-fit: contain; }
+.win-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .win-logo-light { display: none; }
+  .win-logo-dark { display: block; }
+}
+.slash { font-style: normal; color: var(--fg-dim); margin: 0 2px; font-weight: 400; }
+.win-tag {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.win-body {
+  flex: 1;
+  margin: 0;
+  padding: 12px 13px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.85;
+  color: var(--fg);
+}
+.win-body .dim  { color: var(--fg-dim); }
+.win-body .tool { color: var(--run); }
+.win-body .kw   { color: var(--red); }
+.win-body .str  { color: var(--ok); }
+.win-body .good { color: var(--ok); }
+.win-body .bad  { color: var(--red); }
+.win-body .ln   { color: var(--fg-dim); }
+.win-agent .win-body { background: var(--panel); }
+.win-foot {
+  display: flex; align-items: center; gap: 7px;
+  margin: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--fg-mid);
+}
+.d { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.d-ok { background: var(--ok); }
+@media (max-width: 980px) { .windows { grid-template-columns: 1fr; } }
+
+/* one shared file, an agent and a person */
+.side-svg { display: block; width: 100%; height: auto; margin-top: clamp(14px, 2.2vw, 24px); }
+.side-svg .pane { fill: var(--panel-2); stroke: var(--line); stroke-width: .035px; }
+.side-svg .pane-head { fill: var(--panel); }
+.side-svg .pane-sep { stroke: var(--line); stroke-width: .035px; fill: none; }
+/* the repaired proof is a long line; give this panel a hair more room */
+.side-svg .pane-code { font-size: .285px; }
+.side-svg .note { fill: var(--fg-dim); }
+.side-svg .pane-code .cmd { fill: var(--run); font-weight: 500; }
+.side-svg .b-wash-run { fill: var(--unproc); }
+.side-svg .b-wash-err { fill: var(--err-soft); }
+.side-svg .caret { fill: var(--red); }
+.side-svg .bubble rect { fill: var(--panel); stroke: var(--line); stroke-width: .05px; }
+.side-svg .bubble path { fill: var(--panel); stroke: none; }
+.side-svg .bubble text {
+  font-family: var(--sans);
+  font-size: .38px;
+  font-weight: 600;
+  fill: var(--fg);
+  dominant-baseline: central;
+}
+.side-cap {
+  font-family: var(--mono);
+  font-size: .34px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  fill: var(--fg-dim);
+}
+.side-wrap { margin-top: clamp(14px, 2.2vw, 24px); }
+@media (max-width: 780px) {
+  .side-wrap { overflow-x: auto; overflow-y: hidden; padding-bottom: 8px; scrollbar-width: thin; }
+  .side-svg { min-width: 700px; }
+}
+
+/* buttons ---------------------------------------------------------------- */
+.cta {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  margin: clamp(22px, 3vw, 32px) 0 0;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 15px 30px;
+  border-radius: 11px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  text-decoration: none;
+  border: 1.5px solid var(--line);
+  color: var(--fg);
+  background: var(--bg);
+  transition: transform .12s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.btn:hover { transform: translateY(-2px); border-color: var(--fg-dim); }
+.btn-icon { width: 19px; height: 19px; margin-right: 9px; flex: none; }
+/* Zulip's own brand gradient runs #50adff -> #7877fc */
+.btn-zulip {
+  background: linear-gradient(155deg, #50adff, #7877fc);
+  border-color: transparent;
+  color: #fff;
+}
+.btn-zulip:hover { filter: brightness(1.07); }
+@media (hover: none) { .btn:hover { transform: none; } }
+
+/* =============================== get it =============================== */
+.start-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: clamp(20px, 3vw, 30px) 0 0;
+  text-align: left;
+}
+.start-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-2);
+  text-decoration: none;
+  transition: transform .12s ease, border-color .15s ease, box-shadow .15s ease;
+}
+a.start-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--fg-dim);
+  box-shadow: 0 14px 34px -26px rgba(0, 0, 0, .7);
+}
+.start-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--fg);
+}
+.start-logo { width: 27px; height: 27px; flex: none; object-fit: contain; }
+/* the can-and-string glyph is wide, not square */
+.start-logo.wire-logo { width: 46px; height: 17px; }
+.start-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .start-logo-light { display: none; }
+  .start-logo-dark { display: block; }
+}
+.start-body {
+  margin-top: 8px;
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--fg-mid);
+}
+.start-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+}
+.lic {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  color: var(--fg-dim);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.go { font-size: 16px; font-weight: 600; color: var(--red); text-decoration: none; }
+
+.start-or {
+  margin: clamp(16px, 2.2vw, 22px) auto 0;
+  max-width: var(--prose);
+  font-size: 15.5px;
+  color: var(--fg-mid);
+}
+
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: clamp(34px, 4.5vw, 52px) 0 0;
+  text-align: left;
+}
+/* the two things you actually have to install carry the weight; the reading
+   links below them are deliberately quieter */
+.start-card.key {
+  border-width: 1.5px;
+  border-color: var(--fg-dim);
+  background: var(--panel-2);
+  box-shadow: 0 14px 34px -30px rgba(0, 0, 0, .75);
+}
+.start-card.key:hover {
+  border-color: var(--red);
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .8);
+}
+.start-card.key .start-head { font-size: 22px; }
+.start-card.key .start-logo { width: 30px; height: 30px; }
+.start-card.key .start-logo.wire-logo { width: 50px; height: 19px; }
+.start-card.key .go { font-size: 16px; }
+
+.more-grid .start-card { background: var(--bg); padding: 19px 20px 18px; }
+.more-grid .start-head { font-size: 17px; }
+.more-grid .start-logo { width: 22px; height: 22px; }
+.more-head {
+  margin: clamp(8px, 1.4vh, 16px) 0 clamp(10px, 1.6vh, 18px);
+  font-size: clamp(17px, 2vw, 21px);
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--fg-mid);
+}
+.more-grid .start-body { font-size: 15.5px; }
+.more-grid .go { font-size: 15.5px; }
+@media (max-width: 700px) { .more-grid { grid-template-columns: 1fr; } }
+
+.further {
+  margin: clamp(30px, 4vw, 44px) 0 0;
+  font-size: clamp(18px, 2.1vw, 22px);
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--fg);
+}
+.cta-more { margin-top: 14px; }
+.btn-wide { padding: 15px 28px; font-size: 16.5px; }
+.btn-wide .btn-icon { width: 18px; height: 18px; margin-right: 9px; }
+.zulip-link { display: inline-flex; align-items: baseline; gap: 5px; }
+.zulip-link svg { width: 15px; height: 15px; color: #6392fd; align-self: center; }
+
+@media (max-width: 700px) { .start-grid { grid-template-columns: 1fr; } }
+@media (hover: none) { a.start-card:hover { transform: none; } }
+
+/* =============================== footer =============================== */
+footer {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center;
+  padding: 16px clamp(18px, 4vw, 40px);
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--fg-dim);
+}
+footer a { color: inherit; text-decoration: none; }
+footer a:hover { color: var(--fg); text-decoration: underline; }
+
+/* One chapter to a screen -- but only the four chapters. The three
+   subsections under PIDE MCP flow normally: snapping between them would jump
+   the reader through what is meant to read as one stretch.
+
+   Proximity, not mandatory: with the subsections in between, two snap points
+   can be several screens apart, and mandatory snapping fights a reader trying
+   to stop in the middle. */
+/* Native snapping is the no-script fallback. Firefox performs the snap as an
+   instant reposition and ignores scroll-behavior for it, so with script the
+   page animates the chapter-to-chapter scroll itself and turns snapping off
+   (.js) to stop the two fighting. body carries overflow-x: hidden, which
+   propagates to the viewport, so both elements are named. */
+html, body {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+html.js, html.js body { scroll-snap-type: none; }
+.hero, .why, .line, .start {
+  /* a definite height, not just a minimum: the flex children only give up
+     space if the box they sit in has one */
+  height: 100svh;
+  margin: 0;
+  padding: clamp(30px, 5vh, 64px) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Only the artwork gives up height when a chapter is tight. Everything else
+   keeps its own: .props clips its text when squeezed, because it hides overflow
+   to round its corners, and a flex item shrinks by default. */
+.hero > *, .why > *, .line > *, .start > * { flex: none; }
+
+.mcp, .beside, .uses { margin: clamp(40px, 6vw, 72px) 0 0; }
+/* The PIDE MCP chapter and its subsections are a single snap area. Mandatory
+   snapping therefore has a stop at the top of the chapter and then leaves the
+   reader alone all the way through the subsections -- a snap area taller than
+   the viewport does not trap -- until Get started takes over. Nothing snaps at
+   the boundary between the chapter and its own subsections. */
+.hero, .why { scroll-snap-align: start; }
+/* The chapter runs a little past its screen: the scene stays full size, the
+   feature strip stays with it, and the arrow follows the strip in the flow
+   rather than pinned to a foot the reader would never reach. */
+.line { height: auto; min-height: 100svh; padding-bottom: clamp(34px, 5vh, 60px); }
+.props { margin: clamp(34px, 5vh, 56px) 0 0; }
+/* the small arrow into the subsections is a step, not a chapter break: it lost
+   its own margins when the other .cue-sub went and fell back to .cue-flow's,
+   which put 200px of nothing above "It speaks MCP" */
+.scroll-cue.cue-sub.cue-flow { margin: clamp(14px, 2vh, 22px) auto 0; }
+.mcp { margin-top: clamp(14px, 2.2vh, 26px); }
+.pide-block { scroll-snap-align: start; }
+/* The closing chapter and its reference cards are one snap area, exactly as
+   .pide-block is: the reader snaps onto Get started, then scrolls freely
+   through "Want to know more?" and out to the footer, with nothing pulling
+   back up. */
+.finale {
+  scroll-snap-align: start;
+  min-height: calc(100svh - var(--footer-h, 3.3rem));
+  /* centred in the screen it fills: the block is content-sized, so without
+     this the ending sat against the top edge */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Get started stops at its content: "Want to know more?" belongs directly
+   under the two downloads, not a screen below them. .finale is the snap
+   target, so the whole ending still arrives as one. */
+.start { height: auto; }
+.more { margin: clamp(14px, 2.2vh, 26px) 0 clamp(18px, 3vh, 36px); }
+
+/* Too little height for a screen-at-a-time, or narrow enough that the scenes
+   scroll sideways anyway: fall back to an ordinary page. */
+@media (max-height: 620px), (max-width: 700px) {
+  html { scroll-snap-type: none; }
+  .hero, .why, .line, .start {
+    height: auto;
+    min-height: 0;              /* .line keeps a 100svh floor otherwise */
+    margin: clamp(40px, 6vw, 72px) 0 0;
+    padding-bottom: 0;
+  }
+  .finale { min-height: 0; display: block; }
+  .scene-wrap { flex: none; }
+  .scene { height: auto; max-height: none; }
+}
+
+/* A scene stays at frame zero until the reader has actually reached it, so
+   nobody arrives halfway through a story. Only paused when the script is there
+   to unpause it -- hence the .js guard -- and carried by a custom property,
+   because a descendant selector cannot reach inside a <use> shadow tree. */
+.js .scene-wrap, .js .mcp-wrap, .js .side-wrap { --play: paused; }
+.js .scene-wrap.seen, .js .mcp-wrap.seen, .js .side-wrap.seen { --play: running; }
+.scene *, .mcp-svg *, .side-svg *,
+.blip, .eyes, .mouth, .saw, .flutes, .saw-story, .flutes-story {
+  animation-play-state: var(--play, running);
+}
+
+/* Capped rather than grown: a growing box would eat the leftover space and
+   push the artwork to the bottom of the screen, where a centred group reads
+   better. The cap is what keeps the PIDE MCP chapter inside its screen, so
+   re-check it if that scene or the copy around it grows. */
+.scene-wrap {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scene { width: 100%; height: auto; }
+
+/* the two downloads, offered up front as well as at the end */
+.hero-grid { margin-top: clamp(20px, 3vw, 32px); }
+.hero-cta { margin-top: clamp(18px, 2.6vw, 28px); }
+.hero-cta b { color: var(--fg); }
+
+/* Where you are and that there is more. The dots cannot follow a free scroll
+   without script -- CSS has no cross-element scroll position, and this
+   Firefox does not honour timeline-scope -- so they light up on click only. */
+.rail {
+  position: fixed;
+  right: clamp(10px, 1.6vw, 22px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+}
+.rail a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--fg-dim);
+  font-size: 12.5px;
+  letter-spacing: .01em;
+}
+.rail i {
+  order: 2;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--fg-dim);
+  background: transparent;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.rail span {
+  order: 1;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity .15s ease, transform .15s ease;
+  white-space: nowrap;
+}
+.rail a:hover span, .rail a:focus-visible span { opacity: 1; transform: none; }
+.rail a.is-here { color: var(--fg-mid); }
+.rail a.is-here span { opacity: 1; transform: none; }
+.rail a:hover i, .rail a:focus-visible i { border-color: var(--red); transform: scale(1.25); }
+.rail a.is-here i {
+  background: var(--red);
+  border-color: var(--red);
+}
+/* :target is the no-script fallback only. With the script running it fought
+   the real position: click a dot and it stayed lit however far you scrolled. */
+html:not(.js) body:has(#ai-proof:target) .rail a[href="#ai-proof"] i,
+html:not(.js) body:has(#isabelle:target) .rail a[href="#isabelle"] i,
+html:not(.js) body:has(#pide-mcp:target) .rail a[href="#pide-mcp"] i,
+html:not(.js) body:has(#get-started:target) .rail a[href="#get-started"] i {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+/* keep-going cue at the foot of each chapter */
+.hero, .why, .line { position: relative; }
+/* a smaller, still step: PIDE MCP into its own subsections, not a new chapter */
+.scroll-cue.cue-sub { width: 26px; height: 26px; opacity: .75; }
+.scroll-cue.cue-sub svg { width: 16px; height: 16px; animation: none; }
+/* out of the subsections again -- .uses is not a screen, so this one sits in
+   the flow rather than pinned to the bottom of one */
+.scroll-cue.cue-flow {
+  position: static;
+  /* room on both sides: the cards were crowding the arrow, and the arrow the
+     chapter that snaps in after it */
+  /* close under the cards so it is on screen while they are, with the air
+     kept below it instead -- the chapter that snaps in needs the room, the
+     reader needs to see the arrow */
+  margin: clamp(28px, 4vh, 48px) auto clamp(120px, 18vh, 200px);
+}
+.scroll-cue {
+  position: absolute;
+  left: 0; right: 0; bottom: clamp(10px, 2.4vh, 24px);
+  width: 34px; height: 34px;
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-dim);
+  border-radius: 50%;
+  transition: color .15s ease, background .15s ease;
+}
+.scroll-cue:hover { color: var(--red); background: var(--panel); }
+.scroll-cue svg { width: 22px; height: 22px; animation: cue-bob 2.4s ease-in-out infinite; }
+@keyframes cue-bob {
+  0%, 100% { transform: translateY(-2px); }
+  50%      { transform: translateY(3px); }
+}
+/* it is an affordance, not content: it must not slide in with the chapter */
+.scroll-cue { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue svg { animation: none; }
+}
+
+/* ============================= responsive ============================= */
+@media (max-width: 980px) {
+  .props { grid-template-columns: repeat(2, 1fr); }
+  .props li + li { border-left: none; }
+  .props li:nth-child(2n) { border-left: 1px solid var(--line); }
+  .props li:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  .windows { grid-template-columns: 1fr; }
+  .win-body { font-size: 11.5px; }
+}
+
+/* the scene has three panels of code in it: below this width it would shrink
+   past legibility, so let it scroll instead */
+@media (max-width: 820px) {
+  .scene-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scene { min-width: 760px; }
+  /* the wires run off the side; say so, since the page has no script to
+     scroll the box for the reader */
+}
+
+@media (max-width: 560px) {
+  main { padding: 24px 16px 34px; }
+  h1 { font-size: clamp(27px, 8.2vw, 36px); }
+  .sub { font-size: 17px; }
+  .props { grid-template-columns: 1fr; }
+  .props li:nth-child(2n) { border-left: none; }
+  .props li + li { border-top: 1px solid var(--line); }
+  .props li { padding: 12px 14px; }
+  .cta { gap: 10px; }
+  .btn { flex: 1 1 100%; padding: 14px 22px; font-size: 16px; }
+  footer { justify-content: center; text-align: center; }
+}
+
+@supports (padding: max(0px)) {
+  main, footer {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blip, .eyes, .saw, .flutes, .pulse, .pkt, .mouth,
+  .pv, .q-empty, .q-code, .q-snip, .wash, .pst { animation: none; }
+  .pulse, .pkt, .wash { opacity: 0; }
+  .pkt.m0, .pkt.m1, .pkt.m2 { opacity: 1; transform: translate(var(--rx), var(--ry)); }
+  .m-flat { opacity: 1; }
+  .pv1 { opacity: 1; }
+  .pst-idle { opacity: 1; }
+  .btn:hover { transform: none; }
+}
+
+@keyframes msg-0 {
+  0%, 2% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  2% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  3% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  4% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  5% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  6% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  7% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  8% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  9% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  10% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  10%, 100% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+}
+@keyframes pulse-0 {
+  0%, 2% { stroke-dashoffset: 0.8629px; opacity: 0; }
+  3%, 9% { opacity: 1; }
+  10%, 100% { stroke-dashoffset: -4.541px; opacity: 0; }
+}
+.pkt.m0 { animation-name: msg-0; }
+.pulse-0 { animation-name: pulse-0; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m0 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-1 {
+  0%, 5% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  5% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  6% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  7% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  8% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  9% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  10% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  11% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  12% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  13% { transform: translate(-0.302px, 0px); opacity: 0; }
+  13%, 100% { transform: translate(-0.302px, 0px); opacity: 0; }
+}
+@keyframes pulse-1 {
+  0%, 5% { stroke-dashoffset: 0.659px; opacity: 0; }
+  6%, 12% { opacity: 1; }
+  13%, 100% { stroke-dashoffset: -3.468px; opacity: 0; }
+}
+.pkt.m1 { animation-name: msg-1; }
+.pulse-1 { animation-name: pulse-1; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m1 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes msg-2 {
+  0%, 12% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  12% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  13% { transform: translate(-3.237px, 0.3712px); opacity: 1; }
+  14% { transform: translate(-2.775px, 0.7869px); opacity: 1; }
+  15% { transform: translate(-2.35px, 1.252px); opacity: 1; }
+  16% { transform: translate(-1.948px, 1.721px); opacity: 1; }
+  17% { transform: translate(-1.557px, 2.15px); opacity: 1; }
+  18% { transform: translate(-1.161px, 2.493px); opacity: 1; }
+  19% { transform: translate(-0.7471px, 2.704px); opacity: 1; }
+  20% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  20%, 100% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+}
+@keyframes pulse-2 {
+  0%, 12% { stroke-dashoffset: 0.8547px; opacity: 0; }
+  13%, 19% { opacity: 1; }
+  20%, 100% { stroke-dashoffset: -4.498px; opacity: 0; }
+}
+.pkt.m2 { animation-name: msg-2; }
+.pulse-2 { animation-name: pulse-2; stroke-dasharray: 0.8547px 6.208px; }
+.pkt.m2 { --rx: -2.107px; --ry: 1.536px; }
+
+@keyframes msg-3 {
+  0%, 18% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  18% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  19% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  20% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  21% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  22% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  23% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  24% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  25% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  26% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  26%, 100% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+}
+@keyframes pulse-3 {
+  0%, 18% { stroke-dashoffset: 0.8629px; opacity: 0; }
+  19%, 25% { opacity: 1; }
+  26%, 100% { stroke-dashoffset: -4.541px; opacity: 0; }
+}
+.pkt.m3 { animation-name: msg-3; }
+.pulse-3 { animation-name: pulse-3; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m3 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-4 {
+  0%, 21% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  21% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  22% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  23% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  24% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  25% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  26% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  27% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  28% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  29% { transform: translate(-0.302px, 0px); opacity: 0; }
+  29%, 100% { transform: translate(-0.302px, 0px); opacity: 0; }
+}
+@keyframes pulse-4 {
+  0%, 21% { stroke-dashoffset: 0.659px; opacity: 0; }
+  22%, 28% { opacity: 1; }
+  29%, 100% { stroke-dashoffset: -3.468px; opacity: 0; }
+}
+.pkt.m4 { animation-name: msg-4; }
+.pulse-4 { animation-name: pulse-4; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m4 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes msg-5 {
+  0%, 28% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  28% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  29% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  30% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  31% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  32% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  33% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  34% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  35% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  36% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  36%, 100% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+}
+@keyframes pulse-5 {
+  0%, 28% { stroke-dashoffset: -4.541px; opacity: 0; }
+  29%, 35% { opacity: 1; }
+  36%, 100% { stroke-dashoffset: 0.8629px; opacity: 0; }
+}
+.pkt.m5 { animation-name: msg-5; }
+.pulse-5 { animation-name: pulse-5; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m5 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-6 {
+  0%, 24% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  24% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  25% { transform: translate(-3.237px, 0.3712px); opacity: 1; }
+  26% { transform: translate(-2.775px, 0.7869px); opacity: 1; }
+  27% { transform: translate(-2.35px, 1.252px); opacity: 1; }
+  28% { transform: translate(-1.948px, 1.721px); opacity: 1; }
+  29% { transform: translate(-1.557px, 2.15px); opacity: 1; }
+  30% { transform: translate(-1.161px, 2.493px); opacity: 1; }
+  31% { transform: translate(-0.7471px, 2.704px); opacity: 1; }
+  32% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  32%, 100% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+}
+@keyframes pulse-6 {
+  0%, 24% { stroke-dashoffset: 0.8547px; opacity: 0; }
+  25%, 31% { opacity: 1; }
+  32%, 100% { stroke-dashoffset: -4.498px; opacity: 0; }
+}
+.pkt.m6 { animation-name: msg-6; }
+.pulse-6 { animation-name: pulse-6; stroke-dasharray: 0.8547px 6.208px; }
+.pkt.m6 { --rx: -2.107px; --ry: 1.536px; }
+
+@keyframes msg-7 {
+  0%, 31% { transform: translate(-0.302px, 0px); opacity: 0; }
+  31% { transform: translate(-0.302px, 0px); opacity: 0; }
+  32% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  33% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  34% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  35% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  36% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  37% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  38% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  39% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  39%, 100% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+}
+@keyframes pulse-7 {
+  0%, 31% { stroke-dashoffset: -3.468px; opacity: 0; }
+  32%, 38% { opacity: 1; }
+  39%, 100% { stroke-dashoffset: 0.659px; opacity: 0; }
+}
+.pkt.m7 { animation-name: msg-7; }
+.pulse-7 { animation-name: pulse-7; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m7 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes msg-8 {
+  0%, 38% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  38% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  39% { transform: translate(-3.237px, 0.3712px); opacity: 1; }
+  40% { transform: translate(-2.775px, 0.7869px); opacity: 1; }
+  41% { transform: translate(-2.35px, 1.252px); opacity: 1; }
+  42% { transform: translate(-1.948px, 1.721px); opacity: 1; }
+  43% { transform: translate(-1.557px, 2.15px); opacity: 1; }
+  44% { transform: translate(-1.161px, 2.493px); opacity: 1; }
+  45% { transform: translate(-0.7471px, 2.704px); opacity: 1; }
+  46% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  46%, 100% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+}
+@keyframes pulse-8 {
+  0%, 38% { stroke-dashoffset: 0.8547px; opacity: 0; }
+  39%, 45% { opacity: 1; }
+  46%, 100% { stroke-dashoffset: -4.498px; opacity: 0; }
+}
+.pkt.m8 { animation-name: msg-8; }
+.pulse-8 { animation-name: pulse-8; stroke-dasharray: 0.8547px 6.208px; }
+.pkt.m8 { --rx: -2.107px; --ry: 1.536px; }
+
+@keyframes msg-9 {
+  0%, 40% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  40% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  41% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  42% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  43% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  44% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  45% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  46% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  47% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  48% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  48%, 100% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+}
+@keyframes pulse-9 {
+  0%, 40% { stroke-dashoffset: 0.8629px; opacity: 0; }
+  41%, 47% { opacity: 1; }
+  48%, 100% { stroke-dashoffset: -4.541px; opacity: 0; }
+}
+.pkt.m9 { animation-name: msg-9; }
+.pulse-9 { animation-name: pulse-9; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m9 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-10 {
+  0%, 43% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  43% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  44% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  45% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  46% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  47% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  48% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  49% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  50% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  51% { transform: translate(-0.302px, 0px); opacity: 0; }
+  51%, 100% { transform: translate(-0.302px, 0px); opacity: 0; }
+}
+@keyframes pulse-10 {
+  0%, 43% { stroke-dashoffset: 0.659px; opacity: 0; }
+  44%, 50% { opacity: 1; }
+  51%, 100% { stroke-dashoffset: -3.468px; opacity: 0; }
+}
+.pkt.m10 { animation-name: msg-10; }
+.pulse-10 { animation-name: pulse-10; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m10 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes msg-11 {
+  0%, 52% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  52% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  53% { transform: translate(-0.7471px, 2.704px); opacity: 1; }
+  54% { transform: translate(-1.161px, 2.493px); opacity: 1; }
+  55% { transform: translate(-1.557px, 2.15px); opacity: 1; }
+  56% { transform: translate(-1.948px, 1.721px); opacity: 1; }
+  57% { transform: translate(-2.35px, 1.252px); opacity: 1; }
+  58% { transform: translate(-2.775px, 0.7869px); opacity: 1; }
+  59% { transform: translate(-3.237px, 0.3712px); opacity: 1; }
+  60% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  60%, 100% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+}
+@keyframes pulse-11 {
+  0%, 52% { stroke-dashoffset: -4.498px; opacity: 0; }
+  53%, 59% { opacity: 1; }
+  60%, 100% { stroke-dashoffset: 0.8547px; opacity: 0; }
+}
+.pkt.m11 { animation-name: msg-11; }
+.pulse-11 { animation-name: pulse-11; stroke-dasharray: 0.8547px 6.208px; }
+.pkt.m11 { --rx: -2.107px; --ry: 1.536px; }
+
+@keyframes msg-12 {
+  0%, 54% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  54% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  55% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  56% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  57% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  58% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  59% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  60% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  61% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  62% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  62%, 100% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+}
+@keyframes pulse-12 {
+  0%, 54% { stroke-dashoffset: 0.8629px; opacity: 0; }
+  55%, 61% { opacity: 1; }
+  62%, 100% { stroke-dashoffset: -4.541px; opacity: 0; }
+}
+.pkt.m12 { animation-name: msg-12; }
+.pulse-12 { animation-name: pulse-12; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m12 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-13 {
+  0%, 57% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  57% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  58% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  59% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  60% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  61% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  62% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  63% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  64% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  65% { transform: translate(-0.302px, 0px); opacity: 0; }
+  65%, 100% { transform: translate(-0.302px, 0px); opacity: 0; }
+}
+@keyframes pulse-13 {
+  0%, 57% { stroke-dashoffset: 0.659px; opacity: 0; }
+  58%, 64% { opacity: 1; }
+  65%, 100% { stroke-dashoffset: -3.468px; opacity: 0; }
+}
+.pkt.m13 { animation-name: msg-13; }
+.pulse-13 { animation-name: pulse-13; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m13 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes msg-14 {
+  0%, 66% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  66% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  67% { transform: translate(-3.237px, 0.3712px); opacity: 1; }
+  68% { transform: translate(-2.775px, 0.7869px); opacity: 1; }
+  69% { transform: translate(-2.35px, 1.252px); opacity: 1; }
+  70% { transform: translate(-1.948px, 1.721px); opacity: 1; }
+  71% { transform: translate(-1.557px, 2.15px); opacity: 1; }
+  72% { transform: translate(-1.161px, 2.493px); opacity: 1; }
+  73% { transform: translate(-0.7471px, 2.704px); opacity: 1; }
+  74% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+  74%, 100% { transform: translate(-0.302px, 2.74px); opacity: 0; }
+}
+@keyframes pulse-14 {
+  0%, 66% { stroke-dashoffset: 0.8547px; opacity: 0; }
+  67%, 73% { opacity: 1; }
+  74%, 100% { stroke-dashoffset: -4.498px; opacity: 0; }
+}
+.pkt.m14 { animation-name: msg-14; }
+.pulse-14 { animation-name: pulse-14; stroke-dasharray: 0.8547px 6.208px; }
+.pkt.m14 { --rx: -2.107px; --ry: 1.536px; }
+
+@keyframes msg-15 {
+  0%, 64% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  64% { transform: translate(-0.302px, -2.74px); opacity: 0; }
+  65% { transform: translate(-0.7471px, -2.576px); opacity: 1; }
+  66% { transform: translate(-1.161px, -2.254px); opacity: 1; }
+  67% { transform: translate(-1.557px, -1.827px); opacity: 1; }
+  68% { transform: translate(-1.948px, -1.347px); opacity: 1; }
+  69% { transform: translate(-2.35px, -0.8672px); opacity: 1; }
+  70% { transform: translate(-2.775px, -0.4393px); opacity: 1; }
+  71% { transform: translate(-3.237px, -0.116px); opacity: 1; }
+  72% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  72%, 100% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+}
+@keyframes pulse-15 {
+  0%, 64% { stroke-dashoffset: -4.541px; opacity: 0; }
+  65%, 71% { opacity: 1; }
+  72%, 100% { stroke-dashoffset: 0.8629px; opacity: 0; }
+}
+.pkt.m15 { animation-name: msg-15; }
+.pulse-15 { animation-name: pulse-15; stroke-dasharray: 0.8629px 6.267px; }
+.pkt.m15 { --rx: -2.107px; --ry: -1.152px; }
+
+@keyframes msg-16 {
+  0%, 67% { transform: translate(-0.302px, 0px); opacity: 0; }
+  67% { transform: translate(-0.302px, 0px); opacity: 0; }
+  68% { transform: translate(-0.7471px, 0.06416px); opacity: 1; }
+  69% { transform: translate(-1.161px, 0.1192px); opacity: 1; }
+  70% { transform: translate(-1.557px, 0.1614px); opacity: 1; }
+  71% { transform: translate(-1.948px, 0.187px); opacity: 1; }
+  72% { transform: translate(-2.35px, 0.1924px); opacity: 1; }
+  73% { transform: translate(-2.775px, 0.1738px); opacity: 1; }
+  74% { transform: translate(-3.237px, 0.1276px); opacity: 1; }
+  75% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+  75%, 100% { transform: translate(-3.75px, 0.05px); opacity: 0; }
+}
+@keyframes pulse-16 {
+  0%, 67% { stroke-dashoffset: -3.468px; opacity: 0; }
+  68%, 74% { opacity: 1; }
+  75%, 100% { stroke-dashoffset: 0.659px; opacity: 0; }
+}
+.pkt.m16 { animation-name: msg-16; }
+.pulse-16 { animation-name: pulse-16; stroke-dasharray: 0.659px 4.786px; }
+.pkt.m16 { --rx: -2.107px; --ry: 0.1918px; }
+
+@keyframes s0-pv1 {
+  0% { opacity: 1; }
+  9.9% { opacity: 1; }
+  10% { opacity: 0; }
+  98% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes s0-pv2 {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  47.9% { opacity: 1; }
+  48% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s0-pv3 {
+  0% { opacity: 0; }
+  48% { opacity: 1; }
+  97.9% { opacity: 1; }
+  98% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s0-run {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  20.9% { opacity: 1; }
+  21% { opacity: 0; }
+  48% { opacity: 1; }
+  58.9% { opacity: 1; }
+  59% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s0-err {
+  0% { opacity: 0; }
+  21% { opacity: 1; }
+  47.9% { opacity: 1; }
+  48% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s0-idle {
+  0% { opacity: 1; }
+  9.9% { opacity: 1; }
+  10% { opacity: 0; }
+  98% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes s0-done {
+  0% { opacity: 0; }
+  59% { opacity: 1; }
+  97.9% { opacity: 1; }
+  98% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.s0 .pv1 { animation-name: s0-pv1; }
+.s0 .pv2 { animation-name: s0-pv2; }
+.s0 .pv3 { animation-name: s0-pv3; }
+.s0 .w-run { animation-name: s0-run; }
+.s0 .w-err { animation-name: s0-err; }
+.s0 .pst-idle { animation-name: s0-idle; }
+.s0 .pst-run { animation-name: s0-run; }
+.s0 .pst-err { animation-name: s0-err; }
+.s0 .pst-done { animation-name: s0-done; }
+
+@keyframes s1-pv1 {
+  0% { opacity: 1; }
+  12.9% { opacity: 1; }
+  13% { opacity: 0; }
+  98% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes s1-pv2 {
+  0% { opacity: 0; }
+  13% { opacity: 1; }
+  50.9% { opacity: 1; }
+  51% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s1-pv3 {
+  0% { opacity: 0; }
+  51% { opacity: 1; }
+  97.9% { opacity: 1; }
+  98% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s1-run {
+  0% { opacity: 0; }
+  13% { opacity: 1; }
+  23.9% { opacity: 1; }
+  24% { opacity: 0; }
+  51% { opacity: 1; }
+  61.9% { opacity: 1; }
+  62% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s1-err {
+  0% { opacity: 0; }
+  24% { opacity: 1; }
+  50.9% { opacity: 1; }
+  51% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s1-idle {
+  0% { opacity: 1; }
+  12.9% { opacity: 1; }
+  13% { opacity: 0; }
+  98% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes s1-done {
+  0% { opacity: 0; }
+  62% { opacity: 1; }
+  97.9% { opacity: 1; }
+  98% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.s1 .pv1 { animation-name: s1-pv1; }
+.s1 .pv2 { animation-name: s1-pv2; }
+.s1 .pv3 { animation-name: s1-pv3; }
+.s1 .w-run { animation-name: s1-run; }
+.s1 .w-err { animation-name: s1-err; }
+.s1 .pst-idle { animation-name: s1-idle; }
+.s1 .pst-run { animation-name: s1-run; }
+.s1 .pst-err { animation-name: s1-err; }
+.s1 .pst-done { animation-name: s1-done; }
+
+@keyframes w2-throw {
+  0%, 12% { stroke-dashoffset: 4.498px; }
+  20%, 74% { stroke-dashoffset: 0; }
+  82%, 100% { stroke-dashoffset: 4.498px; }
+}
+
+@keyframes s2-live {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  73.9% { opacity: 1; }
+  74% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-twist {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  73.9% { opacity: 1; }
+  74% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-empty {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  31.9% { opacity: 1; }
+  32% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-code {
+  0% { opacity: 0; }
+  32% { opacity: 1; }
+  73.9% { opacity: 1; }
+  74% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-found {
+  0% { opacity: 0; }
+  52% { opacity: 1; }
+  73.9% { opacity: 1; }
+  74% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-ready {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  31.9% { opacity: 1; }
+  32% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-loaded {
+  0% { opacity: 0; }
+  32% { opacity: 1; }
+  45.9% { opacity: 1; }
+  46% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-run {
+  0% { opacity: 0; }
+  46% { opacity: 1; }
+  51.9% { opacity: 1; }
+  52% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes s2-done {
+  0% { opacity: 0; }
+  52% { opacity: 1; }
+  73.9% { opacity: 1; }
+  74% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.w2 .twine, .c2, .panel.s2, .tag-bullet.b2, .s2-stem, .w2 .twist, .s2 .q-empty, .s2 .q-code, .s2 .q-file, .s2 .q-snip {
+  animation-duration: var(--beat);
+  animation-iteration-count: infinite;
+}
+.w2 .twine {
+  stroke-dasharray: 4.498px;
+  animation-name: w2-throw;
+  animation-timing-function: linear;
+}
+.c2, .panel.s2, .tag-bullet.b2, .s2-stem, .w2 .twist, .s2 .q-empty, .s2 .q-code, .s2 .q-file, .s2 .q-snip {
+  opacity: 0;
+  animation-timing-function: steps(1);
+}
+.w2 .twist { animation-name: s2-twist; }
+.c2, .panel.s2, .tag-bullet.b2, .s2-stem { animation-name: s2-live; }
+.s2 .q-empty { animation-name: s2-empty; }
+.s2 .q-code, .s2 .q-file { animation-name: s2-code; }
+.s2 .q-snip, .s2 .w-found { animation-name: s2-found; }
+.s2 .pst-ready { animation-name: s2-ready; }
+.s2 .pst-loaded { animation-name: s2-loaded; }
+.s2 .pst-run { animation-name: s2-run; }
+.s2 .pst-done { animation-name: s2-done; }
+
+@keyframes saw-spin {
+  0%, 75% { transform: rotate(0deg); }
+  98%, 100% { transform: rotate(1440deg); }
+}
+@keyframes flute-run {
+  0%, 75% { transform: translateY(0); }
+  98%, 100% { transform: translateY(-2.2px); }
+}
+.saw, .flutes {
+  animation-duration: var(--beat);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.saw { transform-origin: 0 0; }
+/* only the story robot's tools run off the main timeline; the band's robots
+   spin on hover instead (a <use> shadow tree cannot be reached by a descendant
+   selector, so the scoping has to be a class inside the def) */
+.saw-story { animation-name: saw-spin; }
+.flutes-story { animation-name: flute-run; }
+
+@keyframes face-sad {
+  0% { opacity: 0; }
+  39% { opacity: 1; }
+  49.9% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes face-happy {
+  0% { opacity: 0; }
+  75% { opacity: 1; }
+  97.9% { opacity: 1; }
+  98% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes face-flat {
+  0% { opacity: 1; }
+  38.9% { opacity: 1; }
+  39% { opacity: 0; }
+  50% { opacity: 1; }
+  74.9% { opacity: 1; }
+  75% { opacity: 0; }
+  98% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+/* one cycle is 24s */
+:root { --beat: 24s; }
+:root { --beat-b: 17s; }
+
+@keyframes b-msg-out {
+  0%, 5% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+  5% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+  6.125% { transform: translate(-6.5369px, 0.9252px); opacity: 1; }
+  7.25% { transform: translate(-6.248px, 0.91px); opacity: 1; }
+  8.375% { transform: translate(-5.9879px, 0.8648px); opacity: 1; }
+  9.5% { transform: translate(-5.7527px, 0.8001px); opacity: 1; }
+  10.62% { transform: translate(-5.5366px, 0.7258px); opacity: 1; }
+  11.75% { transform: translate(-5.3356px, 0.6525px); opacity: 1; }
+  12.88% { transform: translate(-5.1448px, 0.5904px); opacity: 1; }
+  14% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+  14%, 100% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+}
+
+@keyframes b-msg-state {
+  0%, 17% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+  17% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+  18.12% { transform: translate(-6.5369px, 0.9252px); opacity: 1; }
+  19.25% { transform: translate(-6.248px, 0.91px); opacity: 1; }
+  20.38% { transform: translate(-5.9879px, 0.8648px); opacity: 1; }
+  21.5% { transform: translate(-5.7527px, 0.8001px); opacity: 1; }
+  22.62% { transform: translate(-5.5366px, 0.7258px); opacity: 1; }
+  23.75% { transform: translate(-5.3356px, 0.6525px); opacity: 1; }
+  24.88% { transform: translate(-5.1448px, 0.5904px); opacity: 1; }
+  26% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+  26%, 100% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+}
+
+@keyframes b-msg-back {
+  0%, 28% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+  28% { transform: translate(-4.96px, 0.55px); opacity: 0; }
+  29.12% { transform: translate(-5.1448px, 0.5904px); opacity: 1; }
+  30.25% { transform: translate(-5.3356px, 0.6525px); opacity: 1; }
+  31.38% { transform: translate(-5.5366px, 0.7258px); opacity: 1; }
+  32.5% { transform: translate(-5.7527px, 0.8001px); opacity: 1; }
+  33.62% { transform: translate(-5.9879px, 0.8648px); opacity: 1; }
+  34.75% { transform: translate(-6.248px, 0.91px); opacity: 1; }
+  35.88% { transform: translate(-6.5369px, 0.9252px); opacity: 1; }
+  37% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+  37%, 100% { transform: translate(-6.86px, 0.9px); opacity: 0; }
+}
+
+@keyframes b-pulse-out {
+  0%, 5% { stroke-dashoffset: 0.3909px; opacity: 0; }
+  6%, 13% { opacity: 1; }
+  14%, 100% { stroke-dashoffset: -1.9544px; opacity: 0; }
+}
+
+@keyframes b-pulse-state {
+  0%, 17% { stroke-dashoffset: 0.3909px; opacity: 0; }
+  18%, 25% { opacity: 1; }
+  26%, 100% { stroke-dashoffset: -1.9544px; opacity: 0; }
+}
+
+@keyframes b-pulse-back {
+  0%, 28% { stroke-dashoffset: -1.9544px; opacity: 0; }
+  29%, 36% { opacity: 1; }
+  37%, 100% { stroke-dashoffset: 0.3909px; opacity: 0; }
+}
+
+@keyframes b-sorry {
+  0% { opacity: 1; }
+  13.9% { opacity: 1; }
+  14% { opacity: 0; }
+  94% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes b-near {
+  0% { opacity: 0; }
+  14% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-good {
+  0% { opacity: 0; }
+  68% { opacity: 1; }
+  93.9% { opacity: 1; }
+  94% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-run {
+  0% { opacity: 0; }
+  14% { opacity: 1; }
+  19.9% { opacity: 1; }
+  20% { opacity: 0; }
+  68% { opacity: 1; }
+  75.9% { opacity: 1; }
+  76% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-err {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-errst {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  55.9% { opacity: 1; }
+  56% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-idle {
+  0% { opacity: 1; }
+  13.9% { opacity: 1; }
+  14% { opacity: 0; }
+  94% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes b-hamst {
+  0% { opacity: 0; }
+  56% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-done {
+  0% { opacity: 0; }
+  76% { opacity: 1; }
+  93.9% { opacity: 1; }
+  94% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-hamtext {
+  0% { opacity: 0; }
+  48% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-bubble {
+  0% { opacity: 0; }
+  37% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-hammer {
+  0% { opacity: 0; }
+  48% { opacity: 1; }
+  67.9% { opacity: 1; }
+  68% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes bot-calm {
+  0% { opacity: 1; }
+  36.9% { opacity: 1; }
+  37% { opacity: 0; }
+  94% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes bot-glum {
+  0% { opacity: 0; }
+  37% { opacity: 1; }
+  75.9% { opacity: 1; }
+  76% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes bot-glad {
+  0% { opacity: 0; }
+  76% { opacity: 1; }
+  93.9% { opacity: 1; }
+  94% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes her-calm {
+  0% { opacity: 1; }
+  75.9% { opacity: 1; }
+  76% { opacity: 0; }
+  94% { opacity: 1; }
+  99.9% { opacity: 1; }
+}
+
+@keyframes her-glad {
+  0% { opacity: 0; }
+  76% { opacity: 1; }
+  93.9% { opacity: 1; }
+  94% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes b-type {
+  0%, 48% { width: 0; }
+  56%, 67.9% { width: 2.052px; }
+  68%, 100% { width: 0; }
+}
+@keyframes b-caret {
+  0%, 47.9% { opacity: 0; transform: translateX(0); }
+  48% { opacity: 1; transform: translateX(0); }
+  56% { opacity: 1; transform: translateX(2.052px); }
+  67.9% { opacity: 1; transform: translateX(2.052px); }
+  68%, 100% { opacity: 0; transform: translateX(0); }
+}
+
+.side-svg .pulse, .side-svg .pkt, .side-svg .wash, .side-svg .pst,
+.side-svg .b-v1, .side-svg .b-v2, .side-svg .b-v3, .side-svg .b-ham,
+.side-svg .type-rect, .side-svg .caret, .side-svg .bubble, .side-svg .b-hammer,
+.side-svg .b-calm, .side-svg .b-glum, .side-svg .b-glad,
+.side-svg .h-calm, .side-svg .h-glad {
+  animation-duration: var(--beat-b);
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1);
+}
+.side-svg .pulse, .side-svg .pkt { animation-timing-function: linear; }
+.side-svg .pulse { stroke-dasharray: 0.3909px 1.9544px; }
+.side-svg .type-rect { animation-timing-function: steps(12, end); }
+.side-svg .caret { animation-timing-function: steps(12, end); }
+.side-svg .pulse, .side-svg .pkt, .side-svg .wash, .side-svg .pst,
+.side-svg .b-v1, .side-svg .b-v2, .side-svg .b-v3, .side-svg .b-ham,
+.side-svg .caret, .side-svg .bubble,
+.side-svg .b-glum, .side-svg .b-glad, .side-svg .h-glad { opacity: 0; }
+.side-svg .b-msg-out { animation-name: b-msg-out; }
+.side-svg .b-msg-state { animation-name: b-msg-state; }
+.side-svg .b-msg-back { animation-name: b-msg-back; }
+.side-svg .b-pulse-out { animation-name: b-pulse-out; }
+.side-svg .b-pulse-state { animation-name: b-pulse-state; }
+.side-svg .b-pulse-back { animation-name: b-pulse-back; }
+.side-svg .b-v1 { animation-name: b-sorry; }
+.side-svg .b-v2 { animation-name: b-near; }
+.side-svg .b-v3 { animation-name: b-good; }
+.side-svg .b-wash-run { animation-name: b-run; }
+.side-svg .b-wash-err { animation-name: b-err; }
+.side-svg .b-st-idle { animation-name: b-idle; }
+.side-svg .b-st-run { animation-name: b-run; }
+.side-svg .b-st-err { animation-name: b-errst; }
+.side-svg .b-st-ham { animation-name: b-hamst; }
+.side-svg .b-st-done { animation-name: b-done; }
+.side-svg .b-ham { animation-name: b-hamtext; }
+.side-svg .type-rect { animation-name: b-type; }
+.side-svg .caret { animation-name: b-caret; }
+.side-svg .bubble { animation-name: b-bubble; }
+.side-svg .b-hammer { animation-name: b-hammer; }
+.side-svg .b-calm { animation-name: bot-calm; }
+.side-svg .b-glum { animation-name: bot-glum; }
+.side-svg .b-glad { animation-name: bot-glad; }
+.side-svg .h-calm { animation-name: her-calm; }
+.side-svg .h-glad { animation-name: her-glad; }
+
+
+/* A wide scene in a scrolling box needs an edge that says so. The fade is
+   driven by the box's own scroll position where that is supported, so it is
+   gone once you reach the end; where it is not, a static edge is still a
+   better signal than nothing. */
+.scene-wrap, .mcp-wrap, .side-wrap { --fade: 0; }
+@media (max-width: 820px) {
+  .scene-wrap { --fade: 1; }
+}
+@media (max-width: 780px) {
+  .side-wrap { --fade: 1; }
+}
+@media (max-width: 700px) {
+  .mcp-wrap { --fade: 1; }
+}
+.scene-wrap, .mcp-wrap, .side-wrap {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 54px * var(--fade)), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 54px * var(--fade)), transparent);
+  transition: --fade .12s linear;
+}
+/* the script clears it once the box is scrolled to the end -- a fade that
+   stays put there is not a hint, it is just content hidden behind a gradient */
+.scene-wrap.at-end, .mcp-wrap.at-end, .side-wrap.at-end { --fade: 0; }
+@property --fade { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+/* ===================== narrow screens and phones ======================= */
+
+/* The rail needs a margin wide enough for a dot *and* its label, which only
+   appears on hover: 1080px of content plus about 130px either side. Anything
+   narrower and the label reaches back over the text, so below that width the
+   rail lies down as a bar across the top instead. */
+@media (max-width: 1340px), (max-height: 620px) {
+  .rail {
+    top: 0; right: 0; left: 0; bottom: auto;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 9px 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .rail a {
+    flex-direction: row;
+    gap: 6px;
+    padding: 9px 6px;          /* the dot is 8px; the tap target is not */
+    font-size: 12px;
+  }
+  .rail i { order: 0; width: 7px; height: 7px; }
+  .rail span { order: 1; opacity: 1; transform: none; }
+  main { padding-top: 46px; }
+}
+@media (max-width: 430px) {
+  .rail { gap: 8px; }
+  .rail a { font-size: 11px; padding: 9px 3px; }
+}
+
+@media (max-height: 620px), (max-width: 700px) {
+  /* The chevrons belong to the screen-at-a-time layout, which is off here. */
+  .scroll-cue { display: none; }
+
+  /* A centred flex container clips its overflow on the leading edge and the
+     scrollbar cannot reach it -- which is where the robot went. */
+  .scene-wrap, .mcp-wrap, .side-wrap { justify-content: flex-start; }
+}

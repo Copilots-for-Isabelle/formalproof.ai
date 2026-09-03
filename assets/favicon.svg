@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>PIDE MCP</title>
+  <!-- the agent's head, same palette as the robot on the page -->
+  <path d="M16 6.4V3.6" stroke="#7C838D" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="16" cy="2.4" r="2" fill="#901A1E"/>
+  <rect x="2.4" y="6" width="27.2" height="22" rx="5.2" fill="#7C838D"/>
+  <rect x="5.6" y="9.2" width="20.8" height="15.6" rx="3.4"
+        fill="#EEF1F5" stroke="#2C2F35" stroke-width="1"/>
+  <circle cx="11.6" cy="15.2" r="2.5" fill="#2C2F35"/>
+  <circle cx="20.4" cy="15.2" r="2.5" fill="#2C2F35"/>
+  <!-- a smile, not a straight line: the robot on the page grins once it is connected -->
+  <path d="M11.2 19.4q4.8 4.4 9.6 0" fill="none" stroke="#2C2F35" stroke-width="2.3"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

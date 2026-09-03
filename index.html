@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ===========================================================================
+     SEARCH AND SOCIAL COPY. This is the whole of the SEO copy. Each string
+     appears twice, once for Google and once for social cards, so edit them in
+     pairs. The title also names the topic entity in the JSON-LD below; keep
+     those in step if you rename the subject of the site.
+
+       TITLE        Google's blue link, and the browser tab.
+                    Keep under ~60 characters or Google truncates it.
+       DESCRIPTION  The grey snippet under the link, and the card subtitle.
+                    Keep under ~160 characters. Google rewrites it about half
+                    the time regardless, usually pulling a sentence off the
+                    page instead, so the opening lines of the hero matter too.
+
+     Everything after this block is machinery, not copy: twitter:* is omitted
+     on purpose because X falls back to og:*, and the JSON-LD below does not
+     restate the title or description either.
+     =========================================================================== -->
+<title>Agentic formal proof, down to the axioms</title>
+<meta property="og:title" content="Agentic formal proof, down to the axioms">
+
+<meta name="description" content="AI creates novel proofs. But who checks them? Meet Isabelle, an agent-friendly proof assistant verifying every step.">
+<meta property="og:description" content="AI creates novel proofs. But who checks them? Meet Isabelle, an agent-friendly proof assistant verifying every step.">
+
+<!-- Card image. Regenerate assets/og.png at exactly 1200x630 if you change it. -->
+<meta property="og:image" content="https://formalproof.ai/assets/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A robot wired by tin-can telephone into an Isabelle editor showing a finished proof.">
+
+<!-- Machinery: rarely needs touching. -->
+<meta name="author" content="Kevin Kappelmann">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://formalproof.ai/">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="formalproof.ai">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://formalproof.ai/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://formalproof.ai/#website",
+      "url": "https://formalproof.ai/",
+      "name": "formalproof.ai",
+      "inLanguage": "en-US",
+      "description": "Agentic formal proof: AI creates novel proofs, and a proof assistant verifies every step. Why Isabelle is the agent-friendly frontier choice, and how to put your agent on it.",
+      "publisher": {
+        "@id": "https://formalproof.ai/#author"
+      },
+      "about": {
+        "@id": "https://formalproof.ai/#topic"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://formalproof.ai/#webpage",
+      "url": "https://formalproof.ai/",
+      "isPartOf": {
+        "@id": "https://formalproof.ai/#website"
+      },
+      "inLanguage": "en-US",
+      "primaryImageOfPage": "https://formalproof.ai/assets/og.png",
+      "about": {
+        "@id": "https://formalproof.ai/#topic"
+      },
+      "mentions": [
+        {
+          "@id": "https://formalproof.ai/#isabelle"
+        },
+        {
+          "@id": "https://formalproof.ai/#app"
+        }
+      ],
+      "keywords": "agentic formal proof, AI theorem proving, autoformalization, proof assistant, Isabelle, formal verification, machine-checked proof, AI agents, LLM theorem prover, MCP server, agent-friendly proof assistant, Isabelle/HOL",
+      "author": {
+        "@id": "https://formalproof.ai/#author"
+      }
+    },
+    {
+      "@type": "Thing",
+      "@id": "https://formalproof.ai/#topic",
+      "name": "Agentic formal proof",
+      "alternateName": [
+        "AI theorem proving",
+        "Autoformalization",
+        "Machine-checked AI proofs"
+      ],
+      "description": "AI agents producing mathematics and verified software whose every step is verified by a proof assistant, down to the axioms.",
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Automated_theorem_proving",
+        "https://en.wikipedia.org/wiki/Formal_verification",
+        "https://en.wikipedia.org/wiki/Proof_assistant"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://formalproof.ai/#author",
+      "name": "Kevin Kappelmann",
+      "url": "https://github.com/kappelmann/"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://formalproof.ai/#isabelle",
+      "name": "Isabelle",
+      "alternateName": "Isabelle/HOL",
+      "url": "https://isabelle.in.tum.de/",
+      "description": "An agent-friendly frontier proof assistant that verifies every step of a proof, down to the axioms. It ships the strongest proof automation of any assistant, notably sledgehammer, and stands behind some of the largest verified software and formal proof libraries ever built.",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Proof assistant",
+      "operatingSystem": "Linux, macOS, Windows",
+      "isAccessibleForFree": true,
+      "sameAs": [
+        "https://isabelle.in.tum.de/",
+        "https://en.wikipedia.org/wiki/Isabelle_(proof_assistant)",
+        "https://www.wikidata.org/wiki/Q1662644"
+      ],
+      "isRelatedTo": {
+        "@id": "https://formalproof.ai/#topic"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://formalproof.ai/#app",
+      "name": "PIDE MCP",
+      "alternateName": "isabelle-pide-mcp",
+      "url": "https://formalproof.ai/",
+      "description": "An MCP server that gives coding agents a live, two-way connection to the Isabelle proof assistant: editing, proving, and exploring across many sessions at once and in parallel.",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Model Context Protocol server",
+      "operatingSystem": "Linux, macOS, Windows",
+      "license": "https://www.gnu.org/licenses/lgpl-3.0.html",
+      "codeRepository": "https://github.com/kappelmann/isabelle-pide-mcp",
+      "downloadUrl": "https://github.com/kappelmann/isabelle-pide-mcp",
+      "image": "https://formalproof.ai/assets/og.png",
+      "author": {
+        "@id": "https://formalproof.ai/#author"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "isAccessibleForFree": true,
+      "softwareRequirements": "Isabelle",
+      "requirements": {
+        "@id": "https://formalproof.ai/#isabelle"
+      },
+      "sameAs": [
+        "https://github.com/kappelmann/isabelle-pide-mcp",
+        "https://doi.org/10.5281/zenodo.21519364"
+      ],
+      "isRelatedTo": {
+        "@id": "https://formalproof.ai/#topic"
+      }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "@id": "https://doi.org/10.5281/zenodo.21519364",
+      "headline": "PIDE MCP",
+      "name": "PIDE MCP preprint",
+      "author": {
+        "@id": "https://formalproof.ai/#author"
+      },
+      "identifier": "https://doi.org/10.5281/zenodo.21519364",
+      "url": "https://doi.org/10.5281/zenodo.21519364",
+      "about": {
+        "@id": "https://formalproof.ai/#app"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<main>
+  <section class="hero" id="ai-proof">
+  <h1>AI creates novel proofs.<br>But <em>who checks them?</em></h1>
+  <p class="sub">
+    AI models settled mathematical conjectures standing for decades and autonomously verified
+    sophisticated programs. But they can also be wrong
+    with great confidence, producing broken proofs that look just like working ones. Proof
+    assistants are a remedy for this challenge.
+  </p>
+    <p class="sub hero-cta"><b>Download and install – or ask your agent to do it for you.</b></p>
+    <div class="start-grid hero-grid">
+      <a class="start-card key" href="https://isabelle.in.tum.de/">
+        <span class="start-head">
+          <img class="start-logo start-logo-light" src="assets/isabelle.svg" alt="">
+          <img class="start-logo start-logo-dark" src="assets/isabelle-dark.svg" alt="">
+          Isabelle
+        </span>
+        <span class="start-body">The frontier proof assistant: every step of a proof checked, down to the axioms.</span>
+        <span class="start-foot">
+          <span class="lic">BSD-style license</span>
+          <span class="go">Download &rarr;</span>
+        </span>
+      </a>
+
+      <a class="start-card key" href="https://github.com/kappelmann/isabelle-pide-mcp">
+        <span class="start-head">
+<svg class="start-logo wire-logo" viewBox="-2.95 -0.95 5.9 2.1" aria-hidden="true">
+          <path fill="none" stroke="#D8B87E" stroke-width="0.1195" stroke-linecap="round" d="M-1.35,0 C-0.35,0.42 0.35,0.42 1.35,0"/>
+          <g class="" transform="translate(-1.95,0) scale(1,1)">
+          <path fill="#C3C8CE" stroke="#2C2F35" stroke-width="0.04218" stroke-linejoin="round" d="M-0.6,-0.6H0.6A0.22,0.6 0 0 1 0.6,0.6H-0.6Z"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M-0.2,-0.5631A0.22,0.5631 0 0 1 -0.2,0.5631"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M0.2,-0.5631A0.22,0.5631 0 0 1 0.2,0.5631"/>
+          <ellipse fill="#9AA1AB" stroke="#2C2F35" stroke-width="0.04218" cx="-0.6" cy="0" rx="0.22" ry="0.6"/>
+          <ellipse fill="#2C2F35" cx="-0.6" cy="0" rx="0.121" ry="0.396"/>
+          <circle fill="#2C2F35" cx="0.6" cy="0" r="0.05"/>
+          </g>
+          <g class="" transform="translate(1.95,0) scale(-1,1)">
+          <path fill="#C3C8CE" stroke="#2C2F35" stroke-width="0.04218" stroke-linejoin="round" d="M-0.6,-0.6H0.6A0.22,0.6 0 0 1 0.6,0.6H-0.6Z"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M-0.2,-0.5631A0.22,0.5631 0 0 1 -0.2,0.5631"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M0.2,-0.5631A0.22,0.5631 0 0 1 0.2,0.5631"/>
+          <ellipse fill="#9AA1AB" stroke="#2C2F35" stroke-width="0.04218" cx="-0.6" cy="0" rx="0.22" ry="0.6"/>
+          <ellipse fill="#2C2F35" cx="-0.6" cy="0" rx="0.121" ry="0.396"/>
+          <circle fill="#2C2F35" cx="0.6" cy="0" r="0.05"/>
+          </g>
+          </svg>
+          PIDE MCP
+        </span>
+        <span class="start-body">Your agent's live line to Isabelle: reactive and parallel, autonomous and cooperative.</span>
+        <span class="start-foot">
+          <span class="lic">LGPL-3.0</span>
+          <span class="go">Download &rarr;</span>
+        </span>
+      </a>
+    </div>
+    <a class="scroll-cue" href="#isabelle" aria-label="On to Isabelle">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+    <svg class="pm-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+    <g id="pm-robot">
+    <g class="robot">
+    <path fill="#7C838D" d="M-1.884,2.006 Q-2,1.6 -1.578,1.6 L1.578,1.6 Q2,1.6 1.884,2.006 L1.716,2.594 Q1.6,3 1.178,3 L-1.178,3 Q-1.6,3 -1.716,2.594 Z"/>
+    <path stroke="#2C2F35" stroke-width="0.03515" d="M-1.5,1.75H1.5"/>
+    <rect fill="#2C2F35" x="-0.42" y="1.0" width="0.84" height="0.75"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.8,1.68 L-3.05,1.8 L-3.4,-0.15"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.8,1.68 L3.05,1.8 L3.4,-0.15"/>
+    <circle fill="#2C2F35" cx="-1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="0" cy="2.25" r="0.34"/>
+    <circle class="core" fill="#901A1E" cx="0" cy="2.25" r="0.26" stroke="#9AA1AB" stroke-width="0.03515"/>
+    <rect fill="#7C838D" x="-1.55" y="-1.05" width="3.1" height="2.1" rx="0.3515"/>
+    <rect fill="#EEF1F5" stroke="#2C2F35" stroke-width="0.03515" x="-1.3" y="-0.8" width="2.6" height="1.6" rx="0.2109"/>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.55" cy="-0.2" r="0.16"/>
+    <circle fill="#2C2F35" cx="0.55" cy="-0.2" r="0.16"/>
+    </g>
+    <path class="mouth m-flat" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.45,0.35H0.45"/>
+    <path class="mouth m-sad" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.46,0.46 Q0,0.12 0.46,0.46"/>
+    <path class="mouth m-happy" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.46,0.24 Q0,0.58 0.46,0.24"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.123" stroke-linecap="round" d="M0,-1.05V-1.45"/>
+    <circle class="blip" fill="#901A1E" cx="0" cy="-1.52" r="0.1"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.4569" stroke-linecap="round" d="M-3.4,-0.15L-3.72,-0.58"/>
+    <g transform="translate(-3.82,-0.9)"><g class="saw saw-story">
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.5"/>
+    <path fill="#C3C8CE" d="M0.5,-0 L0.6276,-0.05491 L0.4908,-0.0954Z M0.4755,-0.1545 L0.5799,-0.2462 L0.4373,-0.2424Z M0.4045,-0.2939 L0.4755,-0.4133 L0.341,-0.3657Z M0.2939,-0.4045 L0.3245,-0.54 L0.2113,-0.4532Z M0.1545,-0.4755 L0.1417,-0.6139 L0.06093,-0.4963Z M3.062e-17,-0.5 L-0.05491,-0.6276 L-0.0954,-0.4908Z M-0.1545,-0.4755 L-0.2462,-0.5799 L-0.2424,-0.4373Z M-0.2939,-0.4045 L-0.4133,-0.4755 L-0.3657,-0.341Z M-0.4045,-0.2939 L-0.54,-0.3245 L-0.4532,-0.2113Z M-0.4755,-0.1545 L-0.6139,-0.1417 L-0.4963,-0.06093Z M-0.5,-6.123e-17 L-0.6276,0.05491 L-0.4908,0.0954Z M-0.4755,0.1545 L-0.5799,0.2462 L-0.4373,0.2424Z M-0.4045,0.2939 L-0.4755,0.4133 L-0.341,0.3657Z M-0.2939,0.4045 L-0.3245,0.54 L-0.2113,0.4532Z M-0.1545,0.4755 L-0.1417,0.6139 L-0.06093,0.4963Z M-9.185e-17,0.5 L0.05491,0.6276 L0.0954,0.4908Z M0.1545,0.4755 L0.2462,0.5799 L0.2424,0.4373Z M0.2939,0.4045 L0.4133,0.4755 L0.3657,0.341Z M0.4045,0.2939 L0.54,0.3245 L0.4532,0.2113Z M0.4755,0.1545 L0.6139,0.1417 L0.4963,0.06093Z"/>
+    <circle fill="none" stroke="#2C2F35" stroke-width="0.02812" cx="0" cy="0" r="0.5"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.08787" stroke-linecap="round" d="M0.1732,-0.1L0.3291,-0.19 M-0.1732,-0.1L-0.3291,-0.19 M-3.674e-17,0.2L-6.98e-17,0.38"/>
+    <circle fill="#2C2F35" cx="0" cy="0" r="0.12"/>
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.05"/>
+    </g></g>
+    <g transform="translate(3.4,-0.15) rotate(-52)">
+    <rect fill="#2C2F35" x="-0.2" y="-0.05" width="0.4" height="0.83" rx="0.1406"/>
+    <rect fill="#7C838D" x="-0.33" y="-0.95" width="0.66" height="1.07" rx="0.246"/>
+    <rect fill="#9AA1AB" x="-0.22" y="-0.45" width="0.44" height="0.33" rx="0.1054"/>
+    <rect fill="#2C2F35" x="-0.17" y="-1.12" width="0.34" height="0.17"/>
+    <clipPath id="pm-bit-story"><path d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/></clipPath>
+    <path fill="#C3C8CE" d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/>
+    <g clip-path="url(#pm-bit-story)">
+    <path class="flutes flutes-story" fill="none" stroke="#2C2F35" stroke-width="0.02109" d="M-0.05,1.3L0.045,1.16 M-0.05,1.08L0.045,0.94 M-0.05,0.86L0.045,0.72 M-0.05,0.64L0.045,0.5 M-0.05,0.42L0.045,0.28 M-0.05,0.2L0.045,0.06 M-0.05,-0.02L0.045,-0.16 M-0.05,-0.24L0.045,-0.38 M-0.05,-0.46L0.045,-0.6 M-0.05,-0.68L0.045,-0.82 M-0.05,-0.9L0.045,-1.04 M-0.05,-1.12L0.045,-1.26 M-0.05,-1.34L0.045,-1.48 M-0.05,-1.56L0.045,-1.7 M-0.05,-1.78L0.045,-1.92 M-0.05,-2L0.045,-2.14"/>
+    </g>
+    </g>
+    </g>
+    </g>
+    <g id="pm-robot-calm">
+    <g class="robot">
+    <path fill="#7C838D" d="M-1.884,2.006 Q-2,1.6 -1.578,1.6 L1.578,1.6 Q2,1.6 1.884,2.006 L1.716,2.594 Q1.6,3 1.178,3 L-1.178,3 Q-1.6,3 -1.716,2.594 Z"/>
+    <path stroke="#2C2F35" stroke-width="0.03515" d="M-1.5,1.75H1.5"/>
+    <rect fill="#2C2F35" x="-0.42" y="1.0" width="0.84" height="0.75"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.8,1.68 L-3.05,1.8 L-3.4,-0.15"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.8,1.68 L3.05,1.8 L3.4,-0.15"/>
+    <circle fill="#2C2F35" cx="-1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="0" cy="2.25" r="0.34"/>
+    <circle class="core" fill="#901A1E" cx="0" cy="2.25" r="0.26" stroke="#9AA1AB" stroke-width="0.03515"/>
+    <rect fill="#7C838D" x="-1.55" y="-1.05" width="3.1" height="2.1" rx="0.3515"/>
+    <rect fill="#EEF1F5" stroke="#2C2F35" stroke-width="0.03515" x="-1.3" y="-0.8" width="2.6" height="1.6" rx="0.2109"/>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.55" cy="-0.2" r="0.16"/>
+    <circle fill="#2C2F35" cx="0.55" cy="-0.2" r="0.16"/>
+    </g>
+    <path class="mouth m-fixed" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.45,0.35H0.45"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.123" stroke-linecap="round" d="M0,-1.05V-1.45"/>
+    <circle class="blip" fill="#901A1E" cx="0" cy="-1.52" r="0.1"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.4569" stroke-linecap="round" d="M-3.4,-0.15L-3.72,-0.58"/>
+    <g transform="translate(-3.82,-0.9)"><g class="saw">
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.5"/>
+    <path fill="#C3C8CE" d="M0.5,-0 L0.6276,-0.05491 L0.4908,-0.0954Z M0.4755,-0.1545 L0.5799,-0.2462 L0.4373,-0.2424Z M0.4045,-0.2939 L0.4755,-0.4133 L0.341,-0.3657Z M0.2939,-0.4045 L0.3245,-0.54 L0.2113,-0.4532Z M0.1545,-0.4755 L0.1417,-0.6139 L0.06093,-0.4963Z M3.062e-17,-0.5 L-0.05491,-0.6276 L-0.0954,-0.4908Z M-0.1545,-0.4755 L-0.2462,-0.5799 L-0.2424,-0.4373Z M-0.2939,-0.4045 L-0.4133,-0.4755 L-0.3657,-0.341Z M-0.4045,-0.2939 L-0.54,-0.3245 L-0.4532,-0.2113Z M-0.4755,-0.1545 L-0.6139,-0.1417 L-0.4963,-0.06093Z M-0.5,-6.123e-17 L-0.6276,0.05491 L-0.4908,0.0954Z M-0.4755,0.1545 L-0.5799,0.2462 L-0.4373,0.2424Z M-0.4045,0.2939 L-0.4755,0.4133 L-0.341,0.3657Z M-0.2939,0.4045 L-0.3245,0.54 L-0.2113,0.4532Z M-0.1545,0.4755 L-0.1417,0.6139 L-0.06093,0.4963Z M-9.185e-17,0.5 L0.05491,0.6276 L0.0954,0.4908Z M0.1545,0.4755 L0.2462,0.5799 L0.2424,0.4373Z M0.2939,0.4045 L0.4133,0.4755 L0.3657,0.341Z M0.4045,0.2939 L0.54,0.3245 L0.4532,0.2113Z M0.4755,0.1545 L0.6139,0.1417 L0.4963,0.06093Z"/>
+    <circle fill="none" stroke="#2C2F35" stroke-width="0.02812" cx="0" cy="0" r="0.5"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.08787" stroke-linecap="round" d="M0.1732,-0.1L0.3291,-0.19 M-0.1732,-0.1L-0.3291,-0.19 M-3.674e-17,0.2L-6.98e-17,0.38"/>
+    <circle fill="#2C2F35" cx="0" cy="0" r="0.12"/>
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.05"/>
+    </g></g>
+    <g transform="translate(3.4,-0.15) rotate(-52)">
+    <rect fill="#2C2F35" x="-0.2" y="-0.05" width="0.4" height="0.83" rx="0.1406"/>
+    <rect fill="#7C838D" x="-0.33" y="-0.95" width="0.66" height="1.07" rx="0.246"/>
+    <rect fill="#9AA1AB" x="-0.22" y="-0.45" width="0.44" height="0.33" rx="0.1054"/>
+    <rect fill="#2C2F35" x="-0.17" y="-1.12" width="0.34" height="0.17"/>
+    <clipPath id="pm-bit-calm"><path d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/></clipPath>
+    <path fill="#C3C8CE" d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/>
+    <g clip-path="url(#pm-bit-calm)">
+    <path class="flutes" fill="none" stroke="#2C2F35" stroke-width="0.02109" d="M-0.05,1.3L0.045,1.16 M-0.05,1.08L0.045,0.94 M-0.05,0.86L0.045,0.72 M-0.05,0.64L0.045,0.5 M-0.05,0.42L0.045,0.28 M-0.05,0.2L0.045,0.06 M-0.05,-0.02L0.045,-0.16 M-0.05,-0.24L0.045,-0.38 M-0.05,-0.46L0.045,-0.6 M-0.05,-0.68L0.045,-0.82 M-0.05,-0.9L0.045,-1.04 M-0.05,-1.12L0.045,-1.26 M-0.05,-1.34L0.045,-1.48 M-0.05,-1.56L0.045,-1.7 M-0.05,-1.78L0.045,-1.92 M-0.05,-2L0.045,-2.14"/>
+    </g>
+    </g>
+    </g>
+    </g>
+    <g id="pm-robot-glum">
+    <g class="robot">
+    <path fill="#7C838D" d="M-1.884,2.006 Q-2,1.6 -1.578,1.6 L1.578,1.6 Q2,1.6 1.884,2.006 L1.716,2.594 Q1.6,3 1.178,3 L-1.178,3 Q-1.6,3 -1.716,2.594 Z"/>
+    <path stroke="#2C2F35" stroke-width="0.03515" d="M-1.5,1.75H1.5"/>
+    <rect fill="#2C2F35" x="-0.42" y="1.0" width="0.84" height="0.75"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.8,1.68 L-3.05,1.8 L-3.4,-0.15"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.8,1.68 L3.05,1.8 L3.4,-0.15"/>
+    <circle fill="#2C2F35" cx="-1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="0" cy="2.25" r="0.34"/>
+    <circle class="core" fill="#901A1E" cx="0" cy="2.25" r="0.26" stroke="#9AA1AB" stroke-width="0.03515"/>
+    <rect fill="#7C838D" x="-1.55" y="-1.05" width="3.1" height="2.1" rx="0.3515"/>
+    <rect fill="#EEF1F5" stroke="#2C2F35" stroke-width="0.03515" x="-1.3" y="-0.8" width="2.6" height="1.6" rx="0.2109"/>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.55" cy="-0.2" r="0.16"/>
+    <circle fill="#2C2F35" cx="0.55" cy="-0.2" r="0.16"/>
+    </g>
+    <path class="mouth m-fixed" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.46,0.46 Q0,0.12 0.46,0.46"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.123" stroke-linecap="round" d="M0,-1.05V-1.45"/>
+    <circle class="blip" fill="#901A1E" cx="0" cy="-1.52" r="0.1"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.4569" stroke-linecap="round" d="M-3.4,-0.15L-3.72,-0.58"/>
+    <g transform="translate(-3.82,-0.9)"><g class="saw">
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.5"/>
+    <path fill="#C3C8CE" d="M0.5,-0 L0.6276,-0.05491 L0.4908,-0.0954Z M0.4755,-0.1545 L0.5799,-0.2462 L0.4373,-0.2424Z M0.4045,-0.2939 L0.4755,-0.4133 L0.341,-0.3657Z M0.2939,-0.4045 L0.3245,-0.54 L0.2113,-0.4532Z M0.1545,-0.4755 L0.1417,-0.6139 L0.06093,-0.4963Z M3.062e-17,-0.5 L-0.05491,-0.6276 L-0.0954,-0.4908Z M-0.1545,-0.4755 L-0.2462,-0.5799 L-0.2424,-0.4373Z M-0.2939,-0.4045 L-0.4133,-0.4755 L-0.3657,-0.341Z M-0.4045,-0.2939 L-0.54,-0.3245 L-0.4532,-0.2113Z M-0.4755,-0.1545 L-0.6139,-0.1417 L-0.4963,-0.06093Z M-0.5,-6.123e-17 L-0.6276,0.05491 L-0.4908,0.0954Z M-0.4755,0.1545 L-0.5799,0.2462 L-0.4373,0.2424Z M-0.4045,0.2939 L-0.4755,0.4133 L-0.341,0.3657Z M-0.2939,0.4045 L-0.3245,0.54 L-0.2113,0.4532Z M-0.1545,0.4755 L-0.1417,0.6139 L-0.06093,0.4963Z M-9.185e-17,0.5 L0.05491,0.6276 L0.0954,0.4908Z M0.1545,0.4755 L0.2462,0.5799 L0.2424,0.4373Z M0.2939,0.4045 L0.4133,0.4755 L0.3657,0.341Z M0.4045,0.2939 L0.54,0.3245 L0.4532,0.2113Z M0.4755,0.1545 L0.6139,0.1417 L0.4963,0.06093Z"/>
+    <circle fill="none" stroke="#2C2F35" stroke-width="0.02812" cx="0" cy="0" r="0.5"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.08787" stroke-linecap="round" d="M0.1732,-0.1L0.3291,-0.19 M-0.1732,-0.1L-0.3291,-0.19 M-3.674e-17,0.2L-6.98e-17,0.38"/>
+    <circle fill="#2C2F35" cx="0" cy="0" r="0.12"/>
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.05"/>
+    </g></g>
+    <g transform="translate(3.4,-0.15) rotate(-52)">
+    <rect fill="#2C2F35" x="-0.2" y="-0.05" width="0.4" height="0.83" rx="0.1406"/>
+    <rect fill="#7C838D" x="-0.33" y="-0.95" width="0.66" height="1.07" rx="0.246"/>
+    <rect fill="#9AA1AB" x="-0.22" y="-0.45" width="0.44" height="0.33" rx="0.1054"/>
+    <rect fill="#2C2F35" x="-0.17" y="-1.12" width="0.34" height="0.17"/>
+    <clipPath id="pm-bit-glum"><path d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/></clipPath>
+    <path fill="#C3C8CE" d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/>
+    <g clip-path="url(#pm-bit-glum)">
+    <path class="flutes" fill="none" stroke="#2C2F35" stroke-width="0.02109" d="M-0.05,1.3L0.045,1.16 M-0.05,1.08L0.045,0.94 M-0.05,0.86L0.045,0.72 M-0.05,0.64L0.045,0.5 M-0.05,0.42L0.045,0.28 M-0.05,0.2L0.045,0.06 M-0.05,-0.02L0.045,-0.16 M-0.05,-0.24L0.045,-0.38 M-0.05,-0.46L0.045,-0.6 M-0.05,-0.68L0.045,-0.82 M-0.05,-0.9L0.045,-1.04 M-0.05,-1.12L0.045,-1.26 M-0.05,-1.34L0.045,-1.48 M-0.05,-1.56L0.045,-1.7 M-0.05,-1.78L0.045,-1.92 M-0.05,-2L0.045,-2.14"/>
+    </g>
+    </g>
+    </g>
+    </g>
+    <g id="pm-robot-glad">
+    <g class="robot">
+    <path fill="#7C838D" d="M-1.884,2.006 Q-2,1.6 -1.578,1.6 L1.578,1.6 Q2,1.6 1.884,2.006 L1.716,2.594 Q1.6,3 1.178,3 L-1.178,3 Q-1.6,3 -1.716,2.594 Z"/>
+    <path stroke="#2C2F35" stroke-width="0.03515" d="M-1.5,1.75H1.5"/>
+    <rect fill="#2C2F35" x="-0.42" y="1.0" width="0.84" height="0.75"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.8,1.68 L-3.05,1.8 L-3.4,-0.15"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.8,1.68 L3.05,1.8 L3.4,-0.15"/>
+    <circle fill="#2C2F35" cx="-1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="-3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="-3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="1.8" cy="1.68" r="0.23"/>
+    <circle fill="#9AA1AB" cx="1.8" cy="1.68" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.05" cy="1.8" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.05" cy="1.8" r="0.09"/>
+    <circle fill="#2C2F35" cx="3.4" cy="-0.15" r="0.23"/>
+    <circle fill="#9AA1AB" cx="3.4" cy="-0.15" r="0.09"/>
+    <circle fill="#2C2F35" cx="0" cy="2.25" r="0.34"/>
+    <circle class="core" fill="#901A1E" cx="0" cy="2.25" r="0.26" stroke="#9AA1AB" stroke-width="0.03515"/>
+    <rect fill="#7C838D" x="-1.55" y="-1.05" width="3.1" height="2.1" rx="0.3515"/>
+    <rect fill="#EEF1F5" stroke="#2C2F35" stroke-width="0.03515" x="-1.3" y="-0.8" width="2.6" height="1.6" rx="0.2109"/>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.55" cy="-0.2" r="0.16"/>
+    <circle fill="#2C2F35" cx="0.55" cy="-0.2" r="0.16"/>
+    </g>
+    <path class="mouth m-fixed" fill="none" stroke="#2C2F35" stroke-width="0.07732" stroke-linecap="round" stroke-linejoin="round" d="M-0.46,0.24 Q0,0.58 0.46,0.24"/>
+    <path fill="none" stroke="#7C838D" stroke-width="0.123" stroke-linecap="round" d="M0,-1.05V-1.45"/>
+    <circle class="blip" fill="#901A1E" cx="0" cy="-1.52" r="0.1"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.4569" stroke-linecap="round" d="M-3.4,-0.15L-3.72,-0.58"/>
+    <g transform="translate(-3.82,-0.9)"><g class="saw saw-live">
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.5"/>
+    <path fill="#C3C8CE" d="M0.5,-0 L0.6276,-0.05491 L0.4908,-0.0954Z M0.4755,-0.1545 L0.5799,-0.2462 L0.4373,-0.2424Z M0.4045,-0.2939 L0.4755,-0.4133 L0.341,-0.3657Z M0.2939,-0.4045 L0.3245,-0.54 L0.2113,-0.4532Z M0.1545,-0.4755 L0.1417,-0.6139 L0.06093,-0.4963Z M3.062e-17,-0.5 L-0.05491,-0.6276 L-0.0954,-0.4908Z M-0.1545,-0.4755 L-0.2462,-0.5799 L-0.2424,-0.4373Z M-0.2939,-0.4045 L-0.4133,-0.4755 L-0.3657,-0.341Z M-0.4045,-0.2939 L-0.54,-0.3245 L-0.4532,-0.2113Z M-0.4755,-0.1545 L-0.6139,-0.1417 L-0.4963,-0.06093Z M-0.5,-6.123e-17 L-0.6276,0.05491 L-0.4908,0.0954Z M-0.4755,0.1545 L-0.5799,0.2462 L-0.4373,0.2424Z M-0.4045,0.2939 L-0.4755,0.4133 L-0.341,0.3657Z M-0.2939,0.4045 L-0.3245,0.54 L-0.2113,0.4532Z M-0.1545,0.4755 L-0.1417,0.6139 L-0.06093,0.4963Z M-9.185e-17,0.5 L0.05491,0.6276 L0.0954,0.4908Z M0.1545,0.4755 L0.2462,0.5799 L0.2424,0.4373Z M0.2939,0.4045 L0.4133,0.4755 L0.3657,0.341Z M0.4045,0.2939 L0.54,0.3245 L0.4532,0.2113Z M0.4755,0.1545 L0.6139,0.1417 L0.4963,0.06093Z"/>
+    <circle fill="none" stroke="#2C2F35" stroke-width="0.02812" cx="0" cy="0" r="0.5"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.08787" stroke-linecap="round" d="M0.1732,-0.1L0.3291,-0.19 M-0.1732,-0.1L-0.3291,-0.19 M-3.674e-17,0.2L-6.98e-17,0.38"/>
+    <circle fill="#2C2F35" cx="0" cy="0" r="0.12"/>
+    <circle fill="#C3C8CE" cx="0" cy="0" r="0.05"/>
+    </g></g>
+    <g transform="translate(3.4,-0.15) rotate(-52)">
+    <rect fill="#2C2F35" x="-0.2" y="-0.05" width="0.4" height="0.83" rx="0.1406"/>
+    <rect fill="#7C838D" x="-0.33" y="-0.95" width="0.66" height="1.07" rx="0.246"/>
+    <rect fill="#9AA1AB" x="-0.22" y="-0.45" width="0.44" height="0.33" rx="0.1054"/>
+    <rect fill="#2C2F35" x="-0.17" y="-1.12" width="0.34" height="0.17"/>
+    <clipPath id="pm-bit-glad"><path d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/></clipPath>
+    <path fill="#C3C8CE" d="M-0.07,-1.12L0.07,-1.12L0,-1.78Z"/>
+    <g clip-path="url(#pm-bit-glad)">
+    <path class="flutes flutes-live" fill="none" stroke="#2C2F35" stroke-width="0.02109" d="M-0.05,1.3L0.045,1.16 M-0.05,1.08L0.045,0.94 M-0.05,0.86L0.045,0.72 M-0.05,0.64L0.045,0.5 M-0.05,0.42L0.045,0.28 M-0.05,0.2L0.045,0.06 M-0.05,-0.02L0.045,-0.16 M-0.05,-0.24L0.045,-0.38 M-0.05,-0.46L0.045,-0.6 M-0.05,-0.68L0.045,-0.82 M-0.05,-0.9L0.045,-1.04 M-0.05,-1.12L0.045,-1.26 M-0.05,-1.34L0.045,-1.48 M-0.05,-1.56L0.045,-1.7 M-0.05,-1.78L0.045,-1.92 M-0.05,-2L0.045,-2.14"/>
+    </g>
+    </g>
+    </g>
+    </g>
+    <g id="pm-can">
+    <g class="" transform="translate(0,0) scale(1,1)">
+    <path fill="#C3C8CE" stroke="#2C2F35" stroke-width="0.04218" stroke-linejoin="round" d="M-0.6,-0.6H0.6A0.22,0.6 0 0 1 0.6,0.6H-0.6Z"/>
+    <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M-0.2,-0.5631A0.22,0.5631 0 0 1 -0.2,0.5631"/>
+    <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M0.2,-0.5631A0.22,0.5631 0 0 1 0.2,0.5631"/>
+    <ellipse fill="#9AA1AB" stroke="#2C2F35" stroke-width="0.04218" cx="-0.6" cy="0" rx="0.22" ry="0.6"/>
+    <ellipse fill="#2C2F35" cx="-0.6" cy="0" rx="0.121" ry="0.396"/>
+    <circle fill="#2C2F35" cx="0.6" cy="0" r="0.05"/>
+    </g>
+    </g>
+    <path id="pm-w0" fill="none" d="M-3.75,0.05 C-2.302,-0.1364 -1.543,-2.56 -0.302,-2.74"/>
+    <path id="pm-w1" fill="none" d="M-3.75,0.05 C-2.302,0.302 -1.543,0.18 -0.302,0"/>
+    <path id="pm-w2" fill="none" d="M-3.75,0.05 C-2.302,0.7404 -1.543,2.92 -0.302,2.74"/>
+    <path id="pm-wire-b" fill="none" d="M-6.86,0.9 C-5.95,1.03 -5.45,0.62 -4.96,0.55"/>
+    </defs>
+    </svg>
+
+  <section class="why" id="isabelle">
+    <h2>Meet <em>Isabelle</em>, a frontier proof assistant.</h2>
+    <div class="isa-intro">
+      <a class="isa-link" href="https://isabelle.in.tum.de/" aria-label="Isabelle">
+        <img class="isa-mark isa-mark-light" src="assets/isabelle.svg" alt="">
+        <img class="isa-mark isa-mark-dark" src="assets/isabelle-dark.svg" alt="">
+      </a>
+      <p class="sub">
+        Proof assistants, like Isabelle, verify every step of a proof, all the way down to the
+        axioms. Isabelle stands behind many of the biggest verified software and formal proof
+        libraries ever built.
+      </p>
+    </div>
+    <div class="proofs">
+      <a class="proof-card" href="https://sel4.systems/">
+        <b>seL4 OS kernel</b>
+        <span>The first OS kernel proved functionally correct – now running air-traffic and
+        maritime control systems.</span>
+        <em>sel4.systems &rarr;</em>
+      </a>
+      <a class="proof-card" href="https://aws.amazon.com/blogs/compute/aws-nitro-isolation-engine-formally-verifying-the-hypervisor-in-the-aws-nitro-system/">
+        <b>AWS Nitro Isolation Engine</b>
+        <span>The first formally verified hypervisor, backing the world's largest
+        cloud.</span>
+        <em>aws.amazon.com &rarr;</em>
+      </a>
+      <a class="proof-card" href="https://security.apple.com/blog/formal-verification-corecrypto/">
+        <b>Apple corecrypto</b>
+        <span>The cryptographic core of Apple's operating systems, with its post-quantum
+        algorithms proved correct.</span>
+        <em>security.apple.com &rarr;</em>
+      </a>
+      <a class="proof-card" href="https://www.isa-afp.org/">
+        <b>Archive of Formal Proofs</b>
+        <span>One of the largest formal libraries for mathematics and computer science
+        in the world.</span>
+        <em>isa-afp.org &rarr;</em>
+      </a>
+    </div>
+    <p class="hammer">
+      <svg class="hammer-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <g transform="rotate(-38 24 24)">
+          <rect x="21.6" y="15" width="4.8" height="27" rx="2.4" fill="#9C7A44"/>
+          <rect x="21.6" y="15" width="4.8" height="27" rx="2.4" fill="none"
+                stroke="#2C2F35" stroke-width="1.3" stroke-opacity=".55"/>
+          <rect x="9.5" y="5" width="29" height="12.4" rx="2.6"
+                fill="#C3C8CE" stroke="#2C2F35" stroke-width="1.7"/>
+          <rect x="19.6" y="5" width="8.8" height="12.4" fill="#9AA1AB"/>
+          <path d="M19.6 5v12.4M28.4 5v12.4" stroke="#2C2F35" stroke-width="1.2"
+                stroke-opacity=".5"/>
+        </g>
+      </svg>
+      <span>40 years of research and engineering created a sophisticated system that not only
+      checks proofs but also helps you write them. Isabelle ships the
+      strongest automation of any proof assistant, most notably
+      <a href="https://isabelle.in.tum.de/doc/sledgehammer.pdf"><b>sledgehammer</b></a>.
+      And now, your agent gets to swing the hammer too.</span>
+    </p>
+    <a class="scroll-cue" href="#pide-mcp" aria-label="On to PIDE MCP">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+  <!-- chapter and subsections: one snap area, so nothing snaps between them -->
+  <div class="pide-block">
+  <section class="line" id="pide-mcp">
+    <h2>Meet <em>PIDE MCP</em>, your agent's line to Isabelle.</h2>
+    <p class="sub">
+      PIDE MCP is your agent's live, two-way line to Isabelle. Thanks to Isabelle's powerful
+      <a href="https://link.springer.com/chapter/10.1007/978-3-319-08970-6_33"><b>PIDE</b></a> document
+      engine, it can edit, prove, and explore without ever waiting. You decide which tools it
+      gets, and you can even add your own. <b>Reactive, parallel, extensible.</b>
+    </p>
+
+    <div class="scene-wrap">
+    <svg class="scene" viewBox="-10.35 -4.28 22.05 8.56" role="img" aria-labelledby="scT scD">
+    <title id="scT">One coding agent wired to three live Isabelle sessions</title>
+    <desc id="scD">A robot holds a tin can with three strings running from it, labeled PIDE MCP, to three Isabelle sessions: HOL, HOL-Analysis and HOL-Library. It edits two proofs and searches the third session for a definition. Both proofs come back with an error and the robot looks glum; it edits them again using what the search turned up, and this time both check clean, so it smiles.</desc>
+    <g transform="translate(-7.15,0.15) scale(0.62)"><use href="#pm-robot"/></g>
+    <g class="wires">
+    <g class="wire w0">
+    <use href="#pm-w0" class="twine" stroke="#D8B87E" stroke-width="0.04428" stroke-linecap="round"/>
+    <path class="twist" fill="none" stroke="#9C7A44" stroke-width="0.01476" stroke-linecap="round" d="M-3.706,-0.002421L-3.648,0.07965 M-3.636,-0.016L-3.574,0.06301 M-3.567,-0.03311L-3.502,0.04272 M-3.499,-0.05366L-3.43,0.01893 M-3.432,-0.07752L-3.36,-0.008212 M-3.366,-0.1046L-3.291,-0.03855 M-3.301,-0.1347L-3.223,-0.07193 M-3.236,-0.1679L-3.156,-0.1082 M-3.172,-0.2039L-3.09,-0.1473 M-3.11,-0.2426L-3.025,-0.1889 M-3.047,-0.284L-2.961,-0.2331 M-2.986,-0.3278L-2.898,-0.2796 M-2.925,-0.374L-2.836,-0.3282 M-2.865,-0.4224L-2.775,-0.379 M-2.805,-0.473L-2.714,-0.4317 M-2.747,-0.5255L-2.655,-0.4863 M-2.688,-0.5798L-2.596,-0.5425 M-2.631,-0.6358L-2.537,-0.6003 M-2.573,-0.6935L-2.479,-0.6595 M-2.517,-0.7525L-2.422,-0.72 M-2.46,-0.8129L-2.365,-0.7817 M-2.405,-0.8744L-2.309,-0.8444 M-2.349,-0.937L-2.253,-0.908 M-2.294,-1.001L-2.198,-0.9724 M-2.239,-1.065L-2.143,-1.037 M-2.185,-1.13L-2.089,-1.103 M-2.131,-1.195L-2.035,-1.169 M-2.077,-1.261L-1.981,-1.235 M-2.024,-1.327L-1.927,-1.301 M-1.97,-1.393L-1.873,-1.368 M-1.917,-1.459L-1.82,-1.434 M-1.864,-1.526L-1.767,-1.5 M-1.81,-1.591L-1.714,-1.566 M-1.757,-1.657L-1.661,-1.631 M-1.704,-1.722L-1.608,-1.695 M-1.651,-1.786L-1.555,-1.758 M-1.598,-1.849L-1.502,-1.821 M-1.545,-1.912L-1.449,-1.883 M-1.491,-1.973L-1.396,-1.943 M-1.438,-2.033L-1.343,-2.002 M-1.384,-2.092L-1.289,-2.06 M-1.33,-2.15L-1.236,-2.116 M-1.275,-2.206L-1.182,-2.17 M-1.221,-2.26L-1.128,-2.222 M-1.166,-2.313L-1.074,-2.273 M-1.11,-2.363L-1.019,-2.321 M-1.054,-2.412L-0.9646,-2.367 M-0.9976,-2.458L-0.9094,-2.411 M-0.9406,-2.502L-0.854,-2.452 M-0.8829,-2.543L-0.7981,-2.49 M-0.8246,-2.582L-0.7419,-2.526 M-0.7655,-2.618L-0.6852,-2.559 M-0.7057,-2.652L-0.6282,-2.589 M-0.6451,-2.682L-0.5707,-2.615 M-0.5836,-2.709L-0.5127,-2.639 M-0.5213,-2.733L-0.4542,-2.659 M-0.458,-2.753L-0.3953,-2.675 M-0.3937,-2.77L-0.3357,-2.688"/>
+    </g>
+    <g class="wire w1">
+    <use href="#pm-w1" class="twine" stroke="#D8B87E" stroke-width="0.04428" stroke-linecap="round"/>
+    <path class="twist" fill="none" stroke="#9C7A44" stroke-width="0.01476" stroke-linecap="round" d="M-3.667,0.01789L-3.642,0.1146 M-3.574,0.03316L-3.548,0.1297 M-3.483,0.04736L-3.456,0.1437 M-3.393,0.06053L-3.365,0.1566 M-3.306,0.07267L-3.277,0.1685 M-3.219,0.08383L-3.19,0.1794 M-3.135,0.094L-3.105,0.1893 M-3.052,0.1032L-3.021,0.1982 M-2.971,0.1115L-2.938,0.2062 M-2.89,0.1189L-2.857,0.2132 M-2.812,0.1254L-2.777,0.2194 M-2.734,0.131L-2.699,0.2246 M-2.657,0.1357L-2.621,0.229 M-2.582,0.1396L-2.545,0.2326 M-2.507,0.1428L-2.469,0.2353 M-2.434,0.1451L-2.395,0.2372 M-2.361,0.1466L-2.321,0.2384 M-2.289,0.1474L-2.248,0.2388 M-2.217,0.1475L-2.175,0.2384 M-2.146,0.1468L-2.104,0.2374 M-2.076,0.1455L-2.032,0.2356 M-2.006,0.1435L-1.961,0.2332 M-1.936,0.1408L-1.891,0.2301 M-1.866,0.1376L-1.821,0.2264 M-1.797,0.1336L-1.751,0.2221 M-1.728,0.1292L-1.681,0.2172 M-1.659,0.1241L-1.611,0.2118 M-1.59,0.1185L-1.541,0.2058 M-1.52,0.1123L-1.471,0.1993 M-1.451,0.1056L-1.401,0.1923 M-1.381,0.09846L-1.33,0.1848 M-1.311,0.09082L-1.26,0.1769 M-1.24,0.08273L-1.189,0.1685 M-1.169,0.07421L-1.117,0.1598 M-1.097,0.06527L-1.045,0.1506 M-1.024,0.05594L-0.972,0.1411 M-0.9512,0.04624L-0.8985,0.1312 M-0.8771,0.03618L-0.8242,0.121 M-0.8021,0.0258L-0.749,0.1105 M-0.7261,0.01511L-0.6728,0.09973 M-0.6491,0.004133L-0.5957,0.08867 M-0.5709,-0.007112L-0.5174,0.07738 M-0.4915,-0.0186L-0.438,0.06586 M-0.4108,-0.03032L-0.3573,0.05414"/>
+    </g>
+    <g class="wire w2">
+    <use href="#pm-w2" class="twine" stroke="#D8B87E" stroke-width="0.04428" stroke-linecap="round"/>
+    <path class="twist" fill="none" stroke="#9C7A44" stroke-width="0.01476" stroke-linecap="round" d="M-3.673,0.03712L-3.679,0.1369 M-3.598,0.0768L-3.607,0.1763 M-3.524,0.119L-3.537,0.2182 M-3.452,0.1634L-3.468,0.2622 M-3.381,0.2101L-3.399,0.3084 M-3.311,0.2589L-3.332,0.3567 M-3.242,0.3097L-3.265,0.4069 M-3.174,0.3622L-3.2,0.4589 M-3.107,0.4165L-3.135,0.5126 M-3.042,0.4724L-3.071,0.5679 M-2.977,0.5298L-3.008,0.6247 M-2.913,0.5885L-2.946,0.6829 M-2.85,0.6484L-2.884,0.7423 M-2.787,0.7094L-2.823,0.8028 M-2.726,0.7715L-2.763,0.8643 M-2.665,0.8343L-2.703,0.9268 M-2.605,0.898L-2.644,0.99 M-2.546,0.9622L-2.586,1.054 M-2.487,1.027L-2.528,1.118 M-2.429,1.092L-2.471,1.183 M-2.372,1.158L-2.414,1.248 M-2.315,1.223L-2.357,1.314 M-2.258,1.289L-2.301,1.379 M-2.202,1.354L-2.245,1.444 M-2.146,1.419L-2.189,1.51 M-2.091,1.484L-2.134,1.575 M-2.036,1.549L-2.079,1.639 M-1.982,1.613L-2.024,1.703 M-1.927,1.676L-1.97,1.767 M-1.873,1.739L-1.915,1.829 M-1.819,1.8L-1.861,1.891 M-1.766,1.861L-1.806,1.952 M-1.712,1.92L-1.752,2.012 M-1.659,1.978L-1.697,2.07 M-1.605,2.035L-1.643,2.127 M-1.552,2.09L-1.588,2.183 M-1.499,2.143L-1.533,2.237 M-1.446,2.195L-1.478,2.29 M-1.392,2.245L-1.423,2.34 M-1.339,2.293L-1.368,2.389 M-1.285,2.339L-1.312,2.435 M-1.232,2.382L-1.255,2.48 M-1.178,2.424L-1.199,2.522 M-1.124,2.463L-1.142,2.561 M-1.07,2.499L-1.084,2.598 M-1.016,2.533L-1.026,2.633 M-0.9613,2.564L-0.967,2.664 M-0.9064,2.592L-0.9076,2.692 M-0.8512,2.618L-0.8475,2.718 M-0.7956,2.64L-0.7867,2.74 M-0.7395,2.659L-0.7253,2.758 M-0.683,2.675L-0.6631,2.773 M-0.6258,2.688L-0.6002,2.785 M-0.5681,2.697L-0.5366,2.792 M-0.5096,2.703L-0.4722,2.796 M-0.4503,2.705L-0.4072,2.795 M-0.3902,2.704L-0.3414,2.791"/>
+    </g>
+    <use href="#pm-w0" class="pulse pulse-0 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-1 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w2" class="pulse pulse-2 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w0" class="pulse pulse-3 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-4 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w0" class="pulse pulse-5 k-err" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w2" class="pulse pulse-6 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-7 k-err" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w2" class="pulse pulse-8 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w0" class="pulse pulse-9 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-10 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w2" class="pulse pulse-11 k-info" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w0" class="pulse pulse-12 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-13 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w2" class="pulse pulse-14 k-out" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w0" class="pulse pulse-15 k-ok" stroke-width="0.07381" stroke-linecap="round"/>
+    <use href="#pm-w1" class="pulse pulse-16 k-ok" stroke-width="0.07381" stroke-linecap="round"/>
+    <g transform="translate(-4.05,0.05) scale(0.5)"><use href="#pm-can"/></g>
+    <g class="can-r c0" transform="translate(-0.05,-2.74) scale(-0.42,0.42)"><use href="#pm-can"/></g>
+    <g class="can-r c1" transform="translate(-0.05,0.0) scale(-0.42,0.42)"><use href="#pm-can"/></g>
+    <g class="can-r c2" transform="translate(-0.05,2.74) scale(-0.42,0.42)"><use href="#pm-can"/></g>
+    </g>
+    <g class="wire-tag">
+    <path class="tag-stem" d="M-2.0,-3.183V0.1889"/>
+    <path class="tag-stem s2-stem" d="M-2.0,0.1889V1.661"/>
+    <circle class="tag-bullet b0" cx="-2.0" cy="-1.284" r="0.13"/>
+    <circle class="tag-bullet b1" cx="-2.0" cy="0.1889" r="0.13"/>
+    <circle class="tag-bullet b2" cx="-2.0" cy="1.661" r="0.13"/>
+    <rect class="tag-chip" x="-3.3" y="-3.843" width="2.6" height="0.66" rx="0.33"/>
+    <text class="tag-text" x="-2.0" y="-3.513">PIDE MCP</text>
+    </g>
+    <g class="panel s0">
+    <rect class="pane" x="0.55" y="-3.95" width="10.9" height="2.42" rx="0.22"/>
+    <rect class="pane-head" x="0.55" y="-3.95" width="10.9" height="0.6" rx="0.22"/>
+    <path class="pane-sep" d="M0.55,-3.35h10.9"/>
+    <path class="pane-sep" d="M0.55,-2.13h10.9"/>
+    <image class="isa-badge badge-light" href="assets/isabelle.svg" x="0.83" y="-3.86" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <image class="isa-badge badge-dark" href="assets/isabelle-dark.svg" x="0.83" y="-3.86" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <text class="pane-logic" x="1.41" y="-3.65">HOL</text>
+    <text class="pane-file" x="11.13" y="-3.65" text-anchor="end">Scratch.thy</text>
+    <rect class="wash w-run" x="0.67" y="-2.74" width="10.66" height="0.42" rx="0.07"/>
+    <rect class="wash w-err" x="0.67" y="-2.74" width="10.66" height="0.42" rx="0.07"/>
+    <text class="pane-code" x="0.87" y="-2.99"><tspan class="kw">lemma</tspan><tspan> </tspan><tspan class="str">"(∑i&lt;n. 2*i+1) = (n::nat)^2"</tspan></text>
+    <text class="pane-code pv pv1" x="1.1" y="-2.54"><tspan class="warn">sorry</tspan></text>
+    <text class="pane-code pv pv2" x="1.1" y="-2.54"><tspan class="kw">by</tspan><tspan> auto</tspan></text>
+    <text class="pane-code pv pv3" x="1.1" y="-2.54"><tspan class="kw">by</tspan><tspan> (induct n) (auto simp: power2_eq_square)</tspan></text>
+    <g class="pst pst-idle tone-warn">
+    <circle class="pane-dot" cx="1.03" cy="-1.83" r="0.11"/>
+    <text class="pane-status" x="1.31" y="-1.83">1 subgoal left</text>
+    </g>
+    <g class="pst pst-run tone-run">
+    <circle class="pane-dot" cx="1.03" cy="-1.83" r="0.11"/>
+    <text class="pane-status" x="1.31" y="-1.83">checking…</text>
+    </g>
+    <g class="pst pst-err tone-err">
+    <circle class="pane-dot" cx="1.03" cy="-1.83" r="0.11"/>
+    <text class="pane-status" x="1.31" y="-1.83">error · Failed to finish proof</text>
+    </g>
+    <g class="pst pst-done tone-ok">
+    <circle class="pane-dot" cx="1.03" cy="-1.83" r="0.11"/>
+    <text class="pane-status" x="1.31" y="-1.83">finished · 0 errors</text>
+    </g>
+    </g>
+    <g class="panel s1">
+    <rect class="pane" x="0.55" y="-1.21" width="10.9" height="2.42" rx="0.22"/>
+    <rect class="pane-head" x="0.55" y="-1.21" width="10.9" height="0.6" rx="0.22"/>
+    <path class="pane-sep" d="M0.55,-0.61h10.9"/>
+    <path class="pane-sep" d="M0.55,0.61h10.9"/>
+    <image class="isa-badge badge-light" href="assets/isabelle.svg" x="0.83" y="-1.12" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <image class="isa-badge badge-dark" href="assets/isabelle-dark.svg" x="0.83" y="-1.12" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <text class="pane-logic" x="1.41" y="-0.91">HOL-Analysis</text>
+    <text class="pane-file" x="11.13" y="-0.91" text-anchor="end">Cont.thy</text>
+    <rect class="wash w-run" x="0.67" y="0" width="10.66" height="0.42" rx="0.07"/>
+    <rect class="wash w-err" x="0.67" y="0" width="10.66" height="0.42" rx="0.07"/>
+    <text class="pane-code" x="0.87" y="-0.25"><tspan class="kw">lemma</tspan><tspan> </tspan><tspan class="str">"continuous_on S (λx::real. x * sin x)"</tspan></text>
+    <text class="pane-code pv pv1" x="1.1" y="0.2"><tspan class="warn">sorry</tspan></text>
+    <text class="pane-code pv pv2" x="1.1" y="0.2"><tspan class="kw">by</tspan><tspan> simp</tspan></text>
+    <text class="pane-code pv pv3" x="1.1" y="0.2"><tspan class="kw">by</tspan><tspan> (intro continuous_intros)</tspan></text>
+    <g class="pst pst-idle tone-warn">
+    <circle class="pane-dot" cx="1.03" cy="0.91" r="0.11"/>
+    <text class="pane-status" x="1.31" y="0.91">1 subgoal left</text>
+    </g>
+    <g class="pst pst-run tone-run">
+    <circle class="pane-dot" cx="1.03" cy="0.91" r="0.11"/>
+    <text class="pane-status" x="1.31" y="0.91">checking…</text>
+    </g>
+    <g class="pst pst-err tone-err">
+    <circle class="pane-dot" cx="1.03" cy="0.91" r="0.11"/>
+    <text class="pane-status" x="1.31" y="0.91">error · Failed to apply initial proof method</text>
+    </g>
+    <g class="pst pst-done tone-ok">
+    <circle class="pane-dot" cx="1.03" cy="0.91" r="0.11"/>
+    <text class="pane-status" x="1.31" y="0.91">finished · 0 errors</text>
+    </g>
+    </g>
+    <g class="panel s2">
+    <rect class="pane" x="0.55" y="1.53" width="10.9" height="2.42" rx="0.22"/>
+    <rect class="pane-head" x="0.55" y="1.53" width="10.9" height="0.6" rx="0.22"/>
+    <path class="pane-sep" d="M0.55,2.13h10.9"/>
+    <path class="pane-sep" d="M0.55,3.35h10.9"/>
+    <image class="isa-badge badge-light" href="assets/isabelle.svg" x="0.83" y="1.62" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <image class="isa-badge badge-dark" href="assets/isabelle-dark.svg" x="0.83" y="1.62" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <text class="pane-logic" x="1.41" y="1.83">HOL-Probability</text>
+    <text class="pane-file q-file" x="11.13" y="1.83" text-anchor="end">Cauchy.thy</text>
+    <rect class="wash w-found" x="0.67" y="2.74" width="10.66" height="0.42" rx="0.07"/>
+    <text class="pane-code q-code" x="0.87" y="2.49"><tspan class="kw">lemma</tspan><tspan> </tspan><tspan class="str">"Cauchy X ⟹ convergent (X::nat ⇒ real)"</tspan></text>
+    <text class="pane-code q-empty" x="0.87" y="2.49"><tspan class="dim">(no theories loaded)</tspan></text>
+    <text class="pane-code q-snip" x="0.87" y="2.94"><tspan class="dim">  ↳ </tspan><tspan class="str">Cauchy X = cauchy_filter (filtermap X sequentially)</tspan></text>
+    <g class="pst pst-ready tone-dim">
+    <circle class="pane-dot" cx="1.03" cy="3.65" r="0.11"/>
+    <text class="pane-status" x="1.31" y="3.65">session ready · no theories</text>
+    </g>
+    <g class="pst pst-loaded tone-ok">
+    <circle class="pane-dot" cx="1.03" cy="3.65" r="0.11"/>
+    <text class="pane-status" x="1.31" y="3.65">Cauchy.thy · 1 theory loaded</text>
+    </g>
+    <g class="pst pst-run tone-run">
+    <circle class="pane-dot" cx="1.03" cy="3.65" r="0.11"/>
+    <text class="pane-status" x="1.31" y="3.65">find_entities · line 4</text>
+    </g>
+    <g class="pst pst-done tone-ok">
+    <circle class="pane-dot" cx="1.03" cy="3.65" r="0.11"/>
+    <text class="pane-status" x="1.31" y="3.65">7 entities · Cauchy · HOL.Topological_Spaces:3557</text>
+    </g>
+    </g>
+    <g class="packets" aria-hidden="true">
+    <g class="pkt m0 k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>edit</text></g>
+    <g class="pkt m1 k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>edit</text></g>
+    <g class="pkt m2 k-out"><rect x="-1.302" y="-0.19" width="2.604" height="0.38" rx="0.19"/><text>start_session</text></g>
+    <g class="pkt m3 k-out"><rect x="-0.966" y="-0.19" width="1.932" height="0.38" rx="0.19"/><text>get_state</text></g>
+    <g class="pkt m4 k-out"><rect x="-0.966" y="-0.19" width="1.932" height="0.38" rx="0.19"/><text>get_state</text></g>
+    <g class="pkt m5 k-err"><rect x="-0.798" y="-0.19" width="1.596" height="0.38" rx="0.19"/><text>1 error</text></g>
+    <g class="pkt m6 k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>read</text></g>
+    <g class="pkt m7 k-err"><rect x="-0.798" y="-0.19" width="1.596" height="0.38" rx="0.19"/><text>1 error</text></g>
+    <g class="pkt m8 k-out"><rect x="-1.302" y="-0.19" width="2.604" height="0.38" rx="0.19"/><text>find_entities</text></g>
+    <g class="pkt m9 k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>edit</text></g>
+    <g class="pkt m10 k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>edit</text></g>
+    <g class="pkt m11 k-info"><rect x="-1.05" y="-0.19" width="2.1" height="0.38" rx="0.19"/><text>7 entities</text></g>
+    <g class="pkt m12 k-out"><rect x="-0.966" y="-0.19" width="1.932" height="0.38" rx="0.19"/><text>get_state</text></g>
+    <g class="pkt m13 k-out"><rect x="-0.966" y="-0.19" width="1.932" height="0.38" rx="0.19"/><text>get_state</text></g>
+    <g class="pkt m14 k-out"><rect x="-1.218" y="-0.19" width="2.436" height="0.38" rx="0.19"/><text>stop_session</text></g>
+    <g class="pkt m15 k-ok"><rect x="-1.05" y="-0.19" width="2.1" height="0.38" rx="0.19"/><text>✓ 0 errors</text></g>
+    <g class="pkt m16 k-ok"><rect x="-1.05" y="-0.19" width="2.1" height="0.38" rx="0.19"/><text>✓ 0 errors</text></g>
+    </g>
+    </svg>
+    </div>
+
+    <ul class="props">
+    <li><b>Never blocked</b> Answers stream in while Isabelle is proving. Your agent can always keep going.</li>
+    <li><b>One agent, many Isabelles</b> PIDE MCP lets agents control several Isabelle sessions. Parallel and autonomously.</li>
+    <li><b>Built your way</b> Choose which tools your agent gets, and build new ones that fit your project.</li>
+    </ul>
+    <a class="scroll-cue cue-sub cue-flow" href="#clients" aria-label="Keep reading">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+
+  <!-- one snap area, not three: the subsections read as one stretch -->
+  <div class="subs">
+  <section class="mcp" id="clients">
+    <h3>It speaks MCP, the language of your agent.</h3>
+    <p class="sub">
+      PIDE MCP is an ordinary <a href="https://modelcontextprotocol.io">MCP</a> server, compatible
+      with the agent you already use – Claude Code, Codex, OpenCode, and many more – each gets its
+      own line to Isabelle.
+    </p>
+    <div class="mcp-wrap">
+    <svg class="mcp-svg" viewBox="-9.25 -2.9 18.5 6.4" role="img" aria-labelledby="mcT mcD">
+    <title id="mcT">Coding agents that speak MCP</title>
+    <desc id="mcD">Four coding agents around an Isabelle editor. Point at one and it opens its own connection: an initialize message goes out, a response comes back, and the editor names it. Claude Code holds the line until another agent takes it.</desc>
+    <g class="mcp-editor">
+    <rect class="pane" x="-2.7" y="-0.71" width="5.4" height="2.3" rx="0.22"/>
+    <rect class="pane-head" x="-2.7" y="-0.71" width="5.4" height="0.55" rx="0.22"/>
+    <path class="pane-sep" d="M-2.7,-0.15999999999999992h5.4"/>
+    <path class="pane-sep" d="M-2.7,0.86h5.4"/>
+    <image class="isa-badge badge-light" href="assets/isabelle.svg" x="-2.52" y="-0.64" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <image class="isa-badge badge-dark" href="assets/isabelle-dark.svg" x="-2.52" y="-0.64" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <text class="pane-logic" x="-1.94" y="-0.43">HOL</text>
+    <text class="pane-file" x="2.52" y="-0.43" text-anchor="end">Scratch.thy</text>
+    <text class="pane-code" x="-2.40" y="0.14"><tspan class="kw">theorem</tspan><tspan> </tspan><tspan class="str">"sqrt 2 ∉ ℚ"</tspan></text>
+    <text class="pane-code" x="-2.40" y="0.56"><tspan>  </tspan><tspan class="warn">sorry</tspan></text>
+    <g class="st-none tone-dim"><circle class="pane-dot" cx="-2.40" cy="1.23" r="0.1"/><text class="pane-status" x="-2.16" y="1.23">no client connected</text></g>
+    <g class="st st-cc tone-ok"><circle class="pane-dot" cx="-2.40" cy="1.23" r="0.1"/><text class="pane-status" x="-2.16" y="1.23">connected · Claude Code</text></g>
+    <g class="st st-codex tone-ok"><circle class="pane-dot" cx="-2.40" cy="1.23" r="0.1"/><text class="pane-status" x="-2.16" y="1.23">connected · Codex</text></g>
+    <g class="st st-oc tone-ok"><circle class="pane-dot" cx="-2.40" cy="1.23" r="0.1"/><text class="pane-status" x="-2.16" y="1.23">connected · OpenCode</text></g>
+    <g class="st st-more tone-ok"><circle class="pane-dot" cx="-2.40" cy="1.23" r="0.1"/><text class="pane-status" x="-2.16" y="1.23">connected · your agent</text></g>
+    </g>
+    <g class="agent a-cc" role="img" aria-label="Claude Code" tabindex="0">
+    <rect class="hit" x="-8.95" y="-2.90" width="3.80" height="2.95" rx="0.3"/>
+    <g class="conn">
+    <path class="wire-c" d="M-4.94,-1.75 Q-4.10,-1.75 -3.26,-0.16"/>
+    <g transform="translate(-5.11,-1.75) scale(-0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(-3.09,-0.16) scale(0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(-4.64,-1.75)"><g class="pk pk-out" style="--dx:1.09px;--dy:1.59px"><rect class="pk-box k-out" x="-0.760" y="-0.19" width="1.520" height="0.38" rx="0.19"/><text class="pk-text k-out">initialize</text></g></g>
+    <g transform="translate(-3.56,-0.16)"><g class="pk pk-in" style="--dx:-1.09px;--dy:-1.59px"><rect class="pk-box k-ok" x="-0.634" y="-0.19" width="1.268" height="0.38" rx="0.19"/><text class="pk-text k-ok">response</text></g></g>
+    </g>
+    <g transform="translate(-7.05,-1.75) scale(0.34)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <rect class="plate" x="-8.75" y="-0.80" width="3.4" height="0.6" rx="0.3"/>
+    <text class="plate-text" x="-7.05" y="-0.50" text-anchor="middle">Claude Code</text>
+    </g>
+    <g class="agent a-codex" role="img" aria-label="Codex" tabindex="0">
+    <rect class="hit" x="-8.95" y="0.60" width="3.80" height="2.95" rx="0.3"/>
+    <g class="conn">
+    <path class="wire-c" d="M-4.94,1.75 Q-4.10,1.75 -3.26,1.04"/>
+    <g transform="translate(-5.11,1.75) scale(-0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(-3.09,1.04) scale(0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(-4.64,1.75)"><g class="pk pk-out" style="--dx:1.09px;--dy:-0.71px"><rect class="pk-box k-out" x="-0.760" y="-0.19" width="1.520" height="0.38" rx="0.19"/><text class="pk-text k-out">initialize</text></g></g>
+    <g transform="translate(-3.56,1.04)"><g class="pk pk-in" style="--dx:-1.09px;--dy:0.71px"><rect class="pk-box k-ok" x="-0.634" y="-0.19" width="1.268" height="0.38" rx="0.19"/><text class="pk-text k-ok">response</text></g></g>
+    </g>
+    <g transform="translate(-7.05,1.75) scale(0.34)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <rect class="plate" x="-8.75" y="2.70" width="3.4" height="0.6" rx="0.3"/>
+    <text class="plate-text" x="-7.05" y="3.00" text-anchor="middle">Codex</text>
+    </g>
+    <g class="agent a-oc" role="img" aria-label="OpenCode" tabindex="0">
+    <rect class="hit" x="5.15" y="-2.90" width="3.80" height="2.95" rx="0.3"/>
+    <g class="conn">
+    <path class="wire-c" d="M4.94,-1.75 Q4.10,-1.75 3.26,-0.16"/>
+    <g transform="translate(5.11,-1.75) scale(0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(3.09,-0.16) scale(-0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(4.64,-1.75)"><g class="pk pk-out" style="--dx:-1.09px;--dy:1.59px"><rect class="pk-box k-out" x="-0.760" y="-0.19" width="1.520" height="0.38" rx="0.19"/><text class="pk-text k-out">initialize</text></g></g>
+    <g transform="translate(3.56,-0.16)"><g class="pk pk-in" style="--dx:1.09px;--dy:-1.59px"><rect class="pk-box k-ok" x="-0.634" y="-0.19" width="1.268" height="0.38" rx="0.19"/><text class="pk-text k-ok">response</text></g></g>
+    </g>
+    <g transform="translate(7.05,-1.75) scale(0.34)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <rect class="plate" x="5.35" y="-0.80" width="3.4" height="0.6" rx="0.3"/>
+    <text class="plate-text" x="7.05" y="-0.50" text-anchor="middle">OpenCode</text>
+    </g>
+    <g class="agent a-more" role="img" aria-label="and many other MCP clients" tabindex="0">
+    <rect class="hit" x="4.90" y="0.60" width="4.30" height="2.95" rx="0.3"/>
+    <g class="conn">
+    <path class="wire-c" d="M4.94,1.75 Q4.10,1.75 3.26,1.04"/>
+    <g transform="translate(5.11,1.75) scale(0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(3.09,1.04) scale(-0.280,0.28)"><use href="#pm-can"/></g>
+    <g transform="translate(4.64,1.75)"><g class="pk pk-out" style="--dx:-1.09px;--dy:-0.71px"><rect class="pk-box k-out" x="-0.760" y="-0.19" width="1.520" height="0.38" rx="0.19"/><text class="pk-text k-out">initialize</text></g></g>
+    <g transform="translate(3.56,1.04)"><g class="pk pk-in" style="--dx:1.09px;--dy:0.71px"><rect class="pk-box k-ok" x="-0.634" y="-0.19" width="1.268" height="0.38" rx="0.19"/><text class="pk-text k-ok">response</text></g></g>
+    </g>
+    <g transform="translate(6.43,1.57) scale(0.17)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <g transform="translate(7.67,1.57) scale(0.17)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <g transform="translate(7.05,2.05) scale(0.17)">
+    <use class="r-calm" href="#pm-robot-calm"/>
+    <use class="r-glad" href="#pm-robot-glad"/>
+    </g>
+    <rect class="plate mini" x="5.10" y="2.70" width="3.9" height="0.6" rx="0.3"/>
+    <text class="plate-text mini" x="7.05" y="3.00" text-anchor="middle">…and many others</text>
+    </g>
+    </svg>
+    </div>
+  </section>
+
+  <section class="beside" id="together">
+    <h3>Let your agent work autonomously or work beside it.</h3>
+    <p class="sub">
+      Hand it a goal, a paper, a book and come back to a formalized result. Or stay and work
+      alongside it in symbiosis. Switch at any moment.
+    </p>
+    <div class="side-wrap">
+    <svg class="side-svg" viewBox="-11.8 -2.55 20.65 4.9" role="img" aria-labelledby="sbT sbD">
+    <title id="sbT">An agent and a person fixing the same proof together</title>
+    <desc id="sbD">The robot is wired into a file and tries a proof that almost works; Isabelle reports an error and the robot looks glum. The woman at the same file says "let me help", runs Sledgehammer, and the missing lemma turns up – then both are smiling.</desc>
+    <g class="b-calm" transform="translate(-9.48,0.35) scale(0.46)"><use href="#pm-robot-calm"/></g>
+    <g class="b-glum" transform="translate(-9.48,0.35) scale(0.46)"><use href="#pm-robot-glum"/></g>
+    <g class="b-glad" transform="translate(-9.48,0.35) scale(0.46)"><use href="#pm-robot-glad"/></g>
+    <path class="twine" fill="none" stroke="#D8B87E" stroke-width="0.04218" stroke-linecap="round" d="M-6.86,0.9 C-5.95,1.03 -5.45,0.62 -4.96,0.55"/>
+    <use href="#pm-wire-b" class="pulse b-pulse-out k-out" stroke-width="0.07029" stroke-linecap="round"/>
+    <use href="#pm-wire-b" class="pulse b-pulse-state k-out" stroke-width="0.07029" stroke-linecap="round"/>
+    <use href="#pm-wire-b" class="pulse b-pulse-back k-err" stroke-width="0.07029" stroke-linecap="round"/>
+    <g transform="translate(-7.1,0.9) scale(0.4)"><use href="#pm-can"/></g>
+    <g transform="translate(-4.72,0.55) scale(-0.4,0.4)"><use href="#pm-can"/></g>
+    <g class="panel side-panel">
+    <rect class="pane" x="-4.15" y="-1.4" width="8.6" height="3.1" rx="0.24"/>
+    <rect class="pane-head" x="-4.15" y="-1.4" width="8.6" height="0.58" rx="0.24"/>
+    <path class="pane-sep" d="M-4.15,-0.82h8.6"/>
+    <path class="pane-sep" d="M-4.15,1.1h8.6"/>
+    <image class="isa-badge badge-light" href="assets/isabelle.svg" x="-3.87" y="-1.32" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <image class="isa-badge badge-dark" href="assets/isabelle-dark.svg" x="-3.87" y="-1.32" width="0.42" height="0.42" preserveAspectRatio="xMidYMid meet"/>
+    <text class="pane-logic" x="-3.29" y="-1.11">HOL</text>
+    <text class="pane-file" x="4.13" y="-1.11" text-anchor="end">Scratch.thy</text>
+    <text class="pane-code" x="-3.83" y="-0.42"><tspan class="kw">lemma</tspan><tspan> </tspan><tspan class="str">"(∑i&lt;n. 2*i+1) = (n::nat)^2"</tspan></text>
+    <rect class="wash b-wash-run" x="-4.02" y="-0.13" width="8.34" height="0.44" rx="0.08"/>
+    <rect class="wash b-wash-err" x="-4.02" y="-0.13" width="8.34" height="0.44" rx="0.08"/>
+    <text class="pane-code b-v1" x="-3.61" y="0.08"><tspan class="warn">sorry</tspan></text>
+    <text class="pane-code b-v2" x="-3.61" y="0.08"><tspan class="kw">by</tspan><tspan> (induct n) auto</tspan></text>
+    <text class="pane-code b-v3" x="-3.61" y="0.08"><tspan class="kw">by</tspan><tspan> (induct n) (auto simp: power2_eq_square)</tspan></text>
+    <clipPath id="pm-type"><rect class="type-rect" x="-3.61" y="0.28" width="0" height="0.6"/></clipPath>
+    <g clip-path="url(#pm-type)">
+    <text class="pane-code b-ham" x="-3.61" y="0.58"><tspan class="cmd">sledgehammer</tspan></text>
+    </g>
+    <rect class="caret" x="-3.61" y="0.36" width="0.075" height="0.44"/>
+    <g class="pst b-st-idle tone-warn">
+    <circle class="pane-dot" cx="-3.69" cy="1.39" r="0.1"/>
+    <text class="pane-status" x="-3.43" y="1.39">1 subgoal left</text>
+    </g>
+    <g class="pst b-st-run tone-run">
+    <circle class="pane-dot" cx="-3.69" cy="1.39" r="0.1"/>
+    <text class="pane-status" x="-3.43" y="1.39">checking…</text>
+    </g>
+    <g class="pst b-st-err tone-err">
+    <circle class="pane-dot" cx="-3.69" cy="1.39" r="0.1"/>
+    <text class="pane-status" x="-3.43" y="1.39">error · Failed to finish proof</text>
+    </g>
+    <g class="pst b-st-ham tone-run">
+    <circle class="pane-dot" cx="-3.69" cy="1.39" r="0.1"/>
+    <text class="pane-status" x="-3.43" y="1.39">sledgehammer: (auto simp: power2_eq_square)</text>
+    </g>
+    <g class="pst b-st-done tone-ok">
+    <circle class="pane-dot" cx="-3.69" cy="1.39" r="0.1"/>
+    <text class="pane-status" x="-3.43" y="1.39">finished · 0 errors</text>
+    </g>
+    </g>
+    <g class="pkt b-msg-out k-out"><rect x="-0.546" y="-0.19" width="1.092" height="0.38" rx="0.19"/><text>edit</text></g>
+    <g class="pkt b-msg-state k-out"><rect x="-0.966" y="-0.19" width="1.932" height="0.38" rx="0.19"/><text>get_state</text></g>
+    <g class="pkt b-msg-back k-err"><rect x="-0.798" y="-0.19" width="1.596" height="0.38" rx="0.19"/><text>1 error</text></g>
+    <g class="h-calm" transform="translate(6.75,0.35) scale(0.5)">
+    <g class="human">
+    <path fill="#6E7C99" d="M-1.901,1.96 Q-2,1.55 -1.578,1.55 L1.578,1.55 Q2,1.55 1.901,1.96 L1.749,2.59 Q1.65,3 1.228,3 L-1.228,3 Q-1.65,3 -1.749,2.59 Z"/>
+    <path stroke="#5A6680" stroke-width="0.03515" d="M-1.5,1.72H1.5"/>
+    <path fill="none" stroke="#6E7C99" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.75,1.62L-2.95,1.9L-3.75,1.35"/>
+    <path fill="none" stroke="#6E7C99" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.75,1.62L2.9,1.95L3.3,2.6"/>
+    <circle fill="#5A6680" cx="-1.75" cy="1.62" r="0.2"/>
+    <circle fill="#5A6680" cx="-2.95" cy="1.9" r="0.2"/>
+    <circle fill="#5A6680" cx="1.75" cy="1.62" r="0.2"/>
+    <circle fill="#5A6680" cx="2.9" cy="1.95" r="0.2"/>
+    <circle fill="#E0AE86" cx="-3.75" cy="1.35" r="0.34"/>
+    <circle fill="#E0AE86" cx="3.3" cy="2.6" r="0.34"/>
+    <rect fill="#C08F6B" x="-0.34" y="0.8" width="0.68" height="0.85"/>
+    <path fill="#3A2F2B" d="M-1.5,-0.15 a1.5,1.62 0 0 1 3,0 L1.5,1.15 q-0.12,-0.9 -0.42,-1.25 L-1.08,-0.1 q-0.3,0.35 -0.42,1.25 Z"/>
+    <ellipse fill="#E0AE86" cx="0" cy="-0.1" rx="1.2" ry="1.32"/>
+    <path fill="#3A2F2B" d="M-1.24,-0.28 a1.26,1.4 0 0 1 2.48,0 q-0.55,-0.62 -1.32,-0.42 q-0.62,0.16 -1.16,0.42 Z"/>
+    <g class="specs">
+    <rect fill="#EEF1F5" fill-opacity="0.55" stroke="#2C2F35" stroke-width="0.07732" x="-1.08" y="-0.52" width="0.84" height="0.72" rx="0.24"/>
+    <rect fill="#EEF1F5" fill-opacity="0.55" stroke="#2C2F35" stroke-width="0.07732" x="0.1" y="-0.52" width="0.84" height="0.72" rx="0.24"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.07732" d="M-0.24,-0.2 q0.11,-0.12 0.22,0"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.07029" d="M-1.08,-0.26 L-1.24,-0.34"/>
+    </g>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.78" cy="-0.16" r="0.15"/>
+    <circle fill="#2C2F35" cx="0.4" cy="-0.16" r="0.15"/>
+    </g>
+    <path class="mouth" fill="none" stroke="#C08F6B" stroke-width="0.08435" stroke-linecap="round" d="M-0.3,0.52 q0.3,0.26 0.6,-0.04"/>
+    </g>
+    </g>
+    <g class="h-glad" transform="translate(6.75,0.35) scale(0.5)">
+    <g class="human">
+    <path fill="#6E7C99" d="M-1.901,1.96 Q-2,1.55 -1.578,1.55 L1.578,1.55 Q2,1.55 1.901,1.96 L1.749,2.59 Q1.65,3 1.228,3 L-1.228,3 Q-1.65,3 -1.749,2.59 Z"/>
+    <path stroke="#5A6680" stroke-width="0.03515" d="M-1.5,1.72H1.5"/>
+    <path fill="none" stroke="#6E7C99" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M-1.75,1.62L-2.95,1.9L-3.75,1.35"/>
+    <path fill="none" stroke="#6E7C99" stroke-width="0.5272" stroke-linecap="round" stroke-linejoin="round" d="M1.75,1.62L2.9,1.95L3.3,2.6"/>
+    <circle fill="#5A6680" cx="-1.75" cy="1.62" r="0.2"/>
+    <circle fill="#5A6680" cx="-2.95" cy="1.9" r="0.2"/>
+    <circle fill="#5A6680" cx="1.75" cy="1.62" r="0.2"/>
+    <circle fill="#5A6680" cx="2.9" cy="1.95" r="0.2"/>
+    <circle fill="#E0AE86" cx="-3.75" cy="1.35" r="0.34"/>
+    <circle fill="#E0AE86" cx="3.3" cy="2.6" r="0.34"/>
+    <rect fill="#C08F6B" x="-0.34" y="0.8" width="0.68" height="0.85"/>
+    <path fill="#3A2F2B" d="M-1.5,-0.15 a1.5,1.62 0 0 1 3,0 L1.5,1.15 q-0.12,-0.9 -0.42,-1.25 L-1.08,-0.1 q-0.3,0.35 -0.42,1.25 Z"/>
+    <ellipse fill="#E0AE86" cx="0" cy="-0.1" rx="1.2" ry="1.32"/>
+    <path fill="#3A2F2B" d="M-1.24,-0.28 a1.26,1.4 0 0 1 2.48,0 q-0.55,-0.62 -1.32,-0.42 q-0.62,0.16 -1.16,0.42 Z"/>
+    <g class="specs">
+    <rect fill="#EEF1F5" fill-opacity="0.55" stroke="#2C2F35" stroke-width="0.07732" x="-1.08" y="-0.52" width="0.84" height="0.72" rx="0.24"/>
+    <rect fill="#EEF1F5" fill-opacity="0.55" stroke="#2C2F35" stroke-width="0.07732" x="0.1" y="-0.52" width="0.84" height="0.72" rx="0.24"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.07732" d="M-0.24,-0.2 q0.11,-0.12 0.22,0"/>
+    <path fill="none" stroke="#2C2F35" stroke-width="0.07029" d="M-1.08,-0.26 L-1.24,-0.34"/>
+    </g>
+    <g class="eyes">
+    <circle fill="#2C2F35" cx="-0.78" cy="-0.16" r="0.15"/>
+    <circle fill="#2C2F35" cx="0.4" cy="-0.16" r="0.15"/>
+    </g>
+    <path class="mouth" fill="none" stroke="#C08F6B" stroke-width="0.08435" stroke-linecap="round" d="M-0.32,0.46 q0.32,0.42 0.64,-0.06"/>
+    </g>
+    </g>
+    <g class="b-hammer" transform="translate(4.595,0.725) scale(0.021875) translate(-24,-24)">
+    <g transform="rotate(-38 24 24)">
+    <rect x="21.6" y="15" width="4.8" height="27" rx="2.4" fill="#9C7A44"/>
+    <rect x="9.5" y="5" width="29" height="12.4" rx="2.6" fill="#C3C8CE" stroke="#2C2F35" stroke-width="1.7"/>
+    <rect x="19.6" y="5" width="8.8" height="12.4" fill="#9AA1AB"/>
+    </g></g>
+    <g class="bubble">
+    <rect x="4.9" y="-1.69" width="3.0" height="0.84" rx="0.42"/>
+    <path d="M6.9,-0.93 l0.34,0.5 l-0.02,-0.52 Z"/>
+    <text x="6.4" y="-1.27" text-anchor="middle">let me help</text>
+    </g>
+    </svg>
+    </div>
+  </section>
+
+  <section class="uses" id="uses">
+    <h3>Now take on what seemed out of reach.</h3>
+    <ul class="use-grid">
+      <li>
+        <b>Mathematical discovery</b>
+        Autoformalization of classic results, and long-standing arguments settled for
+        good.
+      </li>
+      <li>
+        <b>Verified software</b>
+        Verified compilers, kernels, controllers that do the right thing and the right
+        thing only.
+      </li>
+      <li>
+        <b>Security and cryptography</b>
+        Protocol and cryptographic guarantees checked down to the axioms.
+      </li>
+      <li>
+        <b>Living libraries</b>
+        Large formal libraries ported, refactored, and repaired while everything
+        underneath keeps moving.
+      </li>
+    </ul>
+    <a class="scroll-cue cue-flow" href="#get-started" aria-label="On to getting started">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+  </div>
+
+  </div>
+
+  <!-- chapter and subsection: one snap area, so nothing snaps between them -->
+  <div class="finale">
+  <section class="start" id="get-started">
+    <h2><em>Get started today</em>.</h2>
+    <p class="sub">
+      <b>Download and install – or ask your agent to do it for you.</b>
+    </p>
+
+    <div class="start-grid">
+      <a class="start-card key" href="https://isabelle.in.tum.de/">
+        <span class="start-head">
+          <img class="start-logo start-logo-light" src="assets/isabelle.svg" alt="">
+          <img class="start-logo start-logo-dark" src="assets/isabelle-dark.svg" alt="">
+          Isabelle
+        </span>
+        <span class="start-body">The frontier proof assistant: every step of a proof checked, down to the axioms.</span>
+        <span class="start-foot">
+          <span class="lic">BSD-style license</span>
+          <span class="go">Download &rarr;</span>
+        </span>
+      </a>
+
+      <a class="start-card key" href="https://github.com/kappelmann/isabelle-pide-mcp">
+        <span class="start-head">
+<svg class="start-logo wire-logo" viewBox="-2.95 -0.95 5.9 2.1" aria-hidden="true">
+          <path fill="none" stroke="#D8B87E" stroke-width="0.1195" stroke-linecap="round" d="M-1.35,0 C-0.35,0.42 0.35,0.42 1.35,0"/>
+          <g class="" transform="translate(-1.95,0) scale(1,1)">
+          <path fill="#C3C8CE" stroke="#2C2F35" stroke-width="0.04218" stroke-linejoin="round" d="M-0.6,-0.6H0.6A0.22,0.6 0 0 1 0.6,0.6H-0.6Z"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M-0.2,-0.5631A0.22,0.5631 0 0 1 -0.2,0.5631"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M0.2,-0.5631A0.22,0.5631 0 0 1 0.2,0.5631"/>
+          <ellipse fill="#9AA1AB" stroke="#2C2F35" stroke-width="0.04218" cx="-0.6" cy="0" rx="0.22" ry="0.6"/>
+          <ellipse fill="#2C2F35" cx="-0.6" cy="0" rx="0.121" ry="0.396"/>
+          <circle fill="#2C2F35" cx="0.6" cy="0" r="0.05"/>
+          </g>
+          <g class="" transform="translate(1.95,0) scale(-1,1)">
+          <path fill="#C3C8CE" stroke="#2C2F35" stroke-width="0.04218" stroke-linejoin="round" d="M-0.6,-0.6H0.6A0.22,0.6 0 0 1 0.6,0.6H-0.6Z"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M-0.2,-0.5631A0.22,0.5631 0 0 1 -0.2,0.5631"/>
+          <path fill="none" stroke="#2C2F35" stroke-opacity="0.55" stroke-width="0.03163" d="M0.2,-0.5631A0.22,0.5631 0 0 1 0.2,0.5631"/>
+          <ellipse fill="#9AA1AB" stroke="#2C2F35" stroke-width="0.04218" cx="-0.6" cy="0" rx="0.22" ry="0.6"/>
+          <ellipse fill="#2C2F35" cx="-0.6" cy="0" rx="0.121" ry="0.396"/>
+          <circle fill="#2C2F35" cx="0.6" cy="0" r="0.05"/>
+          </g>
+          </svg>
+          PIDE MCP
+        </span>
+        <span class="start-body">Your agent's live line to Isabelle: reactive and parallel, autonomous and cooperative.</span>
+        <span class="start-foot">
+          <span class="lic">LGPL-3.0</span>
+          <span class="go">Download &rarr;</span>
+        </span>
+      </a>
+    </div>
+
+  </section>
+
+  <section class="more" id="more">
+    <h3 class="more-head">Want to know more?</h3>
+    <div class="more-grid">
+      <a class="start-card" href="https://doi.org/10.5281/zenodo.21519364">
+        <span class="start-head">
+          <svg class="start-logo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 2.8h7.2L19 8.6V21.2H6z" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M13.2 2.8V8.6H19" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linejoin="round"/>
+            <path d="M8.8 12.4h7.4M8.8 15.6h7.4M8.8 18.2h4.6" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          PIDE MCP Preprint
+        </span>
+        <span class="start-body">Learn more about the design of PIDE MCP.</span>
+        <span class="start-foot">
+          <span class="lic">PDF · Zenodo</span>
+          <span class="go">Read it &rarr;</span>
+        </span>
+      </a>
+
+      <div class="start-card">
+        <span class="start-head">
+          <svg class="start-logo" viewBox="0 0 773.12 773.12" aria-hidden="true">
+            <!-- Zulip mark, from zulip/zulip static/images/logo (Apache-2.0) -->
+            <circle cx="386.56" cy="386.56" r="386.56" fill="#5d84f5"/>
+            <path d="M566.66 527.25c0 33.03-24.23 60.05-53.84 60.05H260.29c-29.61 0-53.84-27.02-53.84-60.05 0-20.22 9.09-38.2 22.93-49.09l134.37-120c2.5-2.14 5.74 1.31 3.94 4.19l-49.29 98.69c-1.38 2.76.41 6.16 3.25 6.16h191.18c29.61 0 53.83 27.03 53.83 60.05zm0-281.39c0 20.22-9.09 38.2-22.93 49.09l-134.37 120c-2.5 2.14-5.74-1.31-3.94-4.19l49.29-98.69c1.38-2.76-.41-6.16-3.25-6.16H260.29c-29.61 0-53.84-27.02-53.84-60.05s24.23-60.05 53.84-60.05h252.54c29.61 0 53.83 27.02 53.83 60.05z" fill="#fff"/>
+          </svg>
+          Questions and Support
+        </span>
+        <span class="start-body">Contact us on the
+        <a href="https://isabelle.zulipchat.com/#narrow/channel/202967-New-Members-.26-Projects/topic/PIDE.20MCP">PIDE MCP stream on Isabelle Zulip</a> or message
+        <a href="https://github.com/kappelmann/">Kevin Kappelmann</a>.</span>
+        <span class="start-foot">
+          <span class="lic">Isabelle Zulip</span>
+          <a class="go" href="https://isabelle.zulipchat.com/#narrow/channel/202967-New-Members-.26-Projects/topic/PIDE.20MCP">Ask &rarr;</a>
+        </span>
+      </div>
+    </div>
+  </section>
+  </div>
+</main>
+
+<nav class="rail" aria-label="Chapters">
+  <a href="#ai-proof"><i></i><span>AI proof</span></a>
+  <a href="#isabelle"><i></i><span>Isabelle</span></a>
+  <a href="#pide-mcp"><i></i><span>PIDE MCP</span></a>
+  <a href="#get-started"><i></i><span>Get started</span></a>
+</nav>
+
+<footer>
+  <span>by <a href="https://github.com/kappelmann/">Kevin Kappelmann</a>, <a href="https://www.renaissancephilanthropy.org/copilots-for-isabelle-learning-logical-structure-for-a-better-proving-experience">Copilots for Isabelle</a> project</span>
+</footer>
+<script>
+// The rail marks which chapter you are in. CSS cannot express that -- it has no
+// cross-element scroll position, and timeline-scope is not honoured widely
+// enough to rely on -- so this is the one piece of script on the page.
+(function () {
+  // A scrolling scene fades at its right edge to say there is more. Once the
+  // box is scrolled to the end there is nothing more, and the fade would only
+  // be hiding the last of the drawing.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.scene-wrap, .mcp-wrap, .side-wrap'),
+    function (box) {
+      function edge() {
+        var over = box.scrollWidth - box.clientWidth;
+        box.classList.toggle('at-end', over <= 1 || box.scrollLeft >= over - 2);
+      }
+      box.addEventListener('scroll', edge, { passive: true });
+      addEventListener('resize', edge);
+      edge();
+    });
+
+  // the scenes hold at frame zero until the reader gets to them
+  document.documentElement.classList.add('js');
+  var io = window.IntersectionObserver && new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('seen');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.3 });
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.scene-wrap, .mcp-wrap, .side-wrap'),
+    function (w) { io ? io.observe(w) : w.classList.add('seen'); });
+
+  // Chapter-to-chapter scrolling, animated here rather than by scroll-snap:
+  // Firefox performs a snap as an instant reposition and ignores
+  // scroll-behavior for it, so a wheel notch simply teleported you.
+  var CHAPTERS = ['ai-proof', 'isabelle', 'pide-mcp', 'get-started'];
+  var stopsEl = CHAPTERS.map(function (id) { return document.getElementById(id); })
+                        .filter(Boolean);
+  var gliding = false, lockUntil = 0;
+
+  function glideTo(top) {
+    var from = window.scrollY, dist = top - from;
+    if (Math.abs(dist) < 2) return;
+    var dur = Math.min(620, 260 + Math.abs(dist) * 0.35), t0 = null;
+    gliding = true;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur);
+      // easeInOutCubic: decisive in the middle, soft at both ends
+      var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      // 'instant', or the page's own scroll-behavior: smooth would animate
+      // every frame of this animation and the two would fight
+      window.scrollTo({ top: from + dist * e, behavior: 'instant' });
+      if (p < 1) { requestAnimationFrame(step); }
+      else { gliding = false; lockUntil = Date.now() + 160; }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Only the wheel is taken over, and only when the next chapter is a screen
+  // away. Trackpad flicks, keyboard, and the rail links keep native scrolling.
+  addEventListener('wheel', function (ev) {
+    if (innerWidth <= 700 || innerHeight <= 620) return;   // the plain-page fallback
+    if (ev.ctrlKey) return;                                // pinch to zoom
+    // nothing gets through while a glide runs, nor for a moment after it, or
+    // trackpad momentum lands on top of the chapter that just arrived
+    if (gliding || Date.now() < lockUntil) { ev.preventDefault(); return; }
+    if (ev.deltaMode === 0 && Math.abs(ev.deltaY) < 20) return;   // fine trackpad scrolling
+
+    var here = window.scrollY, ih = innerHeight, dir = ev.deltaY > 0 ? 1 : -1;
+    var at = -1, tops = [];
+    for (var i = 0; i < stopsEl.length; i++) {
+      var r = stopsEl[i].getBoundingClientRect();
+      tops.push(r.top + here);
+      if (r.top <= ih / 2 && r.bottom >= ih / 2) at = i;   // resting on this chapter
+    }
+    var target = null;
+    for (var j = 0; j < tops.length; j++) {
+      if (dir > 0 ? tops[j] > here + 4 : tops[j] < here - 4) {
+        if (target === null || (dir > 0 ? tops[j] < target : tops[j] > target)) target = tops[j];
+      }
+    }
+    if (target === null) return;                           // past the last chapter
+    var d = Math.abs(target - here);
+    // A screen is the limit, and it is the honest one: a glide of at most one
+    // viewport only scrolls past content that was already on screen. Reaching
+    // further is what let a tall window carry the reader over the whole
+    // subsections stretch without ever showing it.
+    // Going up, the target is often the top of the chapter you are already
+    // inside. That is welcome when you have barely left it and want to settle
+    // back on it; it is not when you are working back up through the PIDE MCP
+    // chapter, which is taller than a screen -- there it flung the reader over
+    // everything still between them and the heading.
+    // Never glide to the top of the chapter you are already inside. Going up
+    // through PIDE MCP that yanked the reader over the rest of the chapter,
+    // and even a short hop landed as a jolt at the end of an otherwise
+    // ordinary scroll. Above its top the next chapter is a normal hop again.
+    var backToOwnTop = dir < 0 && at >= 0 && Math.abs(tops[at] - target) < 1;
+    var restingHop = at >= 0 && !backToOwnTop && d <= ih * 1.05;
+    // Downwards there is also the chapter that is simply arriving.
+    var arriving   = dir > 0 && d <= ih * 0.98;
+    if (!restingHop && !arriving) return;
+    ev.preventDefault();
+    glideTo(target);
+  }, { passive: false });
+
+  // the closing chapter can only reach the top of the screen if the footer
+  // fills what is left, so its height is published for the CSS to use
+  var foot = document.querySelector('footer');
+  function footerHeight() {
+    if (foot) document.documentElement.style.setProperty('--footer-h', foot.offsetHeight + 'px');
+  }
+  footerHeight();
+  addEventListener('resize', footerHeight);
+
+  // the band's editor shows "no client connected" while the line changes hands
+  var band = document.querySelector('.mcp-svg'), bandTimer = null, held = null;
+  var NAMED = { 'a-cc': 'on-cc', 'a-codex': 'on-codex', 'a-oc': 'on-oc', 'a-more': 'on-more' };
+  function handover(agent) {
+    if (!band || agent === held) return;
+    held = agent;
+    // the line is a class, not a cascade: one cell is live, and the band says
+    // whose name the editor should show once the handshake is through
+    Array.prototype.forEach.call(band.querySelectorAll('.agent'), function (a) {
+      a.classList.toggle('live', a === agent);
+    });
+    for (var key in NAMED) band.classList.toggle(NAMED[key], agent.classList.contains(key));
+    band.classList.add('connecting');
+    clearTimeout(bandTimer);
+    bandTimer = setTimeout(function () { band.classList.remove('connecting'); }, 3150);
+  }
+  if (band) {
+    // The line goes round the agents on its own, so the exchange plays for a
+    // reader who never points at anything -- on a phone there is no hover at
+    // all. Anticlockwise round the editor, not in document order: top-left,
+    // bottom-left, bottom-right, top-right.
+    var agents = ['.a-cc', '.a-codex', '.a-more', '.a-oc']
+      .map(function (sel) { return band.querySelector(sel); })
+      .filter(Boolean);
+    var turn = 0, cycleTimer = null, bandSeen = false, firstTurn = true, holding = false;
+
+    function take(i) {
+      turn = (i + agents.length) % agents.length;   // set first: the focus
+      var a = agents[turn];                         // handler checks against it
+      try { a.focus({ preventScroll: true }); } catch (e) { a.focus(); }
+      handover(a);
+    }
+    function schedule() {
+      clearTimeout(cycleTimer);
+      if (!bandSeen || holding) return;
+      // the first turn comes quickly, so a reader arriving at the band sees
+      // the line move rather than a still picture; after that every turn gets
+      // the same interval, including the one after the pointer leaves
+      var wait = firstTurn ? 1100 : 5200;
+      firstTurn = false;
+      cycleTimer = setTimeout(function () { take(turn + 1); schedule(); }, wait);
+    }
+    // Pointing at an agent moves the line there and keeps it there while the
+    // pointer stays. Clicking moves it there and lets the cycle carry on.
+    agents.forEach(function (a, i) {
+      a.addEventListener('mouseenter', function () {
+        holding = true; firstTurn = false; clearTimeout(cycleTimer); take(i);
+      });
+      // a moment's grace: slipping over a gap in the drawing and back should
+      // not count as letting go
+      var release = null;
+      a.addEventListener('mouseleave', function () {
+        clearTimeout(release);
+        release = setTimeout(function () { holding = false; schedule(); }, 220);
+      });
+      a.addEventListener('mouseover', function () { clearTimeout(release); });
+      a.addEventListener('click', function () { holding = false; take(i); schedule(); });
+      a.addEventListener('focus', function () {
+        if (i === turn) return;                     // this is our own take()
+        firstTurn = false; take(i); schedule();
+      });
+    });
+
+    // the default cell holds the line from the start
+    agents[0].classList.add('live');
+    band.classList.add('on-cc');
+    held = agents[0];
+
+    // Losing focus altogether -- a click somewhere else on the page -- puts the
+    // line back on the default agent, and that is a handover like any other:
+    // without this the editor's caption changed name with no handshake.
+    band.addEventListener('focusout', function () {
+      setTimeout(function () {
+        if (band.contains(document.activeElement)) return;
+        turn = 0;
+        handover(agents[0]);
+        schedule();
+      }, 0);
+    });
+
+    // Nothing turns over until the band is properly on screen, and it stops
+    // again when it leaves. The threshold is high on purpose: at a third the
+    // band counted as seen while the reader was still in the section above it,
+    // so the line had already gone round by the time they arrived.
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          bandSeen = e.isIntersecting;
+          if (!bandSeen) { clearTimeout(cycleTimer); return; }
+          firstTurn = true;      // arriving again should show movement soon
+          schedule();
+        });
+      }, { threshold: 0.75 })
+        // the wrapper, not the drawing: on a phone the svg is far wider than
+        // the screen, so three quarters of *it* is never on show and the band
+        // never counted as seen
+        .observe(band.closest('.mcp-wrap') || band);
+    } else {
+      bandSeen = true;
+      schedule();
+    }
+  }
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var stops = links.map(function (a) {
+    return { link: a, el: document.getElementById(a.hash.slice(1)) };
+  }).filter(function (s) { return s.el; });
+  if (!stops.length) return;
+
+  var here = null;
+  function mark() {
+    // the chapter that owns the point a third of the way down the viewport;
+    // PIDE MCP keeps the mark through its subsections, which is the point
+    var line = window.scrollY + window.innerHeight / 3, found = stops[0];
+    for (var i = 0; i < stops.length; i++) {
+      if (stops[i].el.offsetTop <= line) found = stops[i];
+    }
+    if (found.link === here) return;
+    if (here) here.classList.remove('is-here');
+    found.link.classList.add('is-here');
+    here = found.link;
+  }
+
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; mark(); });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  mark();
+})();
+</script>
+</body>
+</html>

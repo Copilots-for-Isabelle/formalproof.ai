@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+
+# one-shot output of tools/gen_scene.py -- paste it in, do not commit it
+*.svgfrag
+scene_keyframes.css
+side_keyframes.css
+
+# editor swap files
+*.swp
+*.swo
+*~
