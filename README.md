@@ -43,6 +43,7 @@ make help       # the list
 - a dash in the metadata, or a British spelling anywhere a reader or screen
   reader reaches
 - `href`/`src` pointing at a file that is not there
+- a sitemap `lastmod` older than the page, or `changefreq`/`priority` returning
 
 ### Search and social copy
 
@@ -306,8 +307,11 @@ breakpoint fires first.
   artwork. Regenerate it if the headline changes; the card should match `<h1>`.
 - `assets/apple-touch-icon.png` is the 180x180 raster fallback for crawlers and
   home screens that will not take the SVG favicon.
-- `robots.txt` points at `sitemap.xml`; bump its `lastmod` on substantial
-  changes.
+- `robots.txt` points at `sitemap.xml`. The sitemap carries `lastmod` and
+  nothing else: Google ignores `changefreq` and `priority`, and `priority` is
+  relative to other URLs on the same site, of which there is one. `lastmod` is
+  read only while it stays truthful, so `make check` fails if it falls behind
+  the last commit touching `index.html`, or if either dead field returns.
 - The fonts come from Google Fonts and are render-blocking. Self-hosting Inter
   and JetBrains Mono is the next real speed win.
 

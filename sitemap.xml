@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- One page. changefreq and priority are deliberately absent: Google ignores
+     both, and priority is defined relative to other URLs on the same site, of
+     which there are none. lastmod is the only field that gets read, and only
+     while it stays truthful, so keep it at the date index.html last changed. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://formalproof.ai/</loc>
     <lastmod>2026-09-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
   </url>
 </urlset>

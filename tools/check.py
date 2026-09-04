@@ -128,6 +128,35 @@ for word in BRITISH:
     if hits:
         bad(f"British spelling {word!r} in user-facing text ({len(hits)}x)")
 
+# ---- the sitemap's lastmod is the only field crawlers read ---------------
+# It helps only while it is true. Google ignores changefreq and priority, so
+# they are absent on purpose; if they come back, they are noise at best and a
+# reason to distrust lastmod at worst.
+sitemap = os.path.join(ROOT, "sitemap.xml")
+if os.path.exists(sitemap):
+    sm = open(sitemap, encoding="utf-8").read()
+    for dead in ("changefreq", "priority"):
+        if f"<{dead}>" in sm:
+            bad(f"sitemap has <{dead}>, which every major crawler ignores")
+    stamp = re.search(r"<lastmod>([0-9-]+)</lastmod>", sm)
+    if not stamp:
+        bad("sitemap has no <lastmod>, the one field that is read")
+    else:
+        # the page's real last change, straight from git when it is available
+        try:
+            import subprocess
+            real = subprocess.run(
+                ["git", "-C", ROOT, "log", "-1", "--format=%ad", "--date=short",
+                 "--", "index.html"],
+                capture_output=True, text=True, timeout=10).stdout.strip()
+        except Exception:
+            real = ""
+        if real and stamp.group(1) < real:
+            bad(f"sitemap lastmod {stamp.group(1)} predates the last change to "
+                f"index.html ({real})")
+        elif real:
+            notes.append(f"sitemap     lastmod {stamp.group(1)}, page last changed {real}")
+
 # ---- local assets referenced actually exist ------------------------------
 for ref in sorted(set(re.findall(r'(?:href|src)="((?!https?:|#|mailto:)[^"]+)"', html))):
     if not os.path.exists(os.path.join(ROOT, ref.split("?")[0])):
