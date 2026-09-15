@@ -8,8 +8,11 @@ its own repository.
 
 ```
 index.html                the whole page, including one inline script
+quick-start/index.html    the guided first run
 assets/style.css          light + dark, responsive
+assets/quick-start.css    prose, steps, commands: the quick start page only
 assets/isabelle.svg       Isabelle logo (-dark: wordmark lightened)
+assets/jedit-and-agent.png  the quick start's screenshot, from the server repo
 assets/og.png             social card, 1200x630
 assets/favicon.svg  assets/apple-touch-icon.png
 CNAME  .nojekyll  robots.txt  sitemap.xml
@@ -30,7 +33,7 @@ make check      # before you push
 make help       # the list
 ```
 
-`make check` reads `index.html` and fails on what nothing else notices:
+`make check` reads both pages and fails on what nothing else notices:
 
 - `<title>` and `og:title`, or the two descriptions, drifting apart — each
   string lives in two places because the standards require it, and no browser
@@ -42,8 +45,13 @@ make help       # the list
 - JSON-LD that does not parse, or an `@id` pointing at no node
 - a dash in the metadata, or a British spelling anywhere a reader or screen
   reader reaches
-- `href`/`src` pointing at a file that is not there
-- a sitemap `lastmod` older than the page, or `changefreq`/`priority` returning
+- an `<img>` with no `alt`, or an empty one that is not also `aria-hidden`;
+  crawlers and screen readers both read `alt` and nothing else about an image
+- `href`/`src` pointing at a file that is not there, resolved against the page
+  it sits on rather than the root, so `../assets/` is checked where it is used
+- the artwork the quick start copies from the home page drifting out of step
+- a sitemap `lastmod` older than its page, an entry for a page that is not
+  checked here, or `changefreq`/`priority` returning
 
 ### Search and social copy
 
@@ -99,6 +107,58 @@ quotes real source:
 Check any example you change. The plausible-looking ones bite: a lemma that
 looks like it needs work often closes on the spot because the library already
 marks the key fact `[simp]`.
+
+## The quick start page
+
+`quick-start/index.html` is the other page, at `/quick-start/`. It picks up
+where the server's README leaves off: you are installed and connected, so here
+is what working with it looks like, ending in a proof you and your agent wrote
+together. Installation itself is **not** repeated here — it lives in the
+server's README, and the page links there rather than growing a second copy
+that drifts.
+
+The home page argues and snaps chapter by chapter. This one only has to work,
+so it is one column from the first line to the last, with `assets/quick-start.css`
+supplying what a landing page never needed: prose, commands, callouts. Section
+marking is the home page's `nav.rail`, with its own copy of the marking script.
+
+### What it does that plain HTML does not
+
+- **The architecture figure is interactive.** Each part carries `data-part`, in
+  the description list and in the drawing, and the card carries the state:
+  `data-sel` for what was clicked, `data-on` for what the pointer is over. One
+  rule reads both, `data-on` winning while it exists, which is what makes
+  hovering set the selection aside and releasing bring it back. This started as
+  a CSS-only `:has()` construction and broke twice invisibly — an id inside
+  `:has()` counts as an id, so the selected rule silently outranked every hover
+  rule. Two attributes and a short script are testable; that cascade was not.
+- **Agent-specific commands sit behind tabs** at the step where the choice
+  matters. Bars of the same `data-group` mirror each other through a listener,
+  because one shared radio group would clear the other bars' pills.
+- **Copy buttons** on the runnable blocks only. A block marked `out` is output,
+  not input, and gets none; nor does the example exchange, which is an
+  illustration. The `$` prompts are stripped on copy.
+
+### Copies it carries
+
+Two blocks from `index.html`: the `pm-defs` sprite sheet and the side-by-side
+scene, plus the `<footer>`. There is no build step, so an inline SVG cannot be
+included, only duplicated. `make check` compares each copy byte for byte and
+fails when they drift, which is the only thing that would notice.
+
+Both copies therefore have to be **location-independent**, and that is why the
+Isabelle badge inside the scene is `href="/assets/isabelle.svg"` rather than
+relative: the same markup is read from `/` and from `/quick-start/`. Keep any
+new reference inside a shared block root-absolute for the same reason.
+Everything outside those blocks stays relative.
+
+The same rule as the home page applies to what it prints: the example exchange
+is the sum lemma from the table above, so its three attempts and two failures
+are the verified ones, not a plausible-looking invention.
+
+Claims that go stale if the server changes: `-o show_states` in the
+troubleshooting list, and the agents named in the tab bar. Both live in the
+server repository's README.
 
 ## The illustrations
 
@@ -309,9 +369,10 @@ breakpoint fires first.
   home screens that will not take the SVG favicon.
 - `robots.txt` points at `sitemap.xml`. The sitemap carries `lastmod` and
   nothing else: Google ignores `changefreq` and `priority`, and `priority` is
-  relative to other URLs on the same site, of which there is one. `lastmod` is
-  read only while it stays truthful, so `make check` fails if it falls behind
-  the last commit touching `index.html`, or if either dead field returns.
+  relative to other URLs on the same site, which says nothing useful about
+  two. `lastmod` is read only while it stays truthful, so `make check` fails
+  if an entry falls behind the last commit touching its page, if a page is
+  missing an entry, or if either dead field returns.
 - The fonts come from Google Fonts and are render-blocking. Self-hosting Inter
   and JetBrains Mono is the next real speed win.
 

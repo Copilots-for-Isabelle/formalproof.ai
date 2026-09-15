@@ -1,0 +1,415 @@
+/* formalproof.ai - the quick start page
+   Loaded after style.css, which owns the palette, the fonts, the footer and
+   every illustration. Nothing here redefines a token: this file is the prose
+   layer the one-page site never needed - steps, commands, callouts, a table
+   of contents - in the same vocabulary. */
+
+/* The index snaps chapter by chapter. A reader following commands moves
+   between the page and a terminal instead, so the quick start scrolls freely
+   and only the hero keeps the full screen. */
+html { scroll-behavior: smooth; scroll-padding-top: 28px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+main.tut { max-width: 1180px; text-align: left; }
+
+/* ---------------- the page body ----------------
+   One column. Section marking is the home page's rail, which is fixed to the
+   right edge and becomes a bar across the top on narrow screens, so nothing
+   here reserves space for it. */
+
+main.tut { max-width: 860px; }
+
+.tut-body { padding: clamp(32px, 5vw, 56px) 0 clamp(48px, 8vw, 96px); }
+
+.tut-title {
+  margin: 6px 0 10px;
+  font-size: clamp(30px, 4.4vw, 44px); font-weight: 700;
+  letter-spacing: -.02em; line-height: 1.1;
+}
+.tut-intro {
+  max-width: var(--prose); margin: 0 0 clamp(30px, 5vw, 46px);
+  color: var(--fg-mid); font-size: clamp(17px, 2.2vw, 20px); line-height: 1.55;
+}
+
+/* ---------------- a step ---------------- */
+
+.step { scroll-margin-top: 28px; font-size: clamp(17px, 2.2vw, 20px); }
+.step + .step { margin-top: clamp(40px, 6vw, 72px); }
+
+/* Not flex: a flex h2 makes every text node its own item, so the gap lands
+   between "Get" and "Isabelle" as well as after the number. */
+.step > h2 {
+  margin: 0 0 6px; font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
+}
+.step > h2 .n {
+  display: inline-block; margin-right: 11px;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  color: var(--fg-dim); vertical-align: .12em;
+}
+.step h3 {
+  margin: clamp(24px, 3vw, 34px) 0 6px;
+  font-size: 20px; font-weight: 600; letter-spacing: -.005em;
+}
+
+.step p, .step ul, .step ol { max-width: var(--prose); }
+.step p { margin: 10px 0; color: var(--fg-mid); }
+.step p b, .step li b { color: var(--fg); font-weight: 600; }
+.step a { color: inherit; text-decoration: underline;
+          text-decoration-color: var(--fg-dim); text-underline-offset: 3px; }
+.step a:hover { text-decoration-color: var(--red); }
+.step a.go { color: var(--red); text-decoration: none; }
+
+.step ul, .step ol { padding-left: 22px; color: var(--fg-mid); }
+.step li { margin: 6px 0; }
+.step li::marker { color: var(--fg-dim); }
+
+/* ---------------- commands and code ---------------- */
+
+code {
+  font-family: var(--mono); font-size: .9em;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 5px; padding: .1em .35em;
+}
+
+pre {
+  margin: 14px 0; max-width: var(--prose);
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 16px;
+  overflow-x: auto; scrollbar-width: thin;
+  font-family: var(--mono); font-size: 14px; line-height: 1.65;
+  color: var(--fg);
+}
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+
+/* $ marks what you type, so the rest is what you get back */
+pre .p { color: var(--fg-dim); user-select: none; }
+pre .c { color: var(--fg-dim); }
+pre .k { color: var(--red); }
+pre .s { color: var(--ok); }
+pre .v { color: var(--run); }
+pre .warn { color: var(--warn); }
+pre .e { color: var(--red); }
+
+/* A transcript of the loop: what you say, what the agent does, what Isabelle
+   answers. The tool names and verdicts are real; see the README. */
+pre.turn { background: var(--panel); }
+pre.turn .you { color: var(--fg); font-weight: 500; }
+pre.turn .tool { color: var(--run); }
+
+figure { width: 100%; margin: 18px 0; max-width: var(--prose); }
+figcaption { margin-top: 8px; font-size: 13px; color: var(--fg-dim); }
+
+/* ---------------- callouts ---------------- */
+
+.note {
+  margin: 14px 0; max-width: var(--prose);
+  border: 1px solid var(--line); border-left: 3px solid var(--twine);
+  border-radius: 0 10px 10px 0; background: var(--panel-2);
+  padding: 11px 14px; font-size: 14.5px; color: var(--fg-mid);
+}
+.note b { color: var(--fg); font-weight: 600; }
+.note.warn { border-left-color: var(--red); }
+.note.mac { border-left-color: var(--run); }
+.note p { margin: 6px 0; max-width: none; }
+.note p:first-child { margin-top: 0; }
+.note p:last-child { margin-bottom: 0; }
+
+/* ---------------- the screenshot and the scene ---------------- */
+
+.shot {
+  display: block; width: 100%; max-width: 100%; height: auto;
+  aspect-ratio: 2048 / 1242; object-fit: contain;
+  border: 1px solid var(--line); border-radius: 12px;
+}
+.tut-scene { max-width: none; }
+.tut-scene .side-wrap { width: 100%; max-width: 100%; margin-top: 0; }
+.tut-scene .side-svg { aspect-ratio: 20.65 / 4.9; }
+
+/* ---------------- troubleshooting ---------------- */
+
+.fixes { list-style: none; margin: 14px 0 0; padding: 0; max-width: var(--prose); }
+.fixes li {
+  border-top: 1px solid var(--line); padding: 14px 0;
+  color: var(--fg-mid); font-size: 14.5px;
+}
+.fixes li:last-child { border-bottom: 1px solid var(--line); }
+.fixes b { display: block; color: var(--fg); font-weight: 600; margin-bottom: 3px; }
+
+/* ---------------- the way out ---------------- */
+
+.tut-next {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  margin-top: 18px; max-width: var(--prose); padding: 0; list-style: none;
+}
+.tut-next a {
+  display: block; height: 100%; text-decoration: none;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--panel-2); padding: 14px 16px;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.tut-next a:hover { transform: translateY(-2px); border-color: var(--fg-dim); }
+@media (hover: none) { .tut-next a:hover { transform: none; } }
+.tut-next b { display: block; font-weight: 600; margin-bottom: 3px; }
+.tut-next span { font-size: 14px; color: var(--fg-mid); }
+@media (max-width: 720px) { .tut-next { grid-template-columns: 1fr; } }
+
+.step .more-grid { margin-top: 18px; max-width: var(--prose); }
+.step .more-grid > a.start-card, .step .more-grid .go { text-decoration: none; }
+.step .uses { margin: clamp(30px, 5vw, 48px) 0 0; max-width: var(--prose); }
+.step .uses h3 {
+  margin: 0 0 clamp(16px, 2.4vw, 26px); text-align: center;
+  font-size: clamp(19px, 2.6vw, 27px); line-height: 1.16;
+  letter-spacing: -.02em; font-weight: 600;
+}
+.step .use-grid { max-width: none; margin: 0; padding: 0; }
+.step .use-grid li { margin: 0; }
+.step h3.more-head {
+  margin: clamp(8px, 1.4vh, 16px) 0 clamp(10px, 1.6vh, 18px);
+  font-size: clamp(17px, 2vw, 21px); font-weight: 600;
+  letter-spacing: -.015em; color: var(--fg-mid); text-align: center;
+}
+
+/* The way back sits at the head of the contents rather than floating: a fixed
+   pill in the corner lands on top of the sticky column as soon as the reader
+   scrolls past the hero. */
+.tut-home {
+  display: inline-block; margin-bottom: 16px;
+  font-size: 13px; color: var(--fg-dim); text-decoration: none;
+}
+.tut-home:hover { color: var(--fg); }
+
+/* ---------------- platform and agent tabs ----------------
+
+   One hidden radio set at the top of the page drives every tab bar on it, so
+   choosing macOS once chooses it everywhere and the reader never re-picks it
+   halfway down. The bars are <label>s pointing at those radios, which is what
+   lets the same choice appear in many places: only the radio holds the state.
+   `:root:has(...)` reads it back. No script, and the radios keep native
+   keyboard behavior. Same `:has()` dependency the home page already has. */
+
+.tabs {
+  display: inline-flex; gap: 2px; padding: 3px; max-width: 100%;
+  margin: 20px 0 0;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: var(--panel);
+}
+/* The control is the labels; the radios only hold the state. This is the
+   standard visually-hidden recipe rather than `opacity: 0` alone, so nothing
+   can paint a native radio no matter how the browser treats appearance. */
+.tabs input {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  border: 0; overflow: hidden; white-space: nowrap; clip-path: inset(50%);
+  appearance: none; -webkit-appearance: none;
+}
+.tabs label {
+  padding: 6px 15px; border-radius: 8px; cursor: pointer;
+  font-size: 13.5px; font-weight: 500; color: var(--fg-dim);
+  white-space: nowrap; user-select: none;
+  transition: color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.tabs label:hover { color: var(--fg); }
+.tabs input:checked + label {
+  background: var(--bg); color: var(--fg); font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,.10), 0 0 0 1px var(--line);
+}
+.tabs input:focus-visible + label { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-color-scheme: dark) {
+  .tabs input:checked + label { box-shadow: 0 1px 3px rgba(0,0,0,.5), 0 0 0 1px var(--line); }
+}
+
+/* Panels. Without :has() support every panel stays visible, which reads as a
+   longer page rather than a broken one, so nothing is ever hidden by failure. */
+:root:has(#os-mac:checked)      .p-linux, :root:has(#os-mac:checked)      .p-win,
+:root:has(#os-linux:checked)    .p-mac,   :root:has(#os-linux:checked)    .p-win,
+:root:has(#os-win:checked)      .p-mac,   :root:has(#os-win:checked)      .p-linux,
+:root:has(#ag-claude:checked)   .p-opencode, :root:has(#ag-claude:checked)   .p-codex,
+:root:has(#ag-opencode:checked) .p-claude,   :root:has(#ag-opencode:checked) .p-codex,
+:root:has(#ag-codex:checked)    .p-claude,   :root:has(#ag-codex:checked)    .p-opencode {
+  display: none;
+}
+/* the chosen panel, set off from the tabs above it without boxing it in */
+.panel-set { margin-top: 4px; padding-left: 14px; border-left: 2px solid var(--line); }
+.panel-set > * > :first-child { margin-top: 10px; }
+.panel-set pre { background: var(--panel-2); }
+
+/* ---------------- a code block with its own tabs ----------------
+   Where the only difference between platforms is the snippet itself, the tab
+   strip belongs on the block rather than floating above it: one card, an
+   editor-style bar across the top, the code below. */
+
+.code-tabs {
+  margin: 16px 0; max-width: var(--prose);
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+}
+.code-tabs .tabs {
+  display: flex; width: 100%; margin: 0; padding: 0; gap: 0;
+  border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+  background: var(--panel);
+}
+.code-tabs .tabs label {
+  padding: 9px 16px; border-radius: 0; font-size: 13px;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.code-tabs .tabs input:checked + label {
+  background: var(--panel-2); color: var(--fg);
+  border-bottom-color: var(--red); box-shadow: none;
+}
+.code-tabs .panel-set { margin: 0; padding: 0; border-left: 0; background: var(--panel-2); }
+.code-tabs .panel-set > * > :first-child { margin-top: 0; }
+.code-tabs p { margin: 0; padding: 12px 16px 0; font-size: 14px; }
+/* prose that ends a panel still needs a floor; a <pre> brings its own */
+.code-tabs .panel-set > * > p:last-child { padding-bottom: 13px; }
+.code-tabs pre {
+  margin: 0; max-width: none; border: 0; border-radius: 0; background: none;
+}
+
+/* ---------------- the architecture panel ----------------
+   The stack the three install steps fill in, after the paper's Figure 1. */
+
+.arch {
+  margin: 20px 0 0; padding: clamp(14px, 2vw, 20px) clamp(16px, 2.4vw, 22px);
+  border: 1px solid var(--line); border-radius: 14px;
+  background: linear-gradient(180deg, var(--panel-2), var(--bg) 62%);
+  max-width: var(--prose);
+}
+
+/* Each part is keyed to the band it names, and hovering one lights the other,
+   so the words and the drawing are visibly the same three things. */
+.arch ul { margin: 0; padding: 0; list-style: none; }
+.arch li { margin: 0; color: var(--fg-mid); font-size: 14.5px; }
+.arch li + li { border-top: 1px solid var(--line); }
+
+/* the radio only holds the choice; the whole description is the control */
+.arch li input {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; white-space: nowrap; clip-path: inset(50%);
+  appearance: none; -webkit-appearance: none;
+}
+.arch li label {
+  display: block; padding: 8px 10px 8px 12px; cursor: pointer;
+  border-left: 2px solid transparent; border-radius: 0 8px 8px 0;
+  transition: background .16s ease, border-color .16s ease;
+}
+.arch li input:focus-visible + label { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* the nudge that this is interactive at all */
+.arch-hint {
+  margin: 12px 0 0; padding-left: 12px; font-size: 12.5px; color: var(--fg-dim);
+  display: flex; align-items: center; gap: 6px;
+}
+.arch-hint svg {
+  width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor;
+  stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round;
+}
+
+.arch b { display: block; color: var(--fg); font-weight: 600; margin-bottom: 1px; }
+.arch b::before {
+  content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 2px;
+  background: var(--key); margin-right: 8px; vertical-align: .1em;
+}
+.arch .a-isa { --key: var(--twine); }
+.arch .a-mcp { --key: var(--red); }
+.arch .a-agent { --key: var(--run); }
+
+.arch-fig {
+  width: min(100%, 440px); margin: clamp(12px, 1.6vw, 16px) auto 0;
+}
+.arch-svg {
+  display: block; width: 100%; max-width: 100%; height: auto;
+  aspect-ratio: 336 / 314;
+}
+
+/* Each part carries its own key colour, in both halves of the card. */
+.arch [data-part="isa"]   { --k: var(--twine); }
+.arch [data-part="mcp"]   { --k: var(--red); }
+.arch [data-part="agent"] { --k: var(--run); }
+
+/* The card holds the state: data-sel is what was clicked, data-on is what the
+   pointer is over. data-on wins while it exists, which is what makes hovering
+   set the selection aside, and letting go bring it back. */
+.arch[data-sel="isa"]:not([data-on]) [data-part="isa"],
+.arch[data-sel="mcp"]:not([data-on]) [data-part="mcp"],
+.arch[data-sel="agent"]:not([data-on]) [data-part="agent"],
+.arch[data-on="isa"] [data-part="isa"],
+.arch[data-on="mcp"] [data-part="mcp"],
+.arch[data-on="agent"] [data-part="agent"] {
+  stroke: var(--k);
+  stroke-width: 2;
+  background: var(--panel);
+  border-left-color: var(--k);
+}
+
+button.arch-part {
+  display: block; width: 100%; text-align: left;
+  font: inherit; color: inherit; background: none;
+  border: 0; border-left: 2px solid transparent; border-radius: 0 8px 8px 0;
+  padding: 8px 10px 8px 12px; cursor: pointer;
+  transition: background .16s ease, border-color .16s ease;
+  /* Without this, the platform's own default button chrome briefly paints on
+     press -- a flash of native styling before our own transition, which is
+     what read as a jumpy start to the highlight. */
+  appearance: none; -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button.arch-part:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.arch-svg [data-part] { transition: stroke .16s ease, stroke-width .16s ease; }
+
+.arch-svg .band, .arch-svg .group { cursor: pointer; }
+/* The labels sit on top of the boxes and carry no data-part of their own, so
+   without this a pointer over "AI agent" hits the text and nothing lights. */
+.arch-svg text, .arch-svg .label-bg { pointer-events: none; }
+
+.arch-svg .band { fill: var(--panel); stroke: var(--fg-dim); stroke-width: 1.1; }
+.arch-svg .label-bg { fill: var(--bg); }
+.arch-svg .head { fill: var(--fg-mid); }
+.arch-svg .group { fill: none; stroke: var(--line); stroke-width: 1.1;
+                   stroke-dasharray: 4 3; }
+.arch-svg .t { font-family: var(--sans); font-size: 12px; font-weight: 600;
+               fill: var(--fg); text-anchor: middle; }
+.arch-svg .t-sub { font-family: var(--sans); font-size: 9.5px; font-weight: 400;
+                   fill: var(--fg-dim); text-anchor: middle; }
+.arch-svg .t-lane { font-family: var(--sans); font-size: 8.6px; font-style: italic;
+                    fill: var(--fg-dim); }
+.arch-svg .t-lane.e { text-anchor: end; }
+.arch-svg .t-dt { font-family: var(--sans); font-size: 10px; fill: var(--fg-mid);
+                  text-anchor: middle; }
+.arch-svg .t-grp { font-family: var(--sans); font-size: 9.5px; font-style: italic;
+                   fill: var(--fg-dim); text-anchor: middle; }
+.arch-svg .lane { fill: none; stroke: var(--fg-mid); stroke-width: 1.4;
+                  marker-end: url(#arch-head); }
+.arch-svg .lane.dash { stroke-dasharray: 3.5 2.5; }
+
+
+/* ---------------- the example exchange ----------------
+   What you say and what the agent does are different kinds of thing, so they
+   get their own boxes rather than sharing one transcript. Nothing here is
+   meant to be copied, so none of it carries a copy button. */
+
+.exchange { margin: 16px 0; max-width: var(--prose); }
+.xc + .xc { margin-top: 10px; }
+.xc-who {
+  display: block; margin-bottom: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--fg-dim);
+}
+.xc-body {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel-2); overflow: hidden;
+}
+.xc-say {
+  padding: 11px 14px; color: var(--fg);
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.6;
+}
+.xc-body pre { margin: 0; border: 0; border-radius: 0; background: none; max-width: none; }
+.xc-note { margin: 10px 0 0; font-size: 13px; color: var(--fg-dim); }
+
+/* the copy control itself lives in style.css: both pages use it */
+.copy-wrap pre { margin: 0; max-width: none; }
+.code-tabs .copy-wrap { margin: 0; max-width: none; }
+
+/* The setup prompt is centred in the home page's call to action; here it is one
+   more block in a left-aligned step, at the same measure as the prose. */
+.step .prompt-wrap, .step .prompt-wrap.copy-wrap {
+  max-width: var(--prose); margin: 14px 0;
+}
