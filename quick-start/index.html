@@ -11,8 +11,8 @@
      This page has no #topic node in its JSON-LD, so the title is free of the
      home page's constraint that it open with the topic name.
      =========================================================================== -->
-<title>PIDE MCP Quick Start</title>
-<meta property="og:title" content="PIDE MCP Quick Start">
+<title>Isabelle AI Quick Start</title>
+<meta property="og:title" content="Isabelle AI Quick Start">
 
 <meta name="description" content="Set up Isabelle and PIDE MCP, then prove your first theorem with an AI coding agent.">
 <meta property="og:description" content="Set up Isabelle and PIDE MCP, then prove your first theorem with an AI coding agent.">
@@ -55,7 +55,7 @@
     {
       "@type": "HowTo",
       "@id": "https://formalproof.ai/quick-start/#howto",
-      "name": "PIDE MCP Quick Start",
+      "name": "Isabelle AI Quick Start",
       "inLanguage": "en-US",
       "isPartOf": { "@id": "https://formalproof.ai/#website" },
       "step": [
@@ -79,7 +79,7 @@
 
 
       <a class="tut-home" href="../">&larr; Home</a>
-      <h1 class="tut-title">Quick Start</h1>
+      <h1 class="tut-title">Isabelle AI Quick Start</h1>
       <p class="tut-intro">
         How to let an AI agent prove a theorem and have it formally checked by Isabelle. No prior
         Isabelle experience required.
@@ -146,21 +146,18 @@
         <div class="arch">
           <ul>
             <li class="a-agent">
-              <button type="button" class="arch-part" data-part="agent" aria-pressed="false">
               <b>AI agent</b>
               Works on Isabelle documents through PIDE MCP. You typically communicate with the
-              agent via a coding agent, such as Claude Code.</button>
+              agent via a coding agent, such as Claude Code.
             </li>
             <li class="a-mcp">
-              <button type="button" class="arch-part" data-part="mcp" aria-pressed="false">
               <b>PIDE MCP</b>
-              Gives the AI agent a live connection to Isabelle.</button>
+              Gives the AI agent a live connection to Isabelle.
             </li>
             <li class="a-isa">
-              <button type="button" class="arch-part" data-part="isa" aria-pressed="false">
               <b>PIDE</b>
               Isabelle's document model, processing proofs, code, and text while reporting
-              feedback continuously and asynchronously.</button>
+              feedback continuously and asynchronously.
             </li>
           </ul>
 
@@ -184,7 +181,7 @@
             <text class="t-grp" x="260" y="153">PIDE</text>
 
             <rect class="band" data-part="agent" x="150" y="12" width="220" height="34" rx="7"/>
-            <text class="t" x="260" y="30">AI agent</text>
+            <text class="t" x="260" y="32">AI agent</text>
 
             <rect class="band" data-part="mcp" x="150" y="78" width="220" height="38" rx="7"/>
             <text class="t" x="260" y="93">PIDE MCP</text>
@@ -205,16 +202,16 @@
             <path class="lane" d="M315,166 V118"/>
             <path class="lane" d="M315,78 V48"/>
 
-            <text class="t-lane e" x="197" y="64">request</text>
-            <text class="t-lane e" x="197" y="132">loads, edits, queries</text>
-            <text class="t-lane e" x="197" y="142">(public API)</text>
-            <text class="t-lane e" x="197" y="226">protocol commands</text>
-            <text class="t-lane e" x="197" y="236">(private)</text>
-            <text class="t-lane" x="323" y="226">protocol messages</text>
-            <text class="t-lane" x="323" y="236">(private)</text>
-            <text class="t-lane" x="323" y="132">snapshots, resources</text>
-            <text class="t-lane" x="323" y="142">(public API)</text>
-            <text class="t-lane" x="323" y="64">response</text>
+            <text class="t-lane" x="152" y="64">request</text>
+            <text class="t-lane" x="152" y="132">loads, edits, queries</text>
+            <text class="t-lane" x="152" y="142">(public API)</text>
+            <text class="t-lane" x="152" y="226">protocol commands</text>
+            <text class="t-lane" x="152" y="236">(private)</text>
+            <text class="t-lane" x="372" y="226">protocol messages</text>
+            <text class="t-lane" x="372" y="236">(private)</text>
+            <text class="t-lane" x="372" y="132">snapshots, resources</text>
+            <text class="t-lane" x="372" y="142">(public API)</text>
+            <text class="t-lane" x="372" y="64">response</text>
 
             <path class="lane dash" d="M260,219 A11,11 0 0 1 260,241 A11,11 0 0 1 250.5,224.5"/>
             <text class="t-dt" x="260" y="233.5">&#916;t</text>
@@ -505,11 +502,11 @@
 
 <nav class="rail" aria-label="Sections">
   <a href="#install"><i></i><span>Install</span></a>
-  <a href="#stack"><i></i><span>How it fits</span></a>
+  <a href="#stack"><i></i><span>Architecture</span></a>
   <a href="#write"><i></i><span>Write a goal</span></a>
   <a href="#prove"><i></i><span>Let it prove</span></a>
   <a href="#beside"><i></i><span>Work together</span></a>
-  <a href="#next"><i></i><span>Next</span></a>
+  <a href="#next"><i></i><span>Next steps</span></a>
 </nav>
 
 <footer>
@@ -809,33 +806,6 @@
       });
     });
     wrap.appendChild(btn);
-  });
-})();
-
-// The description list and the drawing are two views of the same three parts,
-// so each element carries data-part and the card carries the state: data-sel
-// for what is chosen, data-on for what the pointer is over. Two attributes,
-// one rule each in the stylesheet, and nothing to reason about in the cascade.
-// Pointing at a part hides the selection for as long as the pointer is there;
-// letting go brings it back, because data-on simply goes away.
-(function () {
-  var arch = document.querySelector('.arch');
-  if (!arch) return;
-
-  function press(part) {
-    Array.prototype.forEach.call(arch.querySelectorAll('.arch-part'), function (b) {
-      b.setAttribute('aria-pressed', String(b.dataset.part === part));
-    });
-  }
-
-  Array.prototype.forEach.call(arch.querySelectorAll('[data-part]'), function (el) {
-    var part = el.dataset.part;
-    el.addEventListener('pointerenter', function () { arch.dataset.on = part; });
-    el.addEventListener('pointerleave', function () { delete arch.dataset.on; });
-    el.addEventListener('click', function () {
-      if (arch.dataset.sel === part) { delete arch.dataset.sel; press(null); }
-      else { arch.dataset.sel = part; press(part); }
-    });
   });
 })();
 

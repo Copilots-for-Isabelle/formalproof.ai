@@ -169,6 +169,12 @@ figcaption { margin-top: 8px; font-size: 13px; color: var(--fg-dim); }
   font-size: clamp(17px, 2vw, 21px); font-weight: 600;
   letter-spacing: -.015em; color: var(--fg-mid); text-align: center;
 }
+/* Narrow enough and the four use cases stack, so the last of them lands right
+   under this heading. The margin above is in vh, which hardly grows there, so
+   the gap is set from the width instead. */
+@media (max-width: 980px) {
+  .step h3.more-head { margin-top: clamp(28px, 6vw, 40px); }
+}
 
 /* The way back sits at the head of the contents rather than floating: a fixed
    pill in the corner lands on top of the sticky column as soon as the reader
@@ -274,34 +280,15 @@ figcaption { margin-top: 8px; font-size: 13px; color: var(--fg-dim); }
   max-width: var(--prose);
 }
 
-/* Each part is keyed to the band it names, and hovering one lights the other,
-   so the words and the drawing are visibly the same three things. */
+/* Each part is keyed to the band it names: the same colour marks the words and
+   the drawing, so the two halves read as the same three things. */
 .arch ul { margin: 0; padding: 0; list-style: none; }
-.arch li { margin: 0; color: var(--fg-mid); font-size: 14.5px; }
+.arch li {
+  margin: 0; color: var(--fg-mid); font-size: 14.5px;
+  padding: 8px 10px 8px 12px;
+  border-left: 2px solid var(--key); border-radius: 0 8px 8px 0;
+}
 .arch li + li { border-top: 1px solid var(--line); }
-
-/* the radio only holds the choice; the whole description is the control */
-.arch li input {
-  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
-  overflow: hidden; white-space: nowrap; clip-path: inset(50%);
-  appearance: none; -webkit-appearance: none;
-}
-.arch li label {
-  display: block; padding: 8px 10px 8px 12px; cursor: pointer;
-  border-left: 2px solid transparent; border-radius: 0 8px 8px 0;
-  transition: background .16s ease, border-color .16s ease;
-}
-.arch li input:focus-visible + label { outline: 2px solid var(--red); outline-offset: 2px; }
-
-/* the nudge that this is interactive at all */
-.arch-hint {
-  margin: 12px 0 0; padding-left: 12px; font-size: 12.5px; color: var(--fg-dim);
-  display: flex; align-items: center; gap: 6px;
-}
-.arch-hint svg {
-  width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor;
-  stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round;
-}
 
 .arch b { display: block; color: var(--fg); font-weight: 600; margin-bottom: 1px; }
 .arch b::before {
@@ -325,53 +312,17 @@ figcaption { margin-top: 8px; font-size: 13px; color: var(--fg-dim); }
 .arch [data-part="mcp"]   { --k: var(--red); }
 .arch [data-part="agent"] { --k: var(--run); }
 
-/* The card holds the state: data-sel is what was clicked, data-on is what the
-   pointer is over. data-on wins while it exists, which is what makes hovering
-   set the selection aside, and letting go bring it back. */
-.arch[data-sel="isa"]:not([data-on]) [data-part="isa"],
-.arch[data-sel="mcp"]:not([data-on]) [data-part="mcp"],
-.arch[data-sel="agent"]:not([data-on]) [data-part="agent"],
-.arch[data-on="isa"] [data-part="isa"],
-.arch[data-on="mcp"] [data-part="mcp"],
-.arch[data-on="agent"] [data-part="agent"] {
-  stroke: var(--k);
-  stroke-width: 2;
-  background: var(--panel);
-  border-left-color: var(--k);
-}
-
-button.arch-part {
-  display: block; width: 100%; text-align: left;
-  font: inherit; color: inherit; background: none;
-  border: 0; border-left: 2px solid transparent; border-radius: 0 8px 8px 0;
-  padding: 8px 10px 8px 12px; cursor: pointer;
-  transition: background .16s ease, border-color .16s ease;
-  /* Without this, the platform's own default button chrome briefly paints on
-     press -- a flash of native styling before our own transition, which is
-     what read as a jumpy start to the highlight. */
-  appearance: none; -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-button.arch-part:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-.arch-svg [data-part] { transition: stroke .16s ease, stroke-width .16s ease; }
-
-.arch-svg .band, .arch-svg .group { cursor: pointer; }
-/* The labels sit on top of the boxes and carry no data-part of their own, so
-   without this a pointer over "AI agent" hits the text and nothing lights. */
-.arch-svg text, .arch-svg .label-bg { pointer-events: none; }
-
-.arch-svg .band { fill: var(--panel); stroke: var(--fg-dim); stroke-width: 1.1; }
+.arch-svg .band { fill: var(--panel); stroke: var(--k); stroke-width: 1.8; }
 .arch-svg .label-bg { fill: var(--bg); }
 .arch-svg .head { fill: var(--fg-mid); }
-.arch-svg .group { fill: none; stroke: var(--line); stroke-width: 1.1;
+.arch-svg .group { fill: none; stroke: var(--k); stroke-width: 1.2;
                    stroke-dasharray: 4 3; }
 .arch-svg .t { font-family: var(--sans); font-size: 12px; font-weight: 600;
                fill: var(--fg); text-anchor: middle; }
 .arch-svg .t-sub { font-family: var(--sans); font-size: 9.5px; font-weight: 400;
                    fill: var(--fg-dim); text-anchor: middle; }
 .arch-svg .t-lane { font-family: var(--sans); font-size: 8.6px; font-style: italic;
-                    fill: var(--fg-dim); }
-.arch-svg .t-lane.e { text-anchor: end; }
+                    fill: var(--fg-dim); text-anchor: middle; }
 .arch-svg .t-dt { font-family: var(--sans); font-size: 10px; fill: var(--fg-mid);
                   text-anchor: middle; }
 .arch-svg .t-grp { font-family: var(--sans); font-size: 9.5px; font-style: italic;

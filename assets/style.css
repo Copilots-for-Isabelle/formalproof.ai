@@ -976,6 +976,12 @@ html.js, html.js body { scroll-snap-type: none; }
    target, so the whole ending still arrives as one. */
 .start { height: auto; }
 .more { margin: clamp(14px, 2.2vh, 26px) 0 clamp(18px, 3vh, 36px); }
+/* Narrow enough and the downloads above stack, so the last card lands right
+   under this heading. The margin is in vh, which hardly grows there, so on
+   those widths the gap is set from the width instead. */
+@media (max-width: 980px) {
+  .more { margin-top: clamp(28px, 6vw, 40px); }
+}
 
 /* Too little height for a screen-at-a-time, or narrow enough that the scenes
    scroll sideways anyway: fall back to an ordinary page. */
