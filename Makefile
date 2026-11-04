@@ -4,6 +4,7 @@
 #   make serve    preview on localhost
 #   make check    the invariants that are easy to break by hand
 #   make scene    re-run the one-shot illustration generators
+#   make export   write the main scene as assets/pide-ai-scene.svg
 #   make clean    drop generator output
 #
 # `make gen` is deliberately not wired into anything: the generators emit
@@ -16,7 +17,7 @@ PYTHON ?= python3
 
 .PHONY: help
 help:
-	@sed -n 's/^#   //p' $(MAKEFILE_LIST) | head -4
+	@sed -n 's/^#   //p' $(MAKEFILE_LIST) | head -5
 	@echo
 	@echo "  PORT=$(PORT) overrides the serve port."
 
@@ -43,6 +44,12 @@ scene:
 mcp:
 	@$(PYTHON) tools/gen_mcp.py >/dev/null
 	@echo "index.html rewritten in place; check git diff."
+
+# export_scene.py reads the committed scene and writes one standalone animated
+# SVG for the server's README; it fetches font subsets, so it needs the network.
+.PHONY: export
+export:
+	@$(PYTHON) tools/export_scene.py
 
 .PHONY: gen
 gen: scene mcp

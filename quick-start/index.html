@@ -14,8 +14,8 @@
 <title>Isabelle AI Quick Start</title>
 <meta property="og:title" content="Isabelle AI Quick Start">
 
-<meta name="description" content="Set up Isabelle and PIDE MCP, then prove your first theorem with an AI coding agent.">
-<meta property="og:description" content="Set up Isabelle and PIDE MCP, then prove your first theorem with an AI coding agent.">
+<meta name="description" content="Set up Isabelle and PIDE AI, then prove your first theorem with an AI coding agent.">
+<meta property="og:description" content="Set up Isabelle and PIDE AI, then prove your first theorem with an AI coding agent.">
 
 <meta property="og:image" content="https://formalproof.ai/assets/og.png">
 <meta property="og:image:type" content="image/png">
@@ -92,18 +92,18 @@
         <h2><span class="n">01</span> Install the basic ingredients</h2>
         <p>
           Already have a coding agent? The easiest option is to ask it to install Isabelle and
-          PIDE MCP for you:
+          PIDE AI for you:
         </p>
 
         <blockquote class="prompt-wrap">
           <span class="prompt-tag">Prompt for your agent</span>
-          <code class="prompt">Follow the README at https://github.com/kappelmann/isabelle-pide-mcp to set up Isabelle's latest release and PIDE MCP</code>
+          <code class="prompt">Follow the README at https://github.com/kappelmann/isabelle-pide-mcp to set up Isabelle's latest release and PIDE AI</code>
         </blockquote>
 
         <p>
-          The <a href="https://github.com/kappelmann/isabelle-pide-mcp#readme">PIDE MCP README</a>
+          The <a href="https://github.com/kappelmann/isabelle-pide-mcp#readme">PIDE AI README</a>
           contains instructions for all platforms and several coding agents. To check that your
-          setup is working, confirm that PIDE MCP appears among the connected MCP servers in your
+          setup is working, confirm that PIDE AI's MCP server appears among the connected MCP servers in your
           coding agent and that the Isabelle skills are available:
         </p>
         <div class="code-tabs">
@@ -134,12 +134,18 @@
           If anything is missing, ask your agent to compare its logs and configuration with the
           README.
         </p>
+
+        <p>
+          Your agent can also use PIDE AI from the command line instead of MCP. The
+          <a href="https://github.com/kappelmann/isabelle-pide-mcp#command-based-interaction">README</a>
+          shows how.
+        </p>
       </section>
 
       <section class="step" id="stack">
         <h2><span class="n">02</span> How they work together</h2>
         <p>
-          The <b>AI agent</b> works on the proof. <b>PIDE MCP</b> connects it to
+          The <b>AI agent</b> works on the proof. <b>PIDE AI</b> connects it to
           <b>Isabelle</b>, which checks every proof step.
         </p>
 
@@ -147,11 +153,11 @@
           <ul>
             <li class="a-agent">
               <b>AI agent</b>
-              Works on Isabelle documents through PIDE MCP. You typically communicate with the
+              Works on Isabelle documents through PIDE AI. You typically communicate with the
               agent via a coding agent, such as Claude Code.
             </li>
             <li class="a-mcp">
-              <b>PIDE MCP</b>
+              <b>PIDE AI</b>
               Gives the AI agent a live connection to Isabelle.
             </li>
             <li class="a-isa">
@@ -163,8 +169,8 @@
 
           <div class="arch-fig">
           <svg class="arch-svg" viewBox="98 4 336 314" role="img" aria-labelledby="archT archD">
-            <title id="archT">How PIDE MCP sits between your agent and Isabelle</title>
-            <desc id="archD">Four layers. Your AI agent sends a request down to PIDE MCP, the PIDE
+            <title id="archT">How PIDE AI sits between your agent and Isabelle</title>
+            <desc id="archD">Four layers. Your AI agent sends a request down to PIDE AI, the PIDE
               frontend, which loads, edits and queries a PIDE session in Isabelle/Scala. That session
               exchanges protocol messages with the prover process in Isabelle/ML, repeatedly and over
               time, and passes snapshots and resources back up. The session and the prover together
@@ -184,7 +190,7 @@
             <text class="t" x="260" y="32">AI agent</text>
 
             <rect class="band" data-part="mcp" x="150" y="78" width="220" height="38" rx="7"/>
-            <text class="t" x="260" y="93">PIDE MCP</text>
+            <text class="t" x="260" y="93">PIDE AI</text>
             <text class="t-sub" x="260" y="106">PIDE frontend</text>
 
             <rect class="band" data-part="isa" x="150" y="166" width="220" height="38" rx="7"/>
@@ -259,7 +265,7 @@
         </blockquote>
 
         <p>
-          Your agent will interact with PIDE MCP several times as it searches for a proof. It will
+          Your agent will interact with PIDE AI several times as it searches for a proof. It will
           start a session (likely HOL), read the document, edit it, and check for success. And
           that's it: your first agentic proof! You should see its changes live in your editor. If
           not, press <code>F5</code> to reload.
@@ -432,7 +438,7 @@
           You now have the whole loop: you choose the problem, your agent works on the proof, and
           Isabelle checks the result. You can use the same workflow for a larger task: a paper, a
           book chapter, or a collection of statements you have been meaning to formalize. If you
-          want to know more about Isabelle or the available PIDE MCP tools, just ask your agent 🙂
+          want to know more about Isabelle or the available PIDE AI tools, just ask your agent 🙂
         </p>
         <div class="uses">
           <h3>Now take on what seemed out of reach.</h3>
@@ -469,9 +475,9 @@
                 <path d="M8.8 12.4h7.4M8.8 15.6h7.4M8.8 18.2h4.6" stroke="currentColor"
                       stroke-width="1.5" stroke-linecap="round"/>
               </svg>
-              PIDE MCP Preprint
+              PIDE AI Preprint
             </span>
-            <span class="start-body">Learn more about the design of PIDE MCP.</span>
+            <span class="start-body">Learn more about the design of PIDE AI.</span>
             <span class="start-foot">
               <span class="lic">PDF</span>
               <span class="go">Read it &rarr;</span>

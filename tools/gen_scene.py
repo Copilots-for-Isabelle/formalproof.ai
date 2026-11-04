@@ -253,7 +253,7 @@ def bezier(p0, p1, p2, p3, t):
 
 
 # ============================================================== the scene ====
-# One agent, one PIDE MCP, three live Isabelle sessions. Everything -- wires,
+# One agent, one PIDE AI, three live Isabelle sessions. Everything -- wires,
 # cans, session panels, code -- lives in one SVG so the wire ends and the
 # panels cannot drift apart at any width.
 
@@ -263,7 +263,7 @@ HUB, HUB_S = (-4.05, 0.05), 0.5
 CAN_S = 0.42
 PANEL_X, PANEL_W, PANEL_H = 0.55, 10.9, 2.42
 ROWS = [-2.74, 0.0, 2.74]
-BUS_X = -2.00                     # where the PIDE MCP tag taps the wires
+BUS_X = -2.00                     # where the PIDE AI tag taps the wires
 
 CYCLE = 24                        # seconds; percentages below are of this
 
@@ -405,7 +405,7 @@ out.clear()
 e(f'<svg class="scene" viewBox="{VB}" role="img" aria-labelledby="scT scD">')
 e('<title id="scT">One coding agent wired to three live Isabelle sessions</title>')
 e('<desc id="scD">A robot holds a tin can with three strings running from it, labelled '
-  'PIDE MCP, to three Isabelle sessions: HOL, HOL-Analysis and HOL-Library. It edits two '
+  'PIDE AI, to three Isabelle sessions: HOL, HOL-Analysis and HOL-Library. It edits two '
   'proofs and searches the third session for a definition. Both proofs come back with an '
   'error and the robot looks glum; it edits them again using what the search turned up, and '
   'this time both check clean, so it smiles.</desc>')
@@ -452,7 +452,7 @@ for i, by in enumerate(bus_ys):
     e(f'<circle class="tag-bullet b{i}" cx="{BUS_X}" cy="{by:.4g}" r="0.13"/>')
 e(f'<rect class="tag-chip" x="{BUS_X - chip_w/2:.4g}" y="{chip_y - chip_h/2:.4g}" '
   f'width="{chip_w}" height="{chip_h}" rx="{chip_h/2:.4g}"/>')
-e(f'<text class="tag-text" x="{BUS_X}" y="{chip_y:.4g}">PIDE MCP</text>')
+e(f'<text class="tag-text" x="{BUS_X}" y="{chip_y:.4g}">PIDE AI</text>')
 e('</g>')
 
 # the three session panels
@@ -685,7 +685,7 @@ print("bus ys:", ", ".join(f"{y_at_x(i, BUS_X):.2f}" for i in range(3)))
 
 # ============================================== any client speaks to it =====
 # The robot above is not a particular agent. It is whichever one you use: each
-# runs its own PIDE MCP, with its own sessions. Three by name, then a huddle of
+# runs its own PIDE AI, with its own sessions. Three by name, then a huddle of
 # little ones for everything else. No shared hub -- that would be a lie.
 
 C_VB = "-10.5 -1.35 21.0 4.6"
@@ -700,7 +700,7 @@ out.clear()
 e(f'<svg class="mcp-svg" viewBox="{C_VB}" role="img" aria-labelledby="mcT mcD">')
 e('<title id="mcT">Coding agents that speak MCP</title>')
 e('<desc id="mcD">Three robots labelled Claude Code, Codex and OpenCode, then a huddle '
-  'of smaller ones for any other MCP client. Each runs its own PIDE MCP server with its own '
+  'of smaller ones for any other MCP client. Each runs its own PIDE AI server with its own '
   'Isabelle sessions.</desc>')
 
 
@@ -1000,7 +1000,7 @@ emit("side_wiredef.svgfrag", wire_def)
 emit("side_keyframes.css", "\n\n".join(bcss) + "\n")
 print(f"side scene {len(side)}B, wire {blen:.2f}")
 
-# ==================================================== the PIDE MCP glyph ====
+# ==================================================== the PIDE AI glyph ====
 # Two cans and a bit of string: the thing itself, not the agent holding it.
 
 out.clear()

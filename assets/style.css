@@ -1,4 +1,4 @@
-/* formalproof.ai - PIDE MCP
+/* formalproof.ai - PIDE AI
    Palette and artwork follow the ai4math_convening slides. */
 
 :root {
@@ -458,7 +458,7 @@ h1 em { font-style: normal; color: var(--red); }
   font-weight: 600;
 }
 
-/* A subsection heading has to read as one: everything between "Meet PIDE MCP"
+/* A subsection heading has to read as one: everything between "Meet PIDE AI"
    and "Get started today" is an h3 under it. */
 .mcp h3, .beside h3, .uses h3 {
   font-size: clamp(19px, 2.6vw, 27px);
@@ -570,11 +570,12 @@ html:not(.js) .mcp-svg .st-cc { opacity: 1; }
 .mcp-svg .st { opacity: 0; transition: opacity .14s ease; }
 .mcp-svg.on-cc    .st-cc,
 .mcp-svg.on-codex .st-codex,
-.mcp-svg.on-oc    .st-oc,
+.mcp-svg.on-cli   .st-cli,
 .mcp-svg.on-more  .st-more { opacity: 1; }
 
 /* While a new agent is connecting the editor says so: the client that just
-   let go is gone at once, and the new name only arrives with its response.
+   let go is gone at once, and the new name only arrives with its response
+   (a CLI call: with its request; the script times this per cell).
    This has to come after the rules above -- same specificity, so order is
    what decides, and the other way round both lines drew at once. */
 .mcp-svg .st-none { opacity: 0; transition: opacity .14s ease; }
@@ -781,7 +782,7 @@ a.start-card:hover {
 /* Height is the shared measure, not width: these marks are not all square, and
    forcing a square box letterboxes the wide ones to a different visual height. */
 .start-logo { height: 27px; width: auto; max-width: 84px; flex: none; object-fit: contain; }
-/* the PIDE MCP mark is wide, not square, and keeps its own white ground so the
+/* the PIDE AI mark is wide, not square, and keeps its own white ground so the
    black line art stays readable on the dark theme */
 
 .start-logo-dark { display: none; }
@@ -889,7 +890,7 @@ footer a { color: inherit; text-decoration: none; }
 footer a:hover { color: var(--fg); text-decoration: underline; }
 
 /* One chapter to a screen -- but only the four chapters. The three
-   subsections under PIDE MCP flow normally: snapping between them would jump
+   subsections under PIDE AI flow normally: snapping between them would jump
    the reader through what is meant to read as one stretch.
 
    Proximity, not mandatory: with the subsections in between, two snap points
@@ -929,7 +930,7 @@ html.js, html.js body { scroll-snap-type: none; }
 .hero > *, .why > *, .line > *, .start > * { flex: none; }
 
 .mcp, .beside, .uses { margin: clamp(40px, 6vw, 72px) 0 0; }
-/* The PIDE MCP chapter and its subsections are a single snap area. Mandatory
+/* The PIDE AI chapter and its subsections are a single snap area. Mandatory
    snapping therefore has a stop at the top of the chapter and then leaves the
    reader alone all the way through the subsections -- a snap area taller than
    the viewport does not trap -- until Get started takes over. Nothing snaps at
@@ -941,7 +942,7 @@ html.js, html.js body { scroll-snap-type: none; }
 /* The one chapter that outgrows its screen, so justify-content stops centring
    it and the heading sits at whatever padding-top gives. Every other chapter
    centres and has slack above its title; this one had 30px on a short viewport,
-   which is what put "Meet PIDE MCP" under the browser's top bar. Its own top
+   which is what put "Meet PIDE AI" under the browser's top bar. Its own top
    gap, larger than the shared one, is what keeps the heading clear. */
 .line {
   height: auto;
@@ -1011,7 +1012,7 @@ html.js, html.js body { scroll-snap-type: none; }
 
 /* Capped rather than grown: a growing box would eat the leftover space and
    push the artwork to the bottom of the screen, where a centred group reads
-   better. The cap is what keeps the PIDE MCP chapter inside its screen, so
+   better. The cap is what keeps the PIDE AI chapter inside its screen, so
    re-check it if that scene or the copy around it grows. */
 .scene-wrap {
   flex: none;
@@ -1131,7 +1132,7 @@ html.js, html.js body { scroll-snap-type: none; }
    the real position: click a dot and it stayed lit however far you scrolled. */
 html:not(.js) body:has(#ai-proof:target) .rail a[href="#ai-proof"] i,
 html:not(.js) body:has(#isabelle:target) .rail a[href="#isabelle"] i,
-html:not(.js) body:has(#pide-mcp:target) .rail a[href="#pide-mcp"] i,
+html:not(.js) body:has(#pide-ai:target) .rail a[href="#pide-ai"] i,
 html:not(.js) body:has(#get-started:target) .rail a[href="#get-started"] i {
   background: var(--red);
   border-color: var(--red);
@@ -1139,7 +1140,7 @@ html:not(.js) body:has(#get-started:target) .rail a[href="#get-started"] i {
 
 /* keep-going cue at the foot of each chapter */
 .hero, .why, .line { position: relative; }
-/* a smaller, still step: PIDE MCP into its own subsections, not a new chapter */
+/* a smaller, still step: PIDE AI into its own subsections, not a new chapter */
 .scroll-cue.cue-sub { width: 26px; height: 26px; opacity: .75; }
 .scroll-cue.cue-sub svg { width: 16px; height: 16px; animation: none; }
 /* out of the subsections again -- .uses is not a screen, so this one sits in

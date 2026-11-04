@@ -2,8 +2,9 @@
 
 The static one-page site published at **https://formalproof.ai**. It makes the
 case for agentic formal proof: AI writes proofs, a proof assistant checks every
-step, and Isabelle is the one to reach for. The server it points at,
-[`isabelle-pide-mcp`](https://github.com/kappelmann/isabelle-pide-mcp), lives in
+step, and Isabelle is the one to reach for. The server it points at, PIDE AI
+(formerly PIDE MCP, repository
+[`isabelle-pide-mcp`](https://github.com/kappelmann/isabelle-pide-mcp)), lives in
 its own repository.
 
 ```
@@ -14,12 +15,15 @@ assets/quick-start.css    prose, steps, commands: the quick start page only
 assets/isabelle.svg       Isabelle logo (-dark: wordmark lightened)
 assets/jedit-and-agent.png  the quick start's screenshot, from the server repo
 assets/og.png             social card, 1200x630
+assets/pide-ai.png        the PIDE AI logo
+assets/pide-ai-scene.svg  the main scene, standalone and animated, for the server's README
 assets/favicon.svg  assets/apple-touch-icon.png
 CNAME  .nojekyll  robots.txt  sitemap.xml
 Makefile                  the chores; there is no build
 tools/check.py            invariants that break silently
 tools/gen_scene.py        illustration generator
-tools/gen_mcp.py          the "It speaks MCP" band
+tools/gen_mcp.py          the MCP band ("Connect in a snap")
+tools/export_scene.py     the main scene as assets/pide-ai-scene.svg
 ```
 
 No build step and no dependencies. `index.html` **is** the artifact: edit it,
@@ -68,12 +72,12 @@ The order is the argument. Keep it in order:
 1. **AI can do the mathematics. Certainty needs a checker.** — the problem
 2. **Isabelle is that checker, and it is already frontier.** — seL4, the AWS
    Nitro Isolation Engine, the AFP
-3. **So put your agent on the line with Isabelle.** — what PIDE MCP is, the
+3. **So put your agent on the line with Isabelle.** — what PIDE AI is, the
    animated figure, the four things it does
-4. **It speaks MCP.** — whichever agent you already use
+4. **Connect in a snap, via CLI or MCP.** — whichever agent you already use
 5. **Let it work on its own, or work beside it.**
 6. **Point it at the hard things.** — what people use Isabelle for
-7. **Get started today.** — Isabelle · PIDE MCP · preprint · support
+7. **Get started today.** — Isabelle · PIDE AI · preprint · support
 
 ### Claims to re-check if you edit them
 
@@ -172,8 +176,14 @@ so the page cannot be regenerated as a whole, and is not meant to be:
 - **`make scene`** writes `.svgfrag` and `*_keyframes.css` into the repo root
   for you to paste. Its output has fallen behind the committed HTML, so read the
   diff before pasting.
-- **`make mcp`** rewrites the *It speaks MCP* band inside `index.html` in place
+- **`make mcp`** rewrites the MCP band inside `index.html` in place
   — the one target that edits the page. Commit first, then read `git diff`.
+- **`make export`** goes the other way: it reads the main scene out of the
+  committed `index.html` and writes `assets/pide-ai-scene.svg`, one standalone
+  animated SVG that the server's README embeds. An SVG used as an image may load
+  nothing, so it inlines the sprite sheet, `style.css` (dark mode included), the
+  Isabelle badges, and font subsets fetched from Google Fonts. Re-run it after
+  changing the scene, and copy the file to the server repository.
 
 Both resolve paths from their own location: they run from any directory and
 never write outside the checkout. When you change a scene by hand, change the
@@ -261,7 +271,7 @@ sits on the lit rule only, so an agent that loses the line drops the smile at
 once.
 
 Each cell carries its own wire and packets, because each client starts its own
-PIDE MCP with its own sessions. Nothing is shared between them: do not draw them
+PIDE AI with its own sessions. Nothing is shared between them: do not draw them
 running into a single hub.
 
 The tools spin only while a robot is engaged. That cannot be scoped with a
@@ -285,17 +295,17 @@ chunks instead.
 
 ### One chapter to a screen
 
-Four chapters — hero, Isabelle, PIDE MCP, Get started — each `height: 100svh`
-and centered. The three subsections under PIDE MCP (`.mcp`, `.beside`, `.uses`)
+Four chapters — hero, Isabelle, PIDE AI, Get started — each `height: 100svh`
+and centered. The three subsections under PIDE AI (`.mcp`, `.beside`, `.uses`)
 are deliberately *not* screens: they flow, because snapping between them jumps
 the reader through what should read as one stretch.
 
 Snapping is `mandatory`, so a chapter arrives decisively. What makes that safe
-is `.pide-block`, the wrapper around the PIDE MCP chapter *and* its subsections:
+is `.pide-block`, the wrapper around the PIDE AI chapter *and* its subsections:
 it is the snap target, so the reader snaps into the chapter and is then left
 alone for the whole stretch below. A snap area taller than the viewport does not
 trap. Remove that wrapper and mandatory snapping has nothing to hold between
-PIDE MCP and Get started.
+PIDE AI and Get started.
 
 Three things this depends on:
 
@@ -304,7 +314,7 @@ Three things this depends on:
 - `main > section` is two type selectors, specificity 0-0-2, which any class
   rule beats. The chapter rule is written `main > .hero, main > .why, ...`.
 - `.scene-wrap` is `flex: none` and the scene sizes from its width, so the
-  PIDE MCP chapter is the one that outgrows its screen. That is why `.line` is
+  PIDE AI chapter is the one that outgrows its screen. That is why `.line` is
   `height: auto; min-height: 100svh` while the others are a definite `100svh`,
   and why it carries its own larger `padding-top`: the others center their
   content and get slack above the heading for free, this one does not.
@@ -339,7 +349,7 @@ Marking *which* chapter you are in is the one thing CSS cannot do: it has no
 cross-element scroll position, and `timeline-scope` is not honored by Firefox
 155. So the page carries one small inline script that finds the chapter owning
 the point a third of the way down the viewport and puts `.is-here` on its dot.
-The subsections have no dot, so PIDE MCP keeps the mark throughout them.
+The subsections have no dot, so PIDE AI keeps the mark throughout them.
 
 The same script measures the footer and publishes `--footer-h`. The closing
 chapter is `calc(100svh - var(--footer-h))` and snaps to `start`, so the snap
@@ -349,8 +359,8 @@ Everything else runs without script; the `:target` rules are the fallback.
 
 ### Headings and narrow screens
 
-Three `h2`s — *Meet Isabelle*, *Meet PIDE MCP*, *Get started today* — with
-everything between the second and third an `h3` under PIDE MCP, set smaller so
+Three `h2`s — *Meet Isabelle*, *Meet PIDE AI*, *Get started today* — with
+everything between the second and third an `h3` under PIDE AI, set smaller so
 the nesting reads. Each chapter opens with `<hr class="chapter">`, a length of
 twine with a knot in it. The HTML rendering spec gives `hr` `overflow: hidden`,
 which clips the knot, so the rule sets `overflow: visible`.
@@ -394,6 +404,6 @@ is issued.
 
 ## Keeping the copy honest
 
-The page names the supported Isabelle version and the agents PIDE MCP ships
+The page names the supported Isabelle version and the agents PIDE AI ships
 configuration for. Those live in the server repository, so when they change
 there, update the `.works` line in `index.html`.

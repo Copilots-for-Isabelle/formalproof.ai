@@ -14,8 +14,9 @@ ROW  = [0.14, 0.56]               # code baselines
 SEP  = 0.86
 STY  = 1.23                       # status baseline
 
-def cell(key, name, x, y, aria, mini=False):
-    """One agent: robot (calm/glad), name plate, wire to the editor, two packets."""
+def cell(key, name, x, y, aria, mini=False, messages=("initialize", "response"), connected=3150):
+    """One agent: robot (calm/glad), name plate, wire to the editor, two packets; `connected` is
+    when, in ms, the editor names it: an MCP client after its response, a CLI call on arrival."""
     left  = x < 0
     sx    = -1 if left else 1
     inner = x - sx * -4.93 if False else (x + sx*(-1.67))     # robot edge facing the editor
@@ -30,7 +31,8 @@ def cell(key, name, x, y, aria, mini=False):
     wx0, wx1 = can_r + u * LIP, can_e - u * LIP
     o = io.StringIO()
     w = o.write
-    w(f'    <g class="agent {key}" role="img" aria-label="{aria}" tabindex="0">\n')
+    w(f'    <g class="agent {key}" role="img" aria-label="{aria}" tabindex="0" '
+      f'data-connected="{connected}">\n')
     # the whole cell, plate included: the mini plate is wider than the robots
     # and has no fill, so its ends were not catching the pointer
     hw = 2.15 if mini else 1.9
@@ -44,7 +46,7 @@ def cell(key, name, x, y, aria, mini=False):
     ax, ay = wx0 + 0.30 * u, y
     bx, by = wx1 - 0.30 * u, ey
     dx, dy = bx - ax, by - ay
-    for cls, label, kind, sgn in (("pk-out", "initialize", "k-out", 1), ("pk-in", "response", "k-ok", -1)):
+    for cls, label, kind, sgn in (("pk-out", messages[0], "k-out", 1), ("pk-in", messages[1], "k-ok", -1)):
         px, py = (ax, ay) if sgn > 0 else (bx, by)
         hw = (len(label) * 0.126 + 0.26) / 2
         w(f'    <g transform="translate({px:.2f},{py:.2f})">'
@@ -91,21 +93,24 @@ for (txt, px), y in zip(code, ROW):
 # one status per client: the editor names whoever currently holds the line
 w(f'    <g class="st-none tone-dim"><circle class="pane-dot" cx="{EX+0.30:.2f}" cy="{STY}" r="0.1"/>'
   f'<text class="pane-status" x="{EX+0.54:.2f}" y="{STY}">no client connected</text></g>\n')
-for cls, who in (("st-cc", "Claude Code"), ("st-codex", "Codex"),
-                 ("st-oc", "OpenCode"), ("st-more", "your agent")):
+for cls, status in (("st-cc", "connected \u00b7 Claude Code"), ("st-codex", "connected \u00b7 Codex"),
+                    ("st-cli", "connected \u00b7 CLI"),
+                    ("st-more", "connected \u00b7 your agent")):
     w(f'    <g class="st {cls} tone-ok"><circle class="pane-dot" cx="{EX+0.30:.2f}" cy="{STY}" r="0.1"/>'
-      f'<text class="pane-status" x="{EX+0.54:.2f}" y="{STY}">connected \u00b7 {who}</text></g>\n')
+      f'<text class="pane-status" x="{EX+0.54:.2f}" y="{STY}">{status}</text></g>\n')
 w('    </g>\n')
 
 body = (
 '    <svg class="mcp-svg" viewBox="-9.25 -2.9 18.5 6.4" role="img" aria-labelledby="mcT mcD">\n'
-'    <title id="mcT">Coding agents that speak MCP</title>\n'
-'    <desc id="mcD">Four coding agents around an Isabelle editor. Point at one and it opens its own '
-'connection: an initialize message goes out, a response comes back, and the editor names it. Claude Code holds the line until another agent takes it.</desc>\n'
+'    <title id="mcT">Coding agents connecting via CLI or MCP</title>\n'
+'    <desc id="mcD">Four agents around an Isabelle editor: one calls tools from the command line, the others '
+'connect via MCP. Point at one and it opens its own connection: a message goes out, a response comes back, '
+'and the editor names it. Claude Code holds the line until another agent takes it.</desc>\n'
   + E.getvalue()
   + cell("a-cc",    "Claude Code", -CX, -CY, "Claude Code")
   + cell("a-codex", "Codex",       -CX,  CY, "Codex")
-  + cell("a-oc",    "OpenCode",     CX, -CY, "OpenCode")
+  + cell("a-cli",   "CLI",          CX, -CY, "an agent using the command line",
+         messages=("get_state", "result"), connected=1550)
   + cell("a-more",  "…and many others", CX, CY, "and many other MCP clients", mini=True)
   + '    </svg>\n')
 
