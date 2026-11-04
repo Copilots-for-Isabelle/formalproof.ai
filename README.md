@@ -3,9 +3,8 @@
 The static one-page site published at **https://formalproof.ai**. It makes the
 case for agentic formal proof: AI writes proofs, a proof assistant checks every
 step, and Isabelle is the one to reach for. The server it points at, PIDE AI
-(formerly PIDE MCP, repository
-[`isabelle-pide-mcp`](https://github.com/kappelmann/isabelle-pide-mcp)), lives in
-its own repository.
+(formerly PIDE MCP), lives in its own repository,
+[`isabelle-pide-ai`](https://github.com/kappelmann/isabelle-pide-ai).
 
 ```
 index.html                the whole page, including one inline script
